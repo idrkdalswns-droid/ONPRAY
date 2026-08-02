@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ONPRAY — 깨어 기도하는 자리</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ONPRAY">
+<meta name="theme-color" content="#f7f6f4">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="prayers-data.js"></script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f4;--card:#ffffff;--text:#1d1d1f;--sub:#6e6e73;--line:#e7e5e1;--accent:#8e2b2b;--flame:#d9a441;--navbg:rgba(255,255,255,.92);}
+[data-theme="dark"]{--bg:#0e0e10;--card:#1a1a1d;--text:#f2f2f4;--sub:#98989f;--line:#2a2a2e;--accent:#c96a5a;--flame:#e0b05a;--navbg:rgba(18,18,20,.92);}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity:.75;}
+@keyframes flicker{0%,100%{opacity:.9;transform:scale(1)}25%{opacity:.55;transform:scale(.86)}55%{opacity:1;transform:scale(1.12)}80%{opacity:.7;transform:scale(.94)}}
+@keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes slowzoom{0%{transform:scale(1.04)}100%{transform:scale(1.14)}}
+</style>
+</helmet>
+<div style="max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:{{ shellPadBottom }};">
+
+  <sc-if value="{{ headerOn }}" hint-placeholder-val="{{ true }}">
+  <header style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 8px 20px;">
+    <div style="display:flex;align-items:baseline;gap:8px;">
+      <span style="font-size:19px;font-weight:700;letter-spacing:.06em;">ONPRAY</span>
+      <span style="font-size:12px;color:var(--sub);letter-spacing:.04em;">깨어 기도하는 자리</span>
+    </div>
+    <button onClick="{{ toggleTheme }}" aria-label="다크모드 전환" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);padding:0;">
+      <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+      </sc-if>
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path></svg>
+      </sc-if>
+    </button>
+  </header>
+  </sc-if>
+
+  <sc-if value="{{ doneMsg }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:40;background:var(--text);color:var(--bg);padding:13px 20px;border-radius:14px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2);white-space:nowrap;">선포를 마쳤습니다. 아멘.</div>
+  </sc-if>
+
+  <!-- ─── 홈 ─── -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;min-height:100dvh;overflow:hidden;background:#090908;animation:riseIn .4s ease;">
+    <img src="assets/worship-2x.jpg" srcset="assets/worship-1x.jpg 1170w, assets/worship-2x.jpg 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50.3% 41%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
+    <div style="position:absolute;left:4%;right:4%;top:150px;mix-blend-mode:screen;transform:perspective(700px) rotateX(7deg);">
+      <div style="display:grid;grid-template-columns:repeat(32,1fr);gap:3px;">
+        <sc-for list="{{ candles }}" as="c" hint-placeholder-count="80">
+          <span style="position:relative;width:100%;aspect-ratio:1;animation:{{ c.anim }};">
+            <span style="position:absolute;left:36%;top:0;width:28%;height:100%;border-radius:2px;background:{{ c.heroBg }};box-shadow:{{ c.heroGlow }};"></span>
+            <span style="position:absolute;top:36%;left:0;height:28%;width:100%;border-radius:2px;background:{{ c.heroBg }};box-shadow:{{ c.heroGlow }};"></span>
+          </span>
+        </sc-for>
+      </div>
+    </div>
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 55% at 50% 34%,rgba(230,183,86,.1) 0%,rgba(8,7,6,0) 60%),linear-gradient(180deg,rgba(8,7,6,.62) 0%,rgba(8,7,6,0) 22%,rgba(8,7,6,.3) 54%,rgba(8,7,6,.9) 84%,rgba(8,7,6,.97) 100%);"></div>
+
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:22px 22px 0;">
+      <span style="font-size:19px;font-weight:700;letter-spacing:.14em;color:#fff;">ONPRAY</span>
+      <span style="font-size:11.5px;color:rgba(255,255,255,.62);letter-spacing:.05em;">깨어 기도하는 자리</span>
+    </div>
+
+    <div style="position:absolute;left:24px;right:24px;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:{{ liveDotColor }};animation:breathe 2.4s ease-in-out infinite;"></span>
+        <sc-if value="{{ liveOk }}" hint-placeholder-val="{{ true }}">
+          <span style="font-size:13.5px;color:rgba(255,255,255,.82);">지금 <strong style="color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">{{ liveCount }}명</strong>이 함께 깨어 선포 중</span>
+        </sc-if>
+        <sc-if value="{{ liveLine }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:13.5px;color:rgba(255,255,255,.7);">{{ liveLine }}</span>
+        </sc-if>
+      </div>
+      <sc-if value="{{ isWeekday }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size:11px;color:#e6b756;font-weight:700;letter-spacing:.18em;">오늘의 선포</div>
+        <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;color:#fff;margin:10px 0 20px;text-shadow:0 2px 20px rgba(0,0,0,.55);">{{ todayDayLabel }} 보혈 선포 기도문</h1>
+        <button onClick="{{ goToday }}" style="width:100%;min-height:54px;border:none;border-radius:15px;background:#8e2b2b;color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 10px 26px rgba(142,43,43,.45);">선포 시작하기</button>
+      </sc-if>
+      <sc-if value="{{ isWeekend }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:11px;color:#e6b756;font-weight:700;letter-spacing:.18em;">오늘의 선포</div>
+        <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;color:#fff;margin:10px 0 20px;text-shadow:0 2px 20px rgba(0,0,0,.55);">{{ weekendTitle }}</h1>
+        <button onClick="{{ goWeekend }}" style="width:100%;min-height:54px;border:none;border-radius:15px;background:#8e2b2b;color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 10px 26px rgba(142,43,43,.45);">선포 시작하기</button>
+      </sc-if>
+      <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);">오늘 <strong style="color:rgba(255,255,255,.82);font-weight:600;">{{ todayTotal }}명</strong>이 이 자리에서 선포했습니다</div>
+      <sc-if value="{{ streakLabel }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:6px;font-size:12px;color:#e6b756;font-weight:600;">{{ streakLabel }}</div>
+      </sc-if>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ─── 기도문 ─── -->
+  <sc-if value="{{ isPrayers }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px;animation:riseIn .4s ease;">
+    <sc-if value="{{ noPrayerOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <sc-for list="{{ prayerGroups }}" as="g" hint-placeholder-count="3">
+          <section>
+            <h2 style="font-size:13px;color:var(--sub);font-weight:700;letter-spacing:.1em;margin:0 0 10px 6px;">{{ g.label }}</h2>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="3">
+                <button onClick="{{ p.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-height:60px;cursor:pointer;text-align:left;color:var(--text);font-family:inherit;">
+                  <span style="display:flex;flex-direction:column;gap:3px;">
+                    <span style="font-size:16px;font-weight:500;">{{ p.title }}</span>
+                    <sc-if value="{{ p.resume }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:12px;color:var(--accent);font-weight:600;">{{ p.resume }}</span>
+                    </sc-if>
+                    <span style="font-size:13px;color:var(--sub);line-height:1.6;">{{ p.ref }}</span>
+                  </span>
+                  <span style="color:var(--sub);font-size:18px;">›</span>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+        </sc-for>
+        <p style="font-size:13px;color:var(--sub);text-align:center;margin:4px 0 12px;line-height:1.6;">기도문 업데이트를 요청하시겠어요?<br><a href="mailto:idrkdalswns@gmail.com">idrkdalswns@gmail.com</a> 으로 문의해 주세요</p>
+      </div>
+    </sc-if>
+    <sc-if value="{{ prayerOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:20;">
+        <div style="height:2px;background:var(--line);flex:none;"><div style="height:100%;width:{{ openPct }}%;background:var(--accent);transition:width .3s;"></div></div>
+        <div style="flex:none;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+          <button onClick="{{ closePrayer }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;font-family:inherit;padding:0;">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <span style="flex:1;min-width:0;font-size:12.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ barTitle }}</span>
+          <span style="flex:none;font-size:12.5px;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap;padding:0 2px;">{{ openPageLabel }}</span>
+          <button onClick="{{ toggleTheme }}" aria-label="다크모드 전환" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);font-family:inherit;padding:0;">
+            <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+            </sc-if>
+            <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path></svg>
+            </sc-if>
+          </button>
+          <button onClick="{{ fontDown }}" aria-label="글자 작게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:12px;line-height:1;white-space:nowrap;color:{{ fontDownColor }};font-family:inherit;padding:0;">가−</button>
+          <button onClick="{{ fontUp }}" aria-label="글자 크게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:16px;line-height:1;white-space:nowrap;color:{{ fontUpColor }};font-family:inherit;padding:0;">가+</button>
+        </div>
+        <div ref="{{ scrollerRef }}" onClick="{{ zoneTap }}" onTouchStart="{{ touchStart }}" onTouchEnd="{{ touchEnd }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;padding:0 20px 6px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+          <sc-if value="{{ isFirstPage }}" hint-placeholder-val="{{ true }}">
+            <h1 style="font-family:'Noto Serif KR',serif;font-size:23px;font-weight:600;margin:8px 0 5px;letter-spacing:-.01em;">{{ openTitle }}</h1>
+            <p style="font-size:12.5px;color:var(--sub);margin:0 0 14px;line-height:1.6;">{{ openNote }}</p>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <sc-for list="{{ openBlocks }}" as="blk" hint-placeholder-count="2">
+              <div style="animation:riseIn .3s ease;">
+                <sc-if value="{{ blk.h }}" hint-placeholder-val="{{ false }}">
+                  <p style="font-size:13px;font-weight:700;color:var(--accent);margin:0 0 10px;letter-spacing:.02em;">{{ blk.h }}</p>
+                </sc-if>
+                <div style="font-family:'Noto Serif KR',serif;font-size:{{ prayerFs }}px;line-height:1.85;display:flex;flex-direction:column;gap:13px;">
+                  <sc-for list="{{ blk.lines }}" as="para" hint-placeholder-count="4">
+                    <p style="margin:0;">{{ para }}</p>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="flex:none;display:flex;align-items:center;gap:8px;padding:6px 12px calc(6px + env(safe-area-inset-bottom));max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;border-top:1px solid var(--line);flex-direction:{{ navRowDir }};">
+          <button onClick="{{ openNext }}" style="flex:1;height:46px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">{{ openNextLabel }}</button>
+          <button onClick="{{ openPrevBtn }}" style="width:76px;height:46px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--sub);font-size:14px;cursor:pointer;font-family:inherit;opacity:{{ openPrevOpacity }};">이전</button>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+  </sc-if>
+
+  <!-- ─── 통계 ─── -->
+  <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px;display:flex;flex-direction:column;gap:16px;animation:riseIn .4s ease;">
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 20px;">
+      <h2 style="font-size:17px;font-weight:700;margin:0 0 2px;">시간대별 선포 현황</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 22px;">오늘 0시부터 지금까지 실제 접속 집계</p>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:150px;">
+        <sc-for list="{{ hourBars }}" as="b" hint-placeholder-count="24">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
+            <span style="font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;">{{ b.count }}</span>
+            <div style="width:100%;border-radius:4px 4px 2px 2px;height:{{ b.pct }}%;background:{{ b.color }};min-height:2px;transition:height .5s;"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--sub);">
+        <span>0시</span><span>6시</span><span>12시</span><span>18시</span><span>23시</span>
+      </div>
+    </section>
+    <section style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;">
+        <div style="font-size:28px;font-weight:300;font-variant-numeric:tabular-nums;">{{ todayTotal }}</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:4px;">오늘 누적 선포</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;">
+        <div style="font-size:28px;font-weight:300;font-variant-numeric:tabular-nums;">{{ peakHourLabel }}</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:4px;">가장 뜨거웠던 시간</div>
+      </div>
+    </section>
+    <p style="font-size:12px;color:var(--sub);text-align:center;line-height:1.6;margin:4px 12px;">시간마다 함께 깨어 있는 동역자들의 기록입니다.<br>당신의 방문도 이 불씨 중 하나가 되었습니다.</p>
+  </main>
+  </sc-if>
+
+  <!-- ─── 설정 ─── -->
+  <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px;display:flex;flex-direction:column;gap:16px;animation:riseIn .4s ease;">
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">선포기도시간 알람</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 16px;line-height:1.55;">원하시는 시간에 알림을 보내드립니다.<br>이 사이트를 홈 화면에 추가해 두시면 더 잘 작동합니다.</p>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <input type="time" value="{{ alarmTime }}" onChange="{{ setAlarmTime }}" style="flex:1;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);font-size:17px;padding:0 14px;font-family:inherit;">
+        <button onClick="{{ toggleAlarm }}" style="min-height:48px;min-width:96px;border:none;border-radius:12px;background:{{ alarmBtnBg }};color:{{ alarmBtnFg }};font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">{{ alarmBtnLabel }}</button>
+      </div>
+      <p style="font-size:12px;color:var(--sub);margin:12px 0 0;">{{ alarmStatus }}</p>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 14px;">화면 설정</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:48px;">
+        <span style="font-size:15px;">다크모드 <span style="font-size:12px;color:var(--sub);">새벽·밤 기도용</span></span>
+        <button onClick="{{ toggleTheme }}" style="min-width:56px;min-height:32px;border-radius:16px;border:none;cursor:pointer;background:{{ darkToggleBg }};position:relative;transition:background .25s;">
+          <span style="position:absolute;top:4px;left:{{ darkKnobLeft }}px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.3);"></span>
+        </button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:48px;border-top:1px solid var(--line);margin-top:8px;padding-top:8px;">
+        <span style="font-size:15px;">주 사용 손 <span style="font-size:12px;color:var(--sub);">넘김 버튼 위치</span></span>
+        <div style="display:flex;gap:6px;">
+          <button onClick="{{ setLeftHand }}" style="min-width:56px;min-height:44px;border:1px solid {{ leftHandBorder }};border-radius:12px;background:{{ leftHandBg }};color:{{ leftHandFg }};font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">왼손</button>
+          <button onClick="{{ setRightHand }}" style="min-width:56px;min-height:44px;border:1px solid {{ rightHandBorder }};border-radius:12px;background:{{ rightHandBg }};color:{{ rightHandFg }};font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">오른손</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:48px;border-top:1px solid var(--line);margin-top:8px;padding-top:8px;">
+        <span style="font-size:15px;">기도문 글자 크기 <span style="font-size:12px;color:var(--sub);">{{ prayerFs }}px</span></span>
+        <div style="display:flex;gap:6px;">
+          <button onClick="{{ fontDown }}" style="min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:14px;cursor:pointer;">가−</button>
+          <button onClick="{{ fontUp }}" style="min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:19px;cursor:pointer;">가+</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">후원 안내</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;">이 사역을 함께 세워 주세요</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:12px;padding:14px 16px;">
+        <div>
+          <div style="font-size:13px;color:var(--sub);">국민은행</div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:.02em;font-variant-numeric:tabular-nums;">92311516646</div>
+        </div>
+        <button onClick="{{ copyAccount }}" style="min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ copyLabel }}</button>
+      </div>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">기도문 업데이트 요청</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;line-height:1.55;">추가하고 싶은 기도문이나 수정 요청을<br>이메일로 보내 주세요</p>
+      <a href="mailto:idrkdalswns@gmail.com?subject=기도문 업데이트 요청" style="display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;">이메일 보내기</a>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ─── 하단 탭 ─── -->
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}">
+  <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:grid;grid-template-columns:repeat(4,1fr);background:{{ navBg }};backdrop-filter:blur(16px);border-top:1px solid {{ navBorder }};padding-bottom:env(safe-area-inset-bottom);">
+    <button onClick="{{ goHome }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabHomeColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+      <span style="font-size:11px;font-weight:{{ tabHomeWeight }};">홈</span>
+    </button>
+    <button onClick="{{ goPrayers }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabPrayColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+      <span style="font-size:11px;font-weight:{{ tabPrayWeight }};">기도문</span>
+    </button>
+    <button onClick="{{ goStats }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabStatsColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><rect x="7" y="12" width="3" height="6"></rect><rect x="12" y="8" width="3" height="10"></rect><rect x="17" y="4" width="3" height="14"></rect></svg>
+      <span style="font-size:11px;font-weight:{{ tabStatsWeight }};">통계</span>
+    </button>
+    <button onClick="{{ goSettings }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabSetColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span style="font-size:11px;font-weight:{{ tabSetWeight }};">설정</span>
+    </button>
+  </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:900},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#8e2b2b&quot;,&quot;options&quot;:[&quot;#8e2b2b&quot;,&quot;#a34d2e&quot;,&quot;#5a4a8e&quot;,&quot;#2e6e5e&quot;],&quot;section&quot;:&quot;스타일&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    tab: 'home', theme: localStorage.getItem('sp_theme') || 'light',
+    fs: parseInt(localStorage.getItem('sp_fs') || '19', 10),
+    openKey: null, live: 0, counts: [], copied: false,
+    homePage: 0, openPage: 0, handed: localStorage.getItem('sp_hand') || 'right',
+    hours: null, online: null,
+    alarmTime: localStorage.getItem('sp_alarm_time') || '06:00',
+    alarmOn: localStorage.getItem('sp_alarm_on') === '1',
+    alarmMsg: ''
+  };
+
+  DB = 'https://onpray-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+  componentDidMount() {
+    document.body.dataset.theme = this.state.theme;
+    const grab = () => { if (window.PRAYER_DATA) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
+    if (!grab()) { let n = 0; const t = setInterval(() => { if (grab() || ++n > 50) clearInterval(t); }, 100); }
+    this.cid = localStorage.getItem('sp_cid') || (Math.random().toString(36).slice(2) + Date.now().toString(36));
+    localStorage.setItem('sp_cid', this.cid);
+    this.lastHour = new Date().getHours();
+    this.hourTimer = setInterval(() => { const h = new Date().getHours(); if (h !== this.lastHour) { this.lastHour = h; this.recordVisit(); } }, 60000);
+    this.recordVisit();
+    this.syncLive();
+    this.liveTimer = setInterval(() => this.syncLive(), 15000);
+    this.alarmTimer = setInterval(() => this.checkAlarm(), 20000);
+    this.measure();
+    this.onResize = () => { clearTimeout(this.rzT); this.rzT = setTimeout(() => this.measure(true), 150); };
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('orientationchange', this.onResize);
+    this.onLeave = () => { try { fetch(this.DB + '/pres/' + this.bucket() + '/' + this.cid + '.json', { method: 'DELETE', keepalive: true }); } catch (e) {} };
+    window.addEventListener('pagehide', this.onLeave);
+  }
+  componentWillUnmount() {
+    clearInterval(this.liveTimer); clearInterval(this.alarmTimer); clearTimeout(this.rzT); clearInterval(this.hourTimer);
+    window.removeEventListener('pagehide', this.onLeave); this.onLeave && this.onLeave();
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('orientationchange', this.onResize);
+  }
+  measure(force) {
+    const el = this.scroller;
+    const h = el ? el.clientHeight : 0, w = el ? el.clientWidth - 40 : 0;
+    if (h > 120 && (force || Math.abs(h - (this.state.boxH || 0)) > 4 || Math.abs(w - (this.state.boxW || 0)) > 4)) {
+      this.setState({ boxH: h, boxW: w });
+    } else if (force) { this.forceUpdate(); }
+  }
+  componentDidUpdate() { if (this.scroller && !this._m) { this._m = 1; setTimeout(() => { this._m = 0; this.measure(); }, 30); } }
+
+  dateKey() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+  // 실제 방문 1회 기록 (오늘 · 현재 시간대에 이 세션의 고유 키를 남김)
+  async recordVisit() {
+    try {
+      await fetch(this.DB + '/counts/' + this.dateKey() + '/' + new Date().getHours() + '/' + this.cid + '.json',
+        { method: 'PUT', body: 'true' });
+    } catch (e) {}
+  }
+
+  bucket(offset) { return Math.floor(Date.now() / 30000) + (offset || 0); }
+
+  // 접속 중 표시: 30초 버킷에 자기 키만 기록하고, 최근 2개 버킷의 키 개수만 shallow 로 읽는다
+  // (전체 노드를 내려받지 않으므로 트래픽이 접속자 수에 비례하지 않는다)
+  async syncLive() {
+    const b = this.bucket();
+    try {
+      await fetch(this.DB + '/pres/' + b + '/' + this.cid + '.json', { method: 'PUT', body: 'true' });
+      const [a1, a2] = await Promise.all([
+        fetch(this.DB + '/pres/' + b + '.json?shallow=true').then(r => r.json()).catch(() => null),
+        fetch(this.DB + '/pres/' + (b - 1) + '.json?shallow=true').then(r => r.json()).catch(() => null)
+      ]);
+      const set = new Set([...Object.keys(a1 || {}), ...Object.keys(a2 || {})]);
+      this.setState({ live: Math.max(1, set.size), online: true });
+      this.fetchCounts();
+      if (this._gc !== b && Math.random() < 0.15) { this._gc = b; this.gcPresence(b); }
+    } catch (e) {
+      this.setState({ online: false });
+    }
+  }
+
+  // 오래된 버킷 정리 — 목록을 읽지 않고 버킷 번호를 계산해 삭제한다 (읽기 권한 불필요)
+  gcPresence(b) {
+    for (let i = 21; i <= 40; i++) {
+      fetch(this.DB + '/pres/' + (b - i) + '.json', { method: 'DELETE' }).catch(() => {});
+    }
+  }
+
+  // 시간대별 집계는 자주 바뀌지 않으므로 2분에 한 번만 읽는다
+  async fetchCounts(force) {
+    const now = Date.now();
+    if (!force && this._cAt && now - this._cAt < 120000) return;
+    this._cAt = now;
+    try {
+      const counts = (await fetch(this.DB + '/counts/' + this.dateKey() + '.json').then(r => r.json())) || {};
+      this.setState({ hours: Array.from({ length: 24 }, (_, h) => Object.keys(counts[h] || {}).length) });
+    } catch (e) {}
+  }
+  checkAlarm() {
+    if (!this.state.alarmOn) return;
+    const now = new Date();
+    const hhmm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    if (hhmm === this.state.alarmTime && this.lastFired !== hhmm + now.toDateString()) {
+      this.lastFired = hhmm + now.toDateString();
+      if (window.Notification && Notification.permission === 'granted') {
+        new Notification('선포기도 시간입니다', { body: '지금 함께 깨어 보혈을 선포해요' });
+      }
+      this.setState({ alarmMsg: '지금이 선포기도 시간입니다!' });
+    }
+  }
+
+  prayers() { return window.EXTRA_PRAYERS || []; }
+  legacy() {
+    return [
+      { group: '전신갑주', title: '전신갑주 기도문', ref: '에베소서 6:10-18', paras: [
+        '주님, 오늘 하나님의 전신갑주를 입습니다.',
+        '진리로 허리띠를 띠고, 의의 호심경을 붙입니다.',
+        '평안의 복음이 준비한 것으로 신을 신습니다.',
+        '모든 것 위에 믿음의 방패를 들어 악한 자의 모든 불화살을 소멸합니다.',
+        '구원의 투구와 성령의 검, 곧 하나님의 말씀을 가집니다.',
+        '모든 기도와 간구를 하되 항상 성령 안에서 기도하며 깨어 있겠습니다. 아멘.'] },
+      { group: '성경 인물들의 기도문', title: '다니엘의 기도', ref: '다니엘 9:4-19', paras: [
+        '크시고 두려워할 주 하나님, 주를 사랑하고 주의 계명을 지키는 자를 위하여 언약을 지키시고 긍휼을 베푸시는 이시여.',
+        '우리는 범죄하여 패역하며 행악하며 반역하여 주의 법도와 규례를 떠났사오나,',
+        '주여 들으소서. 주여 용서하소서. 주여 귀를 기울이시고 행하소서.',
+        '지체하지 마옵소서. 나의 하나님이여, 주 자신을 위하여 하시옵소서.'] },
+      { group: '성경 인물들의 기도문', title: '한나의 기도', ref: '사무엘상 2:1-10', paras: [
+        '내 마음이 여호와로 말미암아 즐거워하며 내 뿔이 여호와로 말미암아 높아졌습니다.',
+        '여호와와 같이 거룩하신 이가 없으시니 주밖에 다른 이가 없고 우리 하나님 같은 반석도 없으십니다.',
+        '가난한 자를 진토에서 일으키시며 빈궁한 자를 거름더미에서 올리시는 하나님을 찬양합니다.'] },
+      { group: '성경 인물들의 기도문', title: '다윗의 회개 기도', ref: '시편 51:1-12', paras: [
+        '하나님이여 주의 인자를 따라 내게 은혜를 베푸시며 주의 많은 긍휼을 따라 내 죄악을 지워 주소서.',
+        '나의 죄악을 말갛게 씻으시며 나의 죄를 깨끗이 제하소서.',
+        '하나님이여 내 속에 정한 마음을 창조하시고 내 안에 정직한 영을 새롭게 하소서.',
+        '주의 구원의 즐거움을 내게 회복시켜 주시고 자원하는 심령을 주사 나를 붙드소서.'] },
+      { group: '성경 인물들의 기도문', title: '야베스의 기도', ref: '역대상 4:10', paras: [
+        '주께서 내게 복을 주시려거든 나의 지역을 넓히시고,',
+        '주의 손으로 나를 도우사 나로 환난을 벗어나 근심이 없게 하옵소서.'] },
+      { group: '성경 인물들의 기도문', title: '바울의 기도', ref: '에베소서 3:16-19', paras: [
+        '그의 영광의 풍성함을 따라 그의 성령으로 말미암아 속사람을 능력으로 강건하게 하시오며,',
+        '믿음으로 말미암아 그리스도께서 내 마음에 계시게 하시옵소서.',
+        '그리스도의 사랑의 너비와 길이와 높이와 깊이를 깨달아, 하나님의 모든 충만하신 것으로 충만하게 하시기를 구합니다. 아멘.'] },
+      { group: '신규 업데이트 기도문', title: '나라와 민족을 위한 기도', ref: '2026. 7. 업데이트', paras: [
+        '주님, 이 나라와 민족 위에 하나님의 긍휼을 부어 주소서.',
+        '위정자들에게 지혜를, 교회에는 거룩한 부흥을, 다음 세대에게는 믿음의 유산을 허락하소서.',
+        '이 땅의 모든 어둠이 예수 그리스도의 빛 앞에 물러가기를 선포합니다. 아멘.'] }
+    ];
+  }
+
+  hourData() { return this.state.hours || Array.from({ length: 24 }, () => 0); }
+
+  // 선포 완주 기록 · 연속일
+  markDone() {
+    const k = this.dateKey();
+    let log; try { log = JSON.parse(localStorage.getItem('sp_done') || '[]'); } catch (e) { log = []; }
+    if (log[log.length - 1] !== k) { log.push(k); localStorage.setItem('sp_done', JSON.stringify(log.slice(-400))); }
+  }
+  streak() {
+    let log; try { log = JSON.parse(localStorage.getItem('sp_done') || '[]'); } catch (e) { log = []; }
+    if (!log.length) return 0;
+    const d = new Date(); let n = 0;
+    for (;;) {
+      const k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      if (log.includes(k)) { n++; d.setDate(d.getDate() - 1); } else break;
+    }
+    return n;
+  }
+  resumeLabel(key) {
+    const p = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
+    return p > 0 ? (p + 1) + '장부터 이어서' : '';
+  }
+  openPrayer(key) {
+    const saved = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
+    this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const accent = this.props.accentColor ?? null;
+    if (accent) document.documentElement.style.setProperty('--accent', accent);
+    const list = this.prayers();
+    const wd = this.weekData;
+    const dow = new Date().getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    const todayIdx = isWeekend ? 0 : dow - 1;
+    // 실제 본문 컨테이너를 측정해 스크롤 없이 한 화면에 들어가도록 페이지 분할
+    const boxH = s.boxH || Math.max(240, (window.innerHeight || 800) - 100);
+    const boxW = s.boxW || Math.min(window.innerWidth || 400, 480) - 40;
+    // 캔버스로 실제 글자 폭을 재서 픽셀 단위로 페이지를 채운다 (글자수 추정 금지)
+    if (!this._ctx) this._ctx = document.createElement('canvas').getContext('2d');
+    const ctx = this._ctx;
+    ctx.font = "400 " + s.fs + "px 'Noto Serif KR', serif";
+    const LINE_H = s.fs * 1.85, PARA_GAP = 13;
+    const budget = Math.max(LINE_H * 2, boxH - 8);
+    const HEAD_U = Math.round(s.fs * 0.87 * 1.4) + 10;   // 섹션 제목 높이
+    const GAP_U = 18;                                     // 블록 사이 간격
+    const TITLE_U = Math.round(23 * 1.4) + 5 + 40 + 14;   // 첫 장 제목 + 설명
+    const lineU = line => Math.max(1, Math.ceil(ctx.measureText(line).width / boxW)) * LINE_H + PARA_GAP;
+    // 균등 배분: 그리디로 필요한 최소 장수를 구한 뒤, 그 장수에 맞춰 목표치를 낮춰 재배치
+    const pack = (secs, cap0, capN) => {
+      const pages = [];
+      let cur = null, used = 0;
+      const newPage = () => { cur = { blocks: [] }; pages.push(cur); used = pages.length === 1 ? cap0 : 0; };
+      newPage();
+      const limit = () => capN;
+      secs.forEach((sec, si) => {
+        let part = 0, blk = null;
+        const pushBlock = () => { blk = { h: sec.h ? sec.h + (part ? ' (계속)' : '') : '', lines: [] }; cur.blocks.push(blk); used += (cur.blocks.length > 1 ? GAP_U : 0) + (sec.h ? HEAD_U : 0); part++; };
+        pushBlock();
+        sec.lines.forEach(line => {
+          const u = lineU(line);
+          if (used + u > limit() && (blk.lines.length || cur.blocks.length > 1)) {
+            if (!blk.lines.length) cur.blocks.pop();
+            newPage(); pushBlock();
+          }
+          blk.lines.push(line); used += u;
+        });
+        if (!blk.lines.length) { cur.blocks.pop(); }
+      });
+      return pages.filter(p => p.blocks.length);
+    };
+    const paginate = secs => {
+      const first = pack(secs, TITLE_U, budget);
+      if (first.length < 2) return first;
+      let total = TITLE_U;
+      secs.forEach((sec, i) => { if (sec.h) total += HEAD_U; if (i) total += GAP_U; sec.lines.forEach(l => { total += lineU(l); }); });
+      const target = Math.min(budget, Math.max(budget * 0.72, total / first.length + LINE_H * 0.5));
+      const balanced = pack(secs, TITLE_U, target);
+      return balanced.length <= first.length ? balanced : first;
+    };
+    const notes = (window.DAY_NOTES) || {};
+    const weekReading = di => { const d = wd.DAYS[di]; return { title: '보혈 선포 기도문 · ' + d.day, ref: '', note: notes[d.day] || '', pages: paginate([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]) }; };
+    const groups = [];
+    if (wd) groups.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d, i) => ({
+      title: d.day + ' 보혈 선포', ref: notes[d.day] || '', resume: this.resumeLabel('w' + i),
+      open: () => this.openPrayer('w' + i)
+    })) });
+    if (list.length) groups.push({ label: '선포 기도문', items: list.map((p, i) => ({
+      title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('s' + i),
+      open: () => this.openPrayer('s' + i)
+    })) });
+    let open = null;
+    if (s.openKey) {
+      if (s.openKey[0] === 'w' && wd) open = weekReading(+s.openKey.slice(1));
+      else if (s.openKey[0] === 's' && list[+s.openKey.slice(1)]) { const p = list[+s.openKey.slice(1)]; open = { title: p.title, ref: p.ref, note: p.note, pages: paginate(p.sections) }; }
+    }
+    const hours = this.hourData();
+    const max = Math.max(...hours, 1);
+    const nowH = new Date().getHours();
+    const hourBars = hours.map((c, h) => ({
+      count: c > 0 ? c : '', pct: Math.round(c / max * 100),
+      color: h === nowH ? 'var(--accent)' : (c > 0 ? 'color-mix(in oklch, var(--accent) 45%, var(--line))' : 'var(--line)')
+    }));
+    const peak = hours.indexOf(Math.max(...hours));
+    // 세계지도 도트맵 (32열): 접속자가 늘수록 열방 곳곳에 십자가(교회)가 세워진다
+    const W = 32;
+    const rows = [
+      '..XXXXX.......XX..XXXXXXXXX.....',
+      '.XXXXXXXX....XXX.XXXXXXXXXXXX...',
+      '.XXXXXXXX.....XXXXXXXXXXXXXXXX..',
+      '..XXXXXX......XXXXXXXXXXXXXXXX..',
+      '...XXXX.......XXXXXXXXXXXXXXX...',
+      '....XXX......XXXXXXXX.XXXXXX....',
+      '.....XX......XXXXXXXX...XXX.....',
+      '......XXX....XXXXXXX.....XX.....',
+      '......XXXX....XXXXX......X......',
+      '.......XXX....XXXX..............',
+      '.......XXX.....XX.........XXX...',
+      '........XX................XXXX..',
+      '........X.................XXX...'
+    ];
+    const spots = [];
+    rows.forEach((r, y) => { for (let x = 0; x < W; x++) if (r[x] === 'X') spots.push(y * W + x); });
+    // 채움 순서: 열방에 흩어지듯 의사난수 순서로 점등
+    const fillOrder = spots.slice().sort((a, b) => (Math.abs(Math.sin(a * 12.9898)) % 1) - (Math.abs(Math.sin(b * 12.9898)) % 1));
+    const litN = Math.max(1, Math.min(spots.length, Math.round(Math.log2(s.live + 1) / Math.log2(201) * spots.length)));
+    const litSet = new Set(fillOrder.slice(0, litN));
+    const spotSet = new Set(spots);
+    const candles = Array.from({ length: W * rows.length }, (_, i) => {
+      if (!spotSet.has(i)) return { bg: 'transparent', glow: 'none', anim: 'none', heroBg: 'transparent', heroGlow: 'none' };
+      if (litSet.has(i)) return {
+        bg: 'var(--flame)', glow: '0 0 6px var(--flame)',
+        heroBg: '#e6b756', heroGlow: '0 0 6px rgba(230,183,86,.85)',
+        anim: 'flicker ' + (1.4 + (i * 0.37) % 1.8).toFixed(2) + 's ease-in-out ' + ((i * 0.53) % 2).toFixed(2) + 's infinite'
+      };
+      return { bg: 'var(--line)', glow: 'none', anim: 'none', heroBg: 'rgba(255,255,255,.16)', heroGlow: 'none' };
+    });
+    const savePos = p => { if (s.openKey) localStorage.setItem('sp_pos_' + s.openKey, String(p)); };
+    const goNext = () => {
+      const n = op + 1;
+      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ openKey: null, openPage: 0, doneMsg: true }); setTimeout(() => this.setState({ doneMsg: false }), 2600); return; }
+      savePos(n); this.setState({ openPage: n }); if (this.scroller) this.scroller.scrollTop = 0;
+    };
+    const goPrev = () => { if (op > 0) { savePos(op - 1); this.setState({ openPage: op - 1 }); if (this.scroller) this.scroller.scrollTop = 0; } };
+    const homeR = wd ? weekReading(todayIdx) : { title: '보혈 선포 기도문', ref: '불러오는 중', pages: [{ h: '', lines: ['기도문을 불러오는 중입니다.'] }] };
+    const homePages = homeR.pages;
+    const hp = Math.min(s.homePage || 0, homePages.length - 1);
+    const openPages = open ? open.pages : [{ h: '', lines: [] }];
+    const op = Math.min(s.openPage || 0, openPages.length - 1);
+    const handed = s.handed;
+    const setHand = h => () => { localStorage.setItem('sp_hand', h); this.setState({ handed: h }); };
+    const dark = s.theme === 'dark';
+    const onHome = s.tab === 'home' && !s.openKey;
+    // 주말 고정 배정: 토 → 에클레시아 1, 일 → 에클레시아 2 (없으면 1)
+    const findP = t => list.findIndex(p => p.title === t);
+    let weekendIdx = -1;
+    if (isWeekend) {
+      weekendIdx = dow === 6 ? findP('에클레시아 선포 기도문 1') : findP('에클레시아 선포 기도문 2');
+      if (weekendIdx < 0) weekendIdx = findP('에클레시아 선포 기도문 1');
+    }
+    const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
+    const setTab = t => () => this.setState({ tab: t, openKey: null });
+    const tabs = [
+      { key: 'home', label: '홈', icon: '✦' }, { key: 'prayers', label: '기도문', icon: '𝄞' },
+      { key: 'stats', label: '통계', icon: '▥' }, { key: 'settings', label: '설정', icon: '⚙' }
+    ].map(t => ({ ...t, go: setTab(t.key), color: s.tab === t.key ? 'var(--accent)' : 'var(--sub)', weight: s.tab === t.key ? 700 : 400 }));
+    return {
+      isHome: s.tab === 'home', isPrayers: s.tab === 'prayers', isStats: s.tab === 'stats', isSettings: s.tab === 'settings',
+      themeIcon: dark ? '☀︎' : '☾',
+      toggleTheme: () => { const t = dark ? 'light' : 'dark'; localStorage.setItem('sp_theme', t); document.body.dataset.theme = t; this.setState({ theme: t }); },
+      liveCount: s.live, todayTotal: hours.reduce((a, b) => a + b, 0),
+      liveDotColor: s.online === false ? '#c9c7c3' : '#3fa66a',
+      liveLine: s.online === null ? '집계를 불러오는 중입니다' : (s.online === false ? '집계 서버에 연결할 수 없습니다' : null),
+      liveOk: s.online === true,
+      candles,
+      prayerFs: s.fs,
+      fontUp: () => { const f = Math.min(30, s.fs + 2); localStorage.setItem('sp_fs', f); this.setState({ fs: f }); },
+      fontDown: () => { const f = Math.max(15, s.fs - 2); localStorage.setItem('sp_fs', f); this.setState({ fs: f }); },
+      prayerGroups: groups, noPrayerOpen: !open, prayerOpen: !!open,
+      openTitle: open ? open.title : '', openRef: open ? open.ref : '',
+      openNote: open && op === 0 ? (open.note || '') : '',
+      isFirstPage: op === 0, chromeOn: !open, headerOn: !open && s.tab !== 'home',
+      navBg: s.tab === 'home' ? 'rgba(9,9,8,.86)' : 'var(--navbg)',
+      navBorder: s.tab === 'home' ? 'rgba(255,255,255,.1)' : 'var(--line)',
+      isDark: dark, isLight: !dark, doneMsg: !!s.doneMsg,
+      goHome: setTab('home'), goPrayers: setTab('prayers'), goSettings: setTab('settings'),
+      goStats: () => { this.setState({ tab: 'stats', openKey: null }); this.fetchCounts(true); },
+      tabHomeColor: s.tab === 'home' ? '#e6b756' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabHomeWeight: s.tab === 'home' ? 600 : 400,
+      tabPrayColor: s.tab === 'prayers' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabPrayWeight: s.tab === 'prayers' ? 600 : 400,
+      tabStatsColor: s.tab === 'stats' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabStatsWeight: s.tab === 'stats' ? 600 : 400,
+      tabSetColor: s.tab === 'settings' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabSetWeight: s.tab === 'settings' ? 600 : 400,
+      streakLabel: this.streak() > 1 ? this.streak() + '일 연속 선포 중입니다' : '',
+      fontDownColor: s.fs <= 15 ? 'var(--line)' : 'var(--sub)',
+      fontUpColor: s.fs >= 30 ? 'var(--line)' : 'var(--sub)',
+      scrollerRef: el => { if (el) { this.scroller = el; } },
+      shellPadBottom: open || onHome ? '0px' : '84px',
+      openBlocks: openPages[op].blocks, openPageLabel: (op + 1) + ' / ' + openPages.length,
+      barTitle: op === 0 ? '' : open.title,
+      openNext: goNext, openPrevBtn: goPrev,
+      zoneTap: e => { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX - r.left < r.width * 0.3) goPrev(); else goNext(); },
+      touchStart: e => { const t = e.touches[0]; this._tx = t.clientX; this._ty = t.clientY; },
+      touchEnd: e => {
+        const t = e.changedTouches[0], dx = t.clientX - (this._tx || 0), dy = t.clientY - (this._ty || 0);
+        if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.6) { e.preventDefault(); if (dx < 0) goNext(); else goPrev(); }
+      },
+      openNextLabel: op === openPages.length - 1 ? '선포 마쳤습니다' : '다음 장',
+      openPct: Math.round((op + 1) / openPages.length * 100),
+      openPrevOpacity: op === 0 ? 0.35 : 1,
+      todayDayLabel: wd ? wd.DAYS[todayIdx].day : '오늘의',
+      isWeekend, isWeekday: !isWeekend,
+      weekendTitle: weekendPrayer ? weekendPrayer.title : '',
+      goWeekend: () => { if (weekendIdx >= 0) { this.setState({ tab: 'prayers' }); this.openPrayer('s' + weekendIdx); } },
+      goToday: () => { this.setState({ tab: 'prayers' }); this.openPrayer('w' + todayIdx); },
+      homeParas: homePages[hp].lines, homeHead: homePages[hp].h, homeTitle: homeR.title, homeRef: homeR.ref, homePageLabel: (hp + 1) + ' / ' + homePages.length,
+      homeNext: () => this.setState({ homePage: (hp + 1) % homePages.length }),
+      homePrev: () => this.setState({ homePage: Math.max(0, hp - 1) }),
+      homeNextLabel: hp === homePages.length - 1 ? '처음으로' : '다음 장',
+      navRowDir: handed === 'left' ? 'row-reverse' : 'row',
+      setLeftHand: setHand('left'), setRightHand: setHand('right'),
+      leftHandBg: handed === 'left' ? 'var(--accent)' : 'none', leftHandFg: handed === 'left' ? '#fff' : 'var(--sub)', leftHandBorder: handed === 'left' ? 'var(--accent)' : 'var(--line)',
+      rightHandBg: handed === 'right' ? 'var(--accent)' : 'none', rightHandFg: handed === 'right' ? '#fff' : 'var(--sub)', rightHandBorder: handed === 'right' ? 'var(--accent)' : 'var(--line)',
+      closePrayer: () => this.setState({ openKey: null, openPage: 0 }),
+      hourBars, peakHourLabel: peak + '시',
+      alarmTime: s.alarmTime,
+      setAlarmTime: e => { localStorage.setItem('sp_alarm_time', e.target.value); this.setState({ alarmTime: e.target.value }); },
+      toggleAlarm: async () => {
+        if (!s.alarmOn && window.Notification && Notification.permission !== 'granted') { try { await Notification.requestPermission(); } catch (e) {} }
+        const on = !s.alarmOn; localStorage.setItem('sp_alarm_on', on ? '1' : '0'); this.setState({ alarmOn: on });
+      },
+      alarmBtnBg: s.alarmOn ? 'var(--accent)' : 'var(--line)', alarmBtnFg: s.alarmOn ? '#fff' : 'var(--text)',
+      alarmBtnLabel: s.alarmOn ? '알람 켜짐' : '알람 끄짐',
+      alarmStatus: s.alarmMsg || (s.alarmOn ? '매일 ' + s.alarmTime + '에 알려드립니다 (브라우저를 열어 두세요)' : '알람이 꺼져 있습니다'),
+      darkToggleBg: dark ? 'var(--accent)' : '#c9c7c3', darkKnobLeft: dark ? 28 : 4,
+      copyAccount: () => { navigator.clipboard && navigator.clipboard.writeText('국민 92311516646'); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1600); },
+      copyLabel: s.copied ? '복사됨 ✓' : '복사',
+      tabs
+    };
+  }
+}
+</script>
+</body>
+</html>
