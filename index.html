@@ -57,7 +57,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   <!-- ─── 홈 ─── -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <main style="position:relative;min-height:100dvh;overflow:hidden;background:#090908;animation:riseIn .4s ease;">
-    <img src="assets/worship-1x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50.3% 41%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
+    <img src="assets/worship-1x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:53% 41%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
     <div style="position:absolute;left:4%;right:4%;top:150px;mix-blend-mode:screen;transform:perspective(700px) rotateX(7deg);">
       <div style="display:grid;grid-template-columns:repeat(32,1fr);gap:3px;">
         <sc-for list="{{ candles }}" as="c" hint-placeholder-count="80">
@@ -79,7 +79,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
       <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;">
         <span style="width:7px;height:7px;border-radius:50%;background:{{ liveDotColor }};animation:breathe 2.4s ease-in-out infinite;"></span>
         <sc-if value="{{ liveOk }}" hint-placeholder-val="{{ true }}">
-          <span style="font-size:13.5px;color:rgba(255,255,255,.82);">지금 <strong style="color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">{{ liveCount }}명</strong>이 함께 깨어 선포 중</span>
+          <span style="font-size:13.5px;color:rgba(255,255,255,.82);">지금 <strong style="color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">{{ liveCount }}명</strong>이 함께 깨어 기도 중입니다</span>
         </sc-if>
         <sc-if value="{{ liveLine }}" hint-placeholder-val="{{ false }}">
           <span style="font-size:13.5px;color:rgba(255,255,255,.7);">{{ liveLine }}</span>
@@ -376,7 +376,7 @@ class Component extends DCLogic {
     } catch (e) {}
   }
 
-  bucket(offset) { return Math.floor(Date.now() / 30000) + (offset || 0); }
+  bucket(offset) { return Math.floor(Date.now() / 1800000) + (offset || 0); } // 30분 단위
 
   // 접속 중 표시: 30초 버킷에 자기 키만 기록하고, 최근 2개 버킷의 키 개수만 shallow 로 읽는다
   // (전체 노드를 내려받지 않으므로 트래픽이 접속자 수에 비례하지 않는다)
@@ -384,14 +384,15 @@ class Component extends DCLogic {
     const b = this.bucket();
     try {
       await fetch(this.DB + '/pres/' + b + '/' + this.cid + '.json', { method: 'PUT', body: 'true' });
-      const [a1, a2] = await Promise.all([
-        fetch(this.DB + '/pres/' + b + '.json?shallow=true').then(r => r.json()).catch(() => null),
-        fetch(this.DB + '/pres/' + (b - 1) + '.json?shallow=true').then(r => r.json()).catch(() => null)
-      ]);
-      const set = new Set([...Object.keys(a1 || {}), ...Object.keys(a2 || {})]);
+      // 최근 6개 버킷 = 3시간
+      const buckets = await Promise.all([0, 1, 2, 3, 4, 5].map(i =>
+        fetch(this.DB + '/pres/' + (b - i) + '.json?shallow=true').then(r => r.json()).catch(() => null)
+      ));
+      const set = new Set();
+      buckets.forEach(o => Object.keys(o || {}).forEach(k => set.add(k)));
       this.setState({ live: Math.max(1, set.size), online: true });
       this.fetchCounts();
-      if (this._gc !== b && Math.random() < 0.15) { this._gc = b; this.gcPresence(b); }
+      if (this._gc !== b && Math.random() < 0.1) { this._gc = b; this.gcPresence(b); }
     } catch (e) {
       this.setState({ online: false });
     }
@@ -399,7 +400,7 @@ class Component extends DCLogic {
 
   // 오래된 버킷 정리 — 목록을 읽지 않고 버킷 번호를 계산해 삭제한다 (읽기 권한 불필요)
   gcPresence(b) {
-    for (let i = 21; i <= 40; i++) {
+    for (let i = 7; i <= 26; i++) {
       fetch(this.DB + '/pres/' + (b - i) + '.json', { method: 'DELETE' }).catch(() => {});
     }
   }
@@ -553,11 +554,6 @@ class Component extends DCLogic {
     const collapsed = s.collapsed || {};
     const bodyOf = secs => secs.map(x => (x.h || '') + ' ' + x.lines.join(' ')).join(' ').toLowerCase();
     const raw = [];
-    if (wd) raw.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d, i) => ({
-      title: d.day + ' 보혈 선포', ref: notes[d.day] || '', resume: this.resumeLabel('w' + i),
-      body: bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]),
-      open: () => this.openPrayer('w' + i)
-    })) });
     if (list.length) raw.push({ label: '선포 기도문', items: list.map((p, i) => ({
       title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('s' + i),
       body: bodyOf(p.sections), open: () => this.openPrayer('s' + i)
@@ -566,14 +562,19 @@ class Component extends DCLogic {
       title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('e' + i),
       body: bodyOf(p.sections), open: () => this.openPrayer('e' + i)
     })) });
+    if (wd) raw.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d, i) => ({
+      title: d.day + ' 보혈 선포', ref: notes[d.day] || '', resume: this.resumeLabel('w' + i),
+      body: bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]),
+      open: () => this.openPrayer('w' + i)
+    })) });
     let hits = 0;
     const groups = raw.map(g => {
       const items = q ? g.items.filter(it => (it.title + ' ' + it.ref + ' ' + it.body).toLowerCase().includes(q)) : g.items;
       hits += items.length;
-      const isOpen = q ? true : !collapsed[g.label];
+      const isOpen = q ? true : !!collapsed[g.label];
       return {
         label: g.label, items, count: items.length, open: isOpen, rotate: isOpen ? 90 : 0,
-        toggle: () => this.setState({ collapsed: { ...collapsed, [g.label]: isOpen } })
+        toggle: () => this.setState({ collapsed: { ...collapsed, [g.label]: !isOpen } })
       };
     }).filter(g => g.items.length || !q);
     let open = null;
