@@ -453,9 +453,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   <!-- ─── 묵상 칼럼 ─── -->
   <sc-if value="{{ isColumn }}" hint-placeholder-val="{{ false }}">
   <main style="padding:8px 16px 0;animation:riseIn .4s ease;">
-    <div style="padding:6px 4px 18px;">
-      <h2 style="font-family:'Noto Serif KR',serif;font-size:23px;font-weight:600;margin:0;letter-spacing:-.01em;">빛이 지나간 자리</h2>
-    </div>
+    <div style="height:12px;"></div>
     <div style="display:flex;flex-direction:column;gap:10px;">
       <sc-for list="{{ posts }}" as="p" hint-placeholder-count="1">
         <button onClick="{{ p.open }}" style="display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);cursor:pointer;text-align:left;color:var(--text);font-family:inherit;">
@@ -913,7 +911,7 @@ class Component extends DCLogic {
   closeFlow() {
     this.saveFlowPos();
     this.stopFlowLoop();
-    this.setState({ flowKey: null, flowPlay: false });
+    this.setState({ flowKey: null, flowPlay: false, collapsed: {}, query: '' });
   }
   saveFlowPos() {
     const el = this.flowEl;
@@ -1155,7 +1153,7 @@ class Component extends DCLogic {
       if (weekendIdx < 0) weekendIdx = findP('에클레시아 선포 기도문 1');
     }
     const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
-    const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false, postNo: null }); };
+    const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false, postNo: null, collapsed: {}, query: '' }); };
     const tabs = [
       { key: 'home', label: '홈', icon: '✦' }, { key: 'prayers', label: '기도문', icon: '𝄞' },
       { key: 'column', label: '묵상', icon: '❖' }, { key: 'settings', label: '설정', icon: '⚙' }
@@ -1310,7 +1308,7 @@ class Component extends DCLogic {
       setLeftHand: setHand('left'), setRightHand: setHand('right'),
       leftHandBg: handed === 'left' ? 'var(--accent)' : 'none', leftHandFg: handed === 'left' ? '#fff' : 'var(--sub)', leftHandBorder: handed === 'left' ? 'var(--accent)' : 'var(--line)',
       rightHandBg: handed === 'right' ? 'var(--accent)' : 'none', rightHandFg: handed === 'right' ? '#fff' : 'var(--sub)', rightHandBorder: handed === 'right' ? 'var(--accent)' : 'var(--line)',
-      closePrayer: () => this.setState({ openKey: null, openPage: 0 }),
+      closePrayer: () => this.setState({ openKey: null, openPage: 0, collapsed: {}, query: '' }),
       hourBars, peakHourLabel: peak + '시',
       darkToggleBg: dark ? 'var(--accent)' : '#c9c7c3', darkKnobLeft: dark ? 28 : 4,
       copyAccount: () => { navigator.clipboard && navigator.clipboard.writeText('국민 92311516646'); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1600); },
