@@ -17,6 +17,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <script src="prayers-data.js?v=20260803a"></script>
+<script src="column-data.js?v=20260803a"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
@@ -36,10 +37,10 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
 
   <sc-if value="{{ headerOn }}" hint-placeholder-val="{{ true }}">
   <header style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 8px 20px;">
-    <div style="display:flex;align-items:baseline;gap:8px;">
+    <button onClick="{{ goHome }}" aria-label="홈으로" style="display:flex;align-items:baseline;gap:8px;border:none;background:none;padding:0;cursor:pointer;color:var(--text);font-family:inherit;text-align:left;">
       <span style="font-size:19px;font-weight:700;letter-spacing:.06em;">ONPRAY</span>
       <span style="font-size:12px;color:var(--sub);letter-spacing:.04em;">깨어 기도하는 자리</span>
-    </div>
+    </button>
     <div style="display:flex;align-items:center;gap:2px;">
     <button onClick="{{ openBgmSheet }}" aria-label="배경음악" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ barBgmColor }};padding:0;">
       <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
@@ -92,7 +93,110 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   </sc-if>
 
   <sc-if value="{{ doneMsg }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:40;background:var(--text);color:var(--bg);padding:13px 20px;border-radius:14px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2);white-space:nowrap;">선포를 마쳤습니다. 아멘.</div>
+    <div onClick="{{ closeDone }}" style="position:fixed;inset:0;z-index:70;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:28px 24px calc(22px + env(safe-area-inset-bottom));animation:riseIn .3s ease;">
+        <div style="text-align:center;">
+          <div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);margin-bottom:16px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+          </div>
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:21px;font-weight:600;margin:0 0 8px;">선포를 마쳤습니다</h3>
+          <p style="font-size:13.5px;color:var(--sub);margin:0 0 24px;line-height:1.7;">{{ doneLine }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <button onClick="{{ openShare }}" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:0 18px;border:none;border-radius:15px;background:var(--accent);color:#fff;cursor:pointer;font-family:inherit;text-align:left;">
+            <span style="flex:none;display:flex;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg>
+            </span>
+            <span style="flex:1;display:flex;flex-direction:column;">
+              <span style="font-size:15px;font-weight:700;">동역자에게 함께 하자고 전하기</span>
+              <span style="font-size:11.5px;opacity:.82;">카카오톡 · 문자로 바로</span>
+            </span>
+          </button>
+          <sc-if value="{{ canInstall }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ openInstall }}" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:0 18px;border:1px solid var(--line);border-radius:15px;background:none;color:var(--text);cursor:pointer;font-family:inherit;text-align:left;">
+              <span style="flex:none;display:flex;color:var(--sub);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"></rect><path d="M12 7v8M8 11h8"></path></svg>
+              </span>
+              <span style="flex:1;display:flex;flex-direction:column;">
+                <span style="font-size:15px;font-weight:600;">홈 화면에 추가하기</span>
+                <span style="font-size:11.5px;color:var(--sub);">매일 앱처럼 한 번에 열기</span>
+              </span>
+            </button>
+          </sc-if>
+          <button onClick="{{ closeDone }}" style="min-height:46px;display:flex;align-items:center;justify-content:center;border:none;background:none;font-size:13.5px;color:var(--sub);cursor:pointer;font-family:inherit;">다음에 하기</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 공유 카드 -->
+  <sc-if value="{{ shareOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:80;background:var(--bg);display:flex;flex-direction:column;">
+      <div style="flex:none;display:flex;align-items:center;gap:10px;padding:14px 16px 12px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+        <span style="flex:1;font-size:15px;font-weight:700;">함께 하자고 전하기</span>
+        <button onClick="{{ closeShare }}" aria-label="닫기" style="flex:none;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:0 20px 16px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+        <div ref="{{ cardRef }}" style="position:relative;border-radius:20px;overflow:hidden;background:#0b0a09;aspect-ratio:4/5;">
+          <img src="assets/worship-2x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="440px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:47.5% 40%;filter:grayscale(1) contrast(1.22) brightness(.46);">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,6,.5) 0%,rgba(8,7,6,.1) 34%,rgba(8,7,6,.88) 100%);"></div>
+          <div style="position:absolute;top:20px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.18em;color:#fff;">ONPRAY</span>
+            <span style="font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.5);">{{ shareDate }}</span>
+          </div>
+          <div style="position:absolute;left:22px;right:22px;bottom:22px;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:14px;">
+              <span style="width:6px;height:6px;border-radius:50%;background:#6fd39b;"></span>
+              <span style="font-size:11.5px;color:rgba(255,255,255,.78);">{{ shareLive }}</span>
+            </div>
+            <p style="font-family:'Noto Serif KR',serif;font-size:19px;font-weight:600;line-height:1.62;color:#fff;margin:0 0 12px;text-shadow:0 2px 20px rgba(0,0,0,.5);">{{ shareQuote }}</p>
+            <div style="width:22px;height:1px;background:rgba(255,255,255,.4);margin-bottom:10px;"></div>
+            <span style="font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;">onpray.pages.dev</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:14px;">
+          <sc-for list="{{ shareTabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.pick }}" style="flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;border:1px solid {{ t.border }};border-radius:11px;background:none;font-size:12.5px;color:{{ t.color }};font-weight:{{ t.weight }};cursor:pointer;font-family:inherit;">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:none;padding:0 16px calc(18px + env(safe-area-inset-bottom));max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;">
+        <button onClick="{{ doShare }}" style="min-height:54px;display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:15px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M12 16V3M7 8l5-5 5 5"></path></svg>
+          {{ shareBtnLabel }}
+        </button>
+        <button onClick="{{ saveCard }}" style="min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:14px;background:none;color:var(--sub);font-size:13.5px;cursor:pointer;font-family:inherit;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5M12 15V3"></path></svg>
+          {{ saveBtnLabel }}
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 홈 화면 추가 안내 -->
+  <sc-if value="{{ installOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeInstall }}" style="position:fixed;inset:0;z-index:80;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:26px 24px calc(26px + env(safe-area-inset-bottom));animation:riseIn .3s ease;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="flex:1;font-size:16px;font-weight:700;">홈 화면에 추가하기</span>
+          <button onClick="{{ closeInstall }}" aria-label="닫기" style="flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <p style="font-size:13px;color:var(--sub);margin:0 0 22px;line-height:1.7;">주소창 없이 앱처럼 열리고,<br>선포하던 자리에서 바로 이어집니다.</p>
+        <div style="display:flex;flex-direction:column;gap:15px;">
+          <sc-for list="{{ installSteps }}" as="st" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <span style="flex:none;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;color:var(--accent);font-size:12px;font-weight:700;">{{ st.n }}</span>
+              <span style="flex:1;font-size:14px;line-height:1.6;">{{ st.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ closeInstall }}" style="width:100%;margin-top:24px;min-height:50px;border:none;border-radius:14px;background:var(--accent);color:#fff;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;">알겠습니다</button>
+      </div>
+    </div>
   </sc-if>
 
   <!-- ─── 홈 ─── -->
@@ -346,51 +450,104 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   </main>
   </sc-if>
 
-  <!-- ─── 통계 ─── -->
-  <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
-  <main style="padding:8px 16px;display:flex;flex-direction:column;gap:16px;animation:riseIn .4s ease;">
-    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 20px;">
-      <h2 style="font-size:17px;font-weight:700;margin:0 0 2px;">시간대별 선포 현황</h2>
-      <p style="font-size:13px;color:var(--sub);margin:0 0 22px;">오늘 0시부터 지금까지 실제 접속 집계</p>
-      <div style="display:flex;align-items:flex-end;gap:3px;height:150px;">
-        <sc-for list="{{ hourBars }}" as="b" hint-placeholder-count="24">
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
-            <span style="font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;">{{ b.count }}</span>
-            <div style="width:100%;border-radius:4px 4px 2px 2px;height:{{ b.pct }}%;background:{{ b.color }};min-height:2px;transition:height .5s;"></div>
-          </div>
-        </sc-for>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--sub);">
-        <span>0시</span><span>6시</span><span>12시</span><span>18시</span><span>23시</span>
-      </div>
-    </section>
-    <section style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;">
-        <div style="font-size:28px;font-weight:300;font-variant-numeric:tabular-nums;">{{ todayTotal }}</div>
-        <div style="font-size:12px;color:var(--sub);margin-top:4px;">오늘 누적 선포</div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;">
-        <div style="font-size:28px;font-weight:300;font-variant-numeric:tabular-nums;">{{ peakHourLabel }}</div>
-        <div style="font-size:12px;color:var(--sub);margin-top:4px;">가장 뜨거웠던 시간</div>
-      </div>
-    </section>
-    <p style="font-size:12px;color:var(--sub);text-align:center;line-height:1.6;margin:4px 12px;">시간마다 함께 깨어 있는 동역자들의 기록입니다.<br>당신의 방문도 이 불씨 중 하나가 되었습니다.</p>
+  <!-- ─── 묵상 칼럼 ─── -->
+  <sc-if value="{{ isColumn }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px 0;animation:riseIn .4s ease;">
+    <div style="padding:6px 4px 18px;">
+      <h2 style="font-family:'Noto Serif KR',serif;font-size:23px;font-weight:600;margin:0;letter-spacing:-.01em;">빛이 지나간 자리</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <sc-for list="{{ posts }}" as="p" hint-placeholder-count="1">
+        <button onClick="{{ p.open }}" style="display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);cursor:pointer;text-align:left;color:var(--text);font-family:inherit;">
+          <span style="display:block;position:relative;height:132px;background:#111;">
+            <img src="assets/column/light-01-2x.jpg" srcset="assets/column/light-01-1x.jpg 780w, assets/column/light-01-2x.jpg 1560w" sizes="360px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:34% 30%;opacity:.9;">
+            <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,9,.3) 0%,rgba(8,8,9,.12) 36%,rgba(8,8,9,.86) 100%);"></span>
+            <span style="position:absolute;left:18px;right:18px;bottom:14px;display:block;">
+              <span style="display:block;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.62);font-weight:700;margin-bottom:6px;">NO. {{ p.no }}</span>
+              <span style="display:block;font-family:'Noto Serif KR',serif;font-size:20px;font-weight:600;line-height:1.4;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);">{{ p.title }}</span>
+            </span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <p style="font-size:11.5px;color:var(--sub);text-align:center;margin:22px 0 8px;line-height:1.7;">기록은 천천히 쌓입니다</p>
   </main>
+  </sc-if>
+
+  <!-- ─── 칼럼 읽기 (어두운 표지) ─── -->
+  <sc-if value="{{ postOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:#0e0e10;z-index:30;">
+      <div ref="{{ postScrollRef }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div style="max-width:480px;margin:0 auto;">
+          <div style="position:relative;height:520px;background:#0b0a09;">
+            <img src="assets/column/light-01-2x.jpg" srcset="assets/column/light-01-1x.jpg 780w, assets/column/light-01-2x.jpg 1560w" sizes="480px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:38% 44%;opacity:.92;">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,6,.5) 0%,rgba(8,7,6,0) 28%,rgba(10,10,11,.5) 70%,#0e0e10 100%);"></div>
+            <div style="position:absolute;top:24px;left:24px;right:24px;display:flex;align-items:center;justify-content:space-between;">
+              <button onClick="{{ goHome }}" style="font-size:10.5px;letter-spacing:.22em;color:rgba(255,255,255,.7);font-weight:600;border:none;background:none;padding:0;cursor:pointer;font-family:inherit;">ONPRAY</button>
+              <span style="font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.42);font-variant-numeric:tabular-nums;">NO. {{ postNo }}</span>
+            </div>
+            <div style="position:absolute;left:24px;right:24px;bottom:32px;">
+              <div style="width:26px;height:1px;background:rgba(255,255,255,.45);margin-bottom:16px;"></div>
+              <h1 style="font-family:'Noto Serif KR',serif;font-size:28px;font-weight:600;color:#fff;line-height:1.44;margin:0 0 12px;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.55);">{{ postTitle }}</h1>
+              <p style="font-size:11.5px;color:rgba(255,255,255,.52);margin:0;letter-spacing:.03em;">{{ postMeta }}</p>
+            </div>
+          </div>
+          <div style="padding:34px 26px 90px;">
+            <div style="display:flex;flex-direction:column;gap:26px;">
+              <sc-for list="{{ postBlocks }}" as="blk" hint-placeholder-count="5">
+                <div>
+                  <sc-if value="{{ blk.isText }}" hint-placeholder-val="{{ true }}">
+                    <p style="font-family:'Noto Serif KR',serif;font-size:{{ postFs }}px;line-height:2.15;color:rgba(255,255,255,.86);margin:0;">
+                      <sc-for list="{{ blk.lines }}" as="ln" hint-placeholder-count="3">
+                        <span style="display:block;">{{ ln }}</span>
+                      </sc-for>
+                    </p>
+                  </sc-if>
+                  <sc-if value="{{ blk.isQuote }}" hint-placeholder-val="{{ false }}">
+                    <p style="font-family:'Noto Serif KR',serif;font-size:{{ postQuoteFs }}px;font-weight:600;line-height:1.75;color:#fff;margin:6px 0;padding-left:16px;border-left:2px solid #e6b756;">
+                      <sc-for list="{{ blk.lines }}" as="ln" hint-placeholder-count="2">
+                        <span style="display:block;">{{ ln }}</span>
+                      </sc-for>
+                    </p>
+                  </sc-if>
+                  <sc-if value="{{ blk.isBreak }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:9px;padding:4px 0;">
+                      <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);"></span>
+                      <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);"></span>
+                      <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);"></span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);text-align:center;">
+              <p style="font-size:11.5px;color:rgba(255,255,255,.42);margin:0;line-height:1.8;">{{ postMeta }}<br>필자는 밝히지 않습니다</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;margin:0 auto;box-sizing:border-box;">
+        <button onClick="{{ closePost }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:rgba(255,255,255,.8);cursor:pointer;font-family:inherit;padding:0;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+        </button>
+        <span style="flex:1;"></span>
+        <button onClick="{{ fontDown }}" aria-label="글자 작게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:12px;line-height:1;white-space:nowrap;color:rgba(255,255,255,.7);font-family:inherit;padding:0;">가−</button>
+        <button onClick="{{ fontUp }}" aria-label="글자 크게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:16px;line-height:1;white-space:nowrap;color:rgba(255,255,255,.7);font-family:inherit;padding:0;">가+</button>
+        <button onClick="{{ openBgmSheet }}" aria-label="배경음악" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ postBgmColor }};font-family:inherit;padding:0;">
+          <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+          </sc-if>
+          <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+          </sc-if>
+        </button>
+      </div>
+    </div>
   </sc-if>
 
   <!-- ─── 설정 ─── -->
   <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
   <main style="padding:8px 16px;display:flex;flex-direction:column;gap:16px;animation:riseIn .4s ease;">
-
-    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
-      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">선포기도시간 알람</h2>
-      <p style="font-size:13px;color:var(--sub);margin:0 0 16px;line-height:1.55;">원하시는 시간에 알림을 보내드립니다.<br>이 사이트를 홈 화면에 추가해 두시면 더 잘 작동합니다.</p>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <input type="time" value="{{ alarmTime }}" onChange="{{ setAlarmTime }}" style="flex:1;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);font-size:17px;padding:0 14px;font-family:inherit;">
-        <button onClick="{{ toggleAlarm }}" style="min-height:48px;min-width:96px;border:none;border-radius:12px;background:{{ alarmBtnBg }};color:{{ alarmBtnFg }};font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">{{ alarmBtnLabel }}</button>
-      </div>
-      <p style="font-size:12px;color:var(--sub);margin:12px 0 0;">{{ alarmStatus }}</p>
-    </section>
 
     <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
       <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">배경음악</h2>
@@ -493,9 +650,9 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
       <span style="font-size:11px;font-weight:{{ tabPrayWeight }};">기도문</span>
     </button>
-    <button onClick="{{ goStats }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabStatsColor }};font-family:inherit;">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><rect x="7" y="12" width="3" height="6"></rect><rect x="12" y="8" width="3" height="10"></rect><rect x="17" y="4" width="3" height="14"></rect></svg>
-      <span style="font-size:11px;font-weight:{{ tabStatsWeight }};">통계</span>
+    <button onClick="{{ goColumn }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabColColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><path d="M16 8L2 22"></path><path d="M17.5 15H9"></path></svg>
+      <span style="font-size:11px;font-weight:{{ tabColColWeight }};">묵상</span>
     </button>
     <button onClick="{{ goSettings }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabSetColor }};font-family:inherit;">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -513,20 +670,19 @@ class Component extends DCLogic {
     openKey: null, live: 0, counts: [], copied: false,
     homePage: 0, openPage: 0, handed: localStorage.getItem('sp_hand') || 'right',
     flowKey: null, flowPlay: false, flowSpeed: parseInt(localStorage.getItem('sp_flow_speed') || '300', 10),
+    postNo: null, shareOpen: false, installOpen: false, shareKind: 'today', shareBtnBusy: '', savedMsg: '',
     bgm: localStorage.getItem('sp_bgm') || 'none', bgmPlay: false,
     bgmSheet: false, bgmPos: 0, bgmDur: 0,
     bgmVol: parseInt(localStorage.getItem('sp_bgm_vol') || '45', 10),
     hours: null, online: null,
-    alarmTime: localStorage.getItem('sp_alarm_time') || '06:00',
-    alarmOn: localStorage.getItem('sp_alarm_on') === '1',
-    alarmMsg: ''
+    hours2: null
   };
 
   DB = 'https://onpray-default-rtdb.asia-southeast1.firebasedatabase.app';
 
   componentDidMount() {
     document.body.dataset.theme = this.state.theme;
-    const grab = () => { if (window.PRAYER_DATA) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
+    const grab = () => { if (window.PRAYER_DATA && window.COLUMN_POSTS) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
     if (!grab()) { let n = 0; const t = setInterval(() => { if (grab() || ++n > 50) clearInterval(t); }, 100); }
     this.cid = localStorage.getItem('sp_cid') || (Math.random().toString(36).slice(2) + Date.now().toString(36));
     localStorage.setItem('sp_cid', this.cid);
@@ -535,8 +691,12 @@ class Component extends DCLogic {
     this.recordVisit();
     this.syncLive();
     this.liveTimer = setInterval(() => this.syncLive(), 15000);
-    this.alarmTimer = setInterval(() => this.checkAlarm(), 20000);
     this.measure();
+    if (!window.htmlToImage) {
+      const sc = document.createElement('script');
+      sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js';
+      document.head.appendChild(sc);
+    }
     this.onResize = () => { clearTimeout(this.rzT); this.rzT = setTimeout(() => this.measure(true), 150); };
     window.addEventListener('resize', this.onResize);
     window.addEventListener('orientationchange', this.onResize);
@@ -544,7 +704,7 @@ class Component extends DCLogic {
     window.addEventListener('pagehide', this.onLeave);
   }
   componentWillUnmount() {
-    clearInterval(this.liveTimer); clearInterval(this.alarmTimer); clearTimeout(this.rzT); clearInterval(this.hourTimer); clearInterval(this.posTimer); clearTimeout(this._skT);
+    clearInterval(this.liveTimer); clearTimeout(this.rzT); clearInterval(this.hourTimer); clearInterval(this.posTimer); clearTimeout(this._skT);
     window.removeEventListener('pagehide', this.onLeave); this.onLeave && this.onLeave();
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('orientationchange', this.onResize);
@@ -607,18 +767,7 @@ class Component extends DCLogic {
       this.setState({ hours: Array.from({ length: 24 }, (_, h) => Object.keys(counts[h] || {}).length) });
     } catch (e) {}
   }
-  checkAlarm() {
-    if (!this.state.alarmOn) return;
-    const now = new Date();
-    const hhmm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-    if (hhmm === this.state.alarmTime && this.lastFired !== hhmm + now.toDateString()) {
-      this.lastFired = hhmm + now.toDateString();
-      if (window.Notification && Notification.permission === 'granted') {
-        new Notification('선포기도 시간입니다', { body: '지금 함께 깨어 보혈을 선포해요' });
-      }
-      this.setState({ alarmMsg: '지금이 선포기도 시간입니다!' });
-    }
-  }
+
 
   prayers() { return window.EXTRA_PRAYERS || []; }
   legacy() {
@@ -659,6 +808,46 @@ class Component extends DCLogic {
   }
 
   hourData() { return this.state.hours || Array.from({ length: 24 }, () => 0); }
+
+  isStandalone() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+  isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+
+  async shareCard(save) {
+    const el = this.cardEl;
+    const text = 'ONPRAY — 깨어 기도하는 자리\nhttps://onpray.pages.dev';
+    let file = null;
+    if (el && window.htmlToImage) {
+      try {
+        const blob = await window.htmlToImage.toBlob(el, { pixelRatio: 2, backgroundColor: '#0b0a09' });
+        if (blob) file = new File([blob], 'onpray.png', { type: 'image/png' });
+      } catch (e) {}
+    }
+    if (save) {
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a'); a.href = url; a.download = 'onpray.png'; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+        this.flash('savedMsg', '이미지를 저장했습니다');
+      } else { this.flash('savedMsg', '이미지를 만들 수 없습니다'); }
+      return;
+    }
+    try {
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], text: text });
+      } else if (navigator.share) {
+        await navigator.share({ title: 'ONPRAY', text: text, url: 'https://onpray.pages.dev' });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        this.flash('shareBtnBusy', '링크를 복사했습니다');
+      }
+    } catch (e) {}
+  }
+  flash(key, msg) {
+    this.setState({ [key]: msg });
+    setTimeout(() => this.setState({ [key]: '' }), 1800);
+  }
 
   // 선포 완주 기록 · 연속일
   markDone() {
@@ -750,7 +939,6 @@ class Component extends DCLogic {
       if (el.scrollTop >= max - 1) {
         this.markDone(); this.stopFlowLoop();
         this.setState({ flowPlay: false, doneMsg: true });
-        setTimeout(() => this.setState({ doneMsg: false }), 2600);
         return;
       }
       this._raf = requestAnimationFrame(step);
@@ -883,6 +1071,25 @@ class Component extends DCLogic {
     };
     const flow = sectionsFor(s.flowKey);
     if (flow) this._flowChars = flow.secs.reduce((n, sec) => n + (sec.h ? sec.h.length : 0) + sec.lines.reduce((m, l) => m + l.length, 0), 0);
+    // ── 공유 카드 문구 ──
+    const kinds = [
+      { id: 'today', label: '오늘의 선포', q: wd && !isWeekend ? wd.DAYS[todayIdx].sections[0].lines[0] : (list[0] ? list[0].sections[0].lines[0] : '') },
+      { id: 'armor', label: '전신갑주', q: (week[0] || list[0]) ? (week[0] || list[0]).sections[0].lines[0] : '' },
+      { id: 'column', label: '묵상 칼럼', q: (window.COLUMN_POSTS && window.COLUMN_POSTS[0]) ? window.COLUMN_POSTS[0].title : '' }
+    ];
+    const kind = kinds.find(k => k.id === s.shareKind) || kinds[0];
+    const shareQuote = kind.q || '';
+    const shareTabs = kinds.map(k => ({
+      label: k.label,
+      pick: () => this.setState({ shareKind: k.id }),
+      border: k.id === s.shareKind ? 'var(--accent)' : 'var(--line)',
+      color: k.id === s.shareKind ? 'var(--accent)' : 'var(--sub)',
+      weight: k.id === s.shareKind ? 600 : 400
+    }));
+
+    // ── 묵상 칼럼 ──
+    const cposts = (window.COLUMN_POSTS || []);
+    const post = s.postNo ? cposts.find(p => p.no === s.postNo) : null;
     const hours = this.hourData();
     const max = Math.max(...hours, 1);
     const nowH = new Date().getHours();
@@ -927,7 +1134,7 @@ class Component extends DCLogic {
     const savePos = p => { if (s.openKey) localStorage.setItem('sp_pos_' + s.openKey, String(p)); };
     const goNext = () => {
       const n = op + 1;
-      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ openKey: null, openPage: 0, doneMsg: true }); setTimeout(() => this.setState({ doneMsg: false }), 2600); return; }
+      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ openKey: null, openPage: 0, doneMsg: true }); return; }
       savePos(n); this.setState({ openPage: n }); if (this.scroller) this.scroller.scrollTop = 0;
     };
     const goPrev = () => { if (op > 0) { savePos(op - 1); this.setState({ openPage: op - 1 }); if (this.scroller) this.scroller.scrollTop = 0; } };
@@ -939,7 +1146,7 @@ class Component extends DCLogic {
     const handed = s.handed;
     const setHand = h => () => { localStorage.setItem('sp_hand', h); this.setState({ handed: h }); };
     const dark = s.theme === 'dark';
-    const onHome = s.tab === 'home' && !s.openKey && !s.flowKey;
+    const onHome = s.tab === 'home' && !s.openKey && !s.flowKey && !s.postNo;
     // 주말 고정 배정: 토 → 에클레시아 1, 일 → 에클레시아 2 (없으면 1)
     const findP = t => list.findIndex(p => p.title === t);
     let weekendIdx = -1;
@@ -948,13 +1155,13 @@ class Component extends DCLogic {
       if (weekendIdx < 0) weekendIdx = findP('에클레시아 선포 기도문 1');
     }
     const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
-    const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false }); };
+    const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false, postNo: null }); };
     const tabs = [
       { key: 'home', label: '홈', icon: '✦' }, { key: 'prayers', label: '기도문', icon: '𝄞' },
-      { key: 'stats', label: '통계', icon: '▥' }, { key: 'settings', label: '설정', icon: '⚙' }
+      { key: 'column', label: '묵상', icon: '❖' }, { key: 'settings', label: '설정', icon: '⚙' }
     ].map(t => ({ ...t, go: setTab(t.key), color: s.tab === t.key ? 'var(--accent)' : 'var(--sub)', weight: s.tab === t.key ? 700 : 400 }));
     return {
-      isHome: s.tab === 'home', isPrayers: s.tab === 'prayers', isStats: s.tab === 'stats', isSettings: s.tab === 'settings',
+      isHome: s.tab === 'home', isPrayers: s.tab === 'prayers', isColumn: s.tab === 'column' && !post, isSettings: s.tab === 'settings',
       themeIcon: dark ? '☀︎' : '☾',
       toggleTheme: () => { const t = dark ? 'light' : 'dark'; localStorage.setItem('sp_theme', t); document.body.dataset.theme = t; this.setState({ theme: t }); },
       liveCount: s.live, todayTotal: hours.reduce((a, b) => a + b, 0),
@@ -972,10 +1179,31 @@ class Component extends DCLogic {
       clearQuery: () => this.setState({ query: '' }),
       openTitle: open ? open.title : '', openRef: open ? open.ref : '',
       openNote: open && op === 0 ? (open.note || '') : '',
-      isFirstPage: op === 0, chromeOn: !open && !flow, headerOn: !open && !flow && s.tab !== 'home',
+      isFirstPage: op === 0, chromeOn: !open && !flow, headerOn: !open && !flow && !post && s.tab !== 'home',
       navBg: s.tab === 'home' ? 'rgba(9,9,8,.86)' : 'var(--navbg)',
       navBorder: s.tab === 'home' ? 'rgba(255,255,255,.1)' : 'var(--line)',
       isDark: dark, isLight: !dark, doneMsg: !!s.doneMsg,
+      doneLine: '오늘 이 자리에서 ' + hours.reduce((a, b) => a + b, 0) + '명이 함께했습니다. 혼자 하는 기도가 아닙니다.',
+      closeDone: () => this.setState({ doneMsg: false }),
+      canInstall: !this.isStandalone(),
+      openInstall: () => this.setState({ doneMsg: false, installOpen: true }),
+      closeInstall: () => this.setState({ installOpen: false }),
+      installSteps: this.isIOS()
+        ? [{ n: '1', text: '화면 아래 공유 버튼을 누릅니다' }, { n: '2', text: '목록에서 "홈 화면에 추가"를 찾습니다' }, { n: '3', text: '오른쪽 위 "추가"를 누르면 끝입니다' }]
+        : [{ n: '1', text: '오른쪽 위 메뉴(⋮)를 누릅니다' }, { n: '2', text: '"홈 화면에 추가"를 선택합니다' }, { n: '3', text: '"설치"를 누르면 끝입니다' }],
+      openShare: () => this.setState({ doneMsg: false, shareOpen: true }),
+      closeShare: () => this.setState({ shareOpen: false }),
+      shareOpen: !!s.shareOpen, installOpen: !!s.installOpen,
+      cardRef: el => { if (el) this.cardEl = el; },
+      shareDate: new Date().getFullYear() + '. ' + (new Date().getMonth() + 1) + '. ' + new Date().getDate() + '.',
+      shareLive: '지금 ' + s.live + '명이 함께 깨어 있습니다',
+      shareQuote: shareQuote,
+      shareTabs: shareTabs,
+      doShare: () => this.shareCard(false),
+      saveCard: () => this.shareCard(true),
+      shareBtnLabel: s.shareBtnBusy || '카카오톡 · 문자로 보내기',
+      saveBtnLabel: s.savedMsg || '이미지로 저장',
+      stopProp: e => e.stopPropagation(),
       bgmList: this.tracks().map(t => ({
         title: t.title, artist: t.artist || '', selected: s.bgm === t.id,
         weight: s.bgm === t.id ? 600 : 400,
@@ -1012,15 +1240,30 @@ class Component extends DCLogic {
         this.setState({ bgmPlay: !s.bgmPlay }, () => this.bgmSync());
       },
       goHome: setTab('home'), goPrayers: setTab('prayers'), goSettings: setTab('settings'),
-      goStats: () => { this.setState({ tab: 'stats', openKey: null }); this.fetchCounts(true); },
+      goColumn: () => { this.setState({ tab: 'column', openKey: null, flowKey: null, flowPlay: false, postNo: null }); },
       tabHomeColor: s.tab === 'home' ? '#e6b756' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabHomeWeight: s.tab === 'home' ? 600 : 400,
       tabPrayColor: s.tab === 'prayers' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabPrayWeight: s.tab === 'prayers' ? 600 : 400,
-      tabStatsColor: s.tab === 'stats' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabStatsWeight: s.tab === 'stats' ? 600 : 400,
+      tabColColor: s.tab === 'column' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabColColWeight: s.tab === 'column' ? 600 : 400,
       tabSetColor: s.tab === 'settings' ? 'var(--accent)' : (onHome ? 'rgba(255,255,255,.55)' : 'var(--sub)'), tabSetWeight: s.tab === 'settings' ? 600 : 400,
       streakLabel: this.streak() > 1 ? this.streak() + '일 연속 선포 중입니다' : '',
       fontDownColor: s.fs <= 15 ? 'var(--line)' : 'var(--sub)',
       fontUpColor: s.fs >= 30 ? 'var(--line)' : 'var(--sub)',
       scrollerRef: el => { if (el) { this.scroller = el; } },
+      posts: cposts.map(p => ({
+        no: p.no, title: p.title, meta: p.meta,
+        img2x: p.photo + '-2x.jpg', srcset: p.photo + '-1x.jpg 780w, ' + p.photo + '-2x.jpg 1560w',
+        open: () => { this.setState({ postNo: p.no }); }
+      })),
+      postOpen: !!post,
+      postNo: post ? post.no : '', postTitle: post ? post.title : '', postMeta: post ? post.meta : '',
+      postImg2x: post ? post.photo + '-2x.jpg' : '',
+      postSrcset: post ? (post.photo + '-1x.jpg 780w, ' + post.photo + '-2x.jpg 1560w') : '',
+      postBlocks: post ? post.blocks.map(b => ({ lines: b.lines, isText: b.t === 'p', isQuote: b.t === 'q', isBreak: b.t === 'b' })) : [],
+      postFs: Math.max(15, Math.min(22, s.fs - 1)),
+      postQuoteFs: Math.max(18, Math.min(26, s.fs + 3)),
+      postBgmColor: s.bgmPlay ? '#e6b756' : 'rgba(255,255,255,.7)',
+      postScrollRef: el => { if (el) this.postEl = el; },
+      closePost: () => { this.setState({ postNo: null }); },
       flowOpen: !!flow, flowTitle: flow ? flow.title : '', flowNote: flow ? flow.note : '',
       flowSecs: flow ? flow.secs : [],
       flowPlaying: !!s.flowPlay, flowPaused: !s.flowPlay,
@@ -1040,7 +1283,7 @@ class Component extends DCLogic {
       },
       setFlowSpeed: e => { const v = Number(e.target.value); localStorage.setItem('sp_flow_speed', String(v)); this.setState({ flowSpeed: v }); },
       closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
-      shellPadBottom: open || flow || onHome ? '0px' : '84px',
+      shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
       openBlocks: openPages[op].blocks, openPageLabel: (op + 1) + ' / ' + openPages.length,
       barTitle: op === 0 ? '' : open.title,
       openNext: goNext, openPrevBtn: goPrev,
@@ -1069,15 +1312,6 @@ class Component extends DCLogic {
       rightHandBg: handed === 'right' ? 'var(--accent)' : 'none', rightHandFg: handed === 'right' ? '#fff' : 'var(--sub)', rightHandBorder: handed === 'right' ? 'var(--accent)' : 'var(--line)',
       closePrayer: () => this.setState({ openKey: null, openPage: 0 }),
       hourBars, peakHourLabel: peak + '시',
-      alarmTime: s.alarmTime,
-      setAlarmTime: e => { localStorage.setItem('sp_alarm_time', e.target.value); this.setState({ alarmTime: e.target.value }); },
-      toggleAlarm: async () => {
-        if (!s.alarmOn && window.Notification && Notification.permission !== 'granted') { try { await Notification.requestPermission(); } catch (e) {} }
-        const on = !s.alarmOn; localStorage.setItem('sp_alarm_on', on ? '1' : '0'); this.setState({ alarmOn: on });
-      },
-      alarmBtnBg: s.alarmOn ? 'var(--accent)' : 'var(--line)', alarmBtnFg: s.alarmOn ? '#fff' : 'var(--text)',
-      alarmBtnLabel: s.alarmOn ? '알람 켜짐' : '알람 끄짐',
-      alarmStatus: s.alarmMsg || (s.alarmOn ? '매일 ' + s.alarmTime + '에 알려드립니다 (브라우저를 열어 두세요)' : '알람이 꺼져 있습니다'),
       darkToggleBg: dark ? 'var(--accent)' : '#c9c7c3', darkKnobLeft: dark ? 28 : 4,
       copyAccount: () => { navigator.clipboard && navigator.clipboard.writeText('국민 92311516646'); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1600); },
       copyLabel: s.copied ? '복사됨 ✓' : '복사',
