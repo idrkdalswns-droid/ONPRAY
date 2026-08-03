@@ -185,16 +185,25 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
             <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="3">
-                  <button onClick="{{ p.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-height:60px;cursor:pointer;text-align:left;color:var(--text);font-family:inherit;">
-                    <span style="display:flex;flex-direction:column;gap:3px;">
+                  <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;">
+                    <div style="display:flex;flex-direction:column;gap:3px;">
                       <span style="font-size:16px;font-weight:500;">{{ p.title }}</span>
                       <sc-if value="{{ p.resume }}" hint-placeholder-val="{{ false }}">
                         <span style="font-size:12px;color:var(--accent);font-weight:600;">{{ p.resume }}</span>
                       </sc-if>
                       <span style="font-size:13px;color:var(--sub);line-height:1.6;">{{ p.ref }}</span>
-                    </span>
-                    <span style="color:var(--sub);font-size:18px;">›</span>
-                  </button>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:14px;">
+                      <button onClick="{{ p.open }}" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7v14H4zM13 5h7v14h-7"></path></svg>
+                        장 넘기며 읽기
+                      </button>
+                      <button onClick="{{ p.flow }}" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--accent);border-radius:12px;background:none;color:var(--accent);font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 10l6-6 6 6"></path></svg>
+                        흐름으로 읽기
+                      </button>
+                    </div>
+                  </div>
                 </sc-for>
               </div>
             </sc-if>
@@ -204,6 +213,80 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
           <p style="font-size:14px;color:var(--sub);text-align:center;padding:32px 20px;line-height:1.7;">검색 결과가 없습니다.<br>다른 낱말로 찾아보세요.</p>
         </sc-if>
         <p style="font-size:13px;color:var(--sub);text-align:center;margin:4px 0 12px;line-height:1.6;">기도문 업데이트를 요청하시겠어요?<br><a href="mailto:idrkdalswns@gmail.com">idrkdalswns@gmail.com</a> 으로 문의해 주세요</p>
+      </div>
+    </sc-if>
+    <sc-if value="{{ flowOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;background:var(--bg);z-index:20;">
+        <div ref="{{ flowRef }}" onClick="{{ toggleFlow }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;">
+          <div style="max-width:480px;margin:0 auto;padding:0 22px;box-sizing:border-box;">
+            <div style="height:150px;"></div>
+            <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em;">{{ flowTitle }}</h1>
+            <p style="font-size:12.5px;color:var(--sub);margin:0 0 34px;line-height:1.65;">{{ flowNote }}</p>
+            <div style="display:flex;flex-direction:column;gap:26px;">
+              <sc-for list="{{ flowSecs }}" as="sec" hint-placeholder-count="4">
+                <div>
+                  <sc-if value="{{ sec.h }}" hint-placeholder-val="{{ false }}">
+                    <p style="font-size:13px;font-weight:700;color:var(--accent);margin:0 0 12px;letter-spacing:.02em;">{{ sec.h }}</p>
+                  </sc-if>
+                  <div style="font-family:'Noto Serif KR',serif;font-size:{{ prayerFs }}px;line-height:1.95;display:flex;flex-direction:column;gap:16px;">
+                    <sc-for list="{{ sec.lines }}" as="para" hint-placeholder-count="4">
+                      <p style="margin:0;">{{ para }}</p>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="height:320px;"></div>
+          </div>
+        </div>
+        <div style="position:absolute;left:0;right:0;top:0;height:140px;background:linear-gradient(180deg,var(--bg) 46%,rgba(0,0,0,0));pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:190px;background:linear-gradient(0deg,var(--bg) 48%,rgba(0,0,0,0));pointer-events:none;"></div>
+        <sc-if value="{{ flowPlaying }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:0;right:0;top:42%;height:62px;border-top:1px solid color-mix(in oklch, var(--accent) 22%, transparent);border-bottom:1px solid color-mix(in oklch, var(--accent) 22%, transparent);background:color-mix(in oklch, var(--accent) 4%, transparent);pointer-events:none;"></div>
+        </sc-if>
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;margin:0 auto;box-sizing:border-box;">
+          <button onClick="{{ closeFlowView }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;font-family:inherit;padding:0;">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <span style="flex:1;min-width:0;font-size:12.5px;color:var(--accent);font-weight:600;white-space:nowrap;">흐름으로 읽기</span>
+          <button onClick="{{ toggleTheme }}" aria-label="다크모드 전환" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);font-family:inherit;padding:0;">
+            <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+            </sc-if>
+            <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path></svg>
+            </sc-if>
+          </button>
+          <button onClick="{{ fontDown }}" aria-label="글자 작게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:12px;line-height:1;white-space:nowrap;color:{{ fontDownColor }};font-family:inherit;padding:0;">가−</button>
+          <button onClick="{{ fontUp }}" aria-label="글자 크게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:16px;line-height:1;white-space:nowrap;color:{{ fontUpColor }};font-family:inherit;padding:0;">가+</button>
+          <button onClick="{{ openBgmSheet }}" aria-label="배경음악" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ barBgmColor }};font-family:inherit;padding:0;">
+            <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+            </sc-if>
+            <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+            </sc-if>
+          </button>
+        </div>
+        <div style="position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:456px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.12);box-sizing:border-box;">
+          <div style="display:flex;align-items:center;gap:14px;flex-direction:{{ flowRowDir }};">
+            <button onClick="{{ toggleFlow }}" aria-label="자동 스크롤 재생 또는 정지" style="flex:none;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);cursor:pointer;padding:0;">
+              <sc-if value="{{ flowPlaying }}" hint-placeholder-val="{{ false }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+              </sc-if>
+              <sc-if value="{{ flowPaused }}" hint-placeholder-val="{{ true }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l12 7.5-12 7.5z"></path></svg>
+              </sc-if>
+            </button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <span style="font-size:12px;color:var(--sub);">흐르는 속도</span>
+                <span style="font-size:12px;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;">{{ flowSpeedLabel }}</span>
+              </div>
+              <input type="range" min="120" max="480" step="20" value="{{ flowSpeed }}" onChange="{{ setFlowSpeed }}" onInput="{{ setFlowSpeed }}" aria-label="흐르는 속도" style="width:100%;height:28px;accent-color:var(--accent);background:none;cursor:pointer;">
+            </div>
+          </div>
+        </div>
       </div>
     </sc-if>
     <sc-if value="{{ prayerOpen }}" hint-placeholder-val="{{ false }}">
@@ -429,6 +512,7 @@ class Component extends DCLogic {
     fs: parseInt(localStorage.getItem('sp_fs') || '19', 10),
     openKey: null, live: 0, counts: [], copied: false,
     homePage: 0, openPage: 0, handed: localStorage.getItem('sp_hand') || 'right',
+    flowKey: null, flowPlay: false, flowSpeed: parseInt(localStorage.getItem('sp_flow_speed') || '300', 10),
     bgm: localStorage.getItem('sp_bgm') || 'none', bgmPlay: false,
     bgmSheet: false, bgmPos: 0, bgmDur: 0,
     bgmVol: parseInt(localStorage.getItem('sp_bgm_vol') || '45', 10),
@@ -632,6 +716,53 @@ class Component extends DCLogic {
     const p = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
     return p > 0 ? (p + 1) + '장부터 이어서' : '';
   }
+  // ── 흐름으로 읽기 (자동 스크롤) ─────────────────────────
+  openFlow(key) {
+    this._flowChars = 0;
+    this.setState({ flowKey: key, flowPlay: false, openKey: null });
+  }
+  closeFlow() {
+    this.saveFlowPos();
+    this.stopFlowLoop();
+    this.setState({ flowKey: null, flowPlay: false });
+  }
+  saveFlowPos() {
+    const el = this.flowEl;
+    if (el && this.state.flowKey) {
+      const max = el.scrollHeight - el.clientHeight;
+      localStorage.setItem('sp_flow_' + this.state.flowKey, max > 0 ? (el.scrollTop / max).toFixed(4) : '0');
+    }
+  }
+  stopFlowLoop() { if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; } }
+  startFlowLoop() {
+    if (this._raf) return;
+    let last = performance.now(), acc = 0;
+    const step = now => {
+      const el = this.flowEl;
+      if (!el || !this.state.flowPlay) { this._raf = null; return; }
+      const dt = Math.min(120, now - last); last = now;
+      const max = el.scrollHeight - el.clientHeight;
+      if (max <= 0) { this._raf = requestAnimationFrame(step); return; }
+      const chars = this._flowChars || 1;
+      const pxPerChar = el.scrollHeight / chars;
+      acc += (this.state.flowSpeed / 60) * pxPerChar * (dt / 1000);
+      if (acc >= 1) { el.scrollTop += Math.floor(acc); acc -= Math.floor(acc); }
+      if (el.scrollTop >= max - 1) {
+        this.markDone(); this.stopFlowLoop();
+        this.setState({ flowPlay: false, doneMsg: true });
+        setTimeout(() => this.setState({ doneMsg: false }), 2600);
+        return;
+      }
+      this._raf = requestAnimationFrame(step);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+  async requestWake(on) {
+    try {
+      if (on && navigator.wakeLock && !this._wake) this._wake = await navigator.wakeLock.request('screen');
+      else if (!on && this._wake) { await this._wake.release(); this._wake = null; }
+    } catch (e) {}
+  }
   openPrayer(key) {
     const saved = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
     this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved });
@@ -709,20 +840,20 @@ class Component extends DCLogic {
     const raw = [];
     if (list.length) raw.push({ label: '선포 기도문', items: list.map((p, i) => ({
       title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('s' + i),
-      body: bodyOf(p.sections), open: () => this.openPrayer('s' + i)
+      body: bodyOf(p.sections), open: () => this.openPrayer('s' + i), flow: () => this.openFlow('s' + i)
     })) });
     if (w2l.length) raw.push({ label: '예배에서 삶으로', items: w2l.map((p, i) => ({
       title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('l' + i),
-      body: bodyOf(p.sections), open: () => this.openPrayer('l' + i)
+      body: bodyOf(p.sections), open: () => this.openPrayer('l' + i), flow: () => this.openFlow('l' + i)
     })) });
     if (week.length) raw.push({ label: '에클레시아 · 승부5 선포', items: week.map((p, i) => ({
       title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('e' + i),
-      body: bodyOf(p.sections), open: () => this.openPrayer('e' + i)
+      body: bodyOf(p.sections), open: () => this.openPrayer('e' + i), flow: () => this.openFlow('e' + i)
     })) });
     if (wd) raw.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d, i) => ({
       title: d.day + ' 보혈 선포', ref: notes[d.day] || '', resume: this.resumeLabel('w' + i),
       body: bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]),
-      open: () => this.openPrayer('w' + i)
+      open: () => this.openPrayer('w' + i), flow: () => this.openFlow('w' + i)
     })) });
     let hits = 0;
     const groups = raw.map(g => {
@@ -741,6 +872,17 @@ class Component extends DCLogic {
       else if (s.openKey[0] === 'e' && week[+s.openKey.slice(1)]) { const p = week[+s.openKey.slice(1)]; open = { title: p.title, ref: p.ref, note: p.note, pages: paginate(p.sections, (p.ref || '') + ' ' + (p.note || '')) }; }
       else if (s.openKey[0] === 'l' && w2l[+s.openKey.slice(1)]) { const p = w2l[+s.openKey.slice(1)]; open = { title: p.title, ref: p.ref, note: p.note, pages: paginate(p.sections, (p.ref || '') + ' ' + (p.note || '')) }; }
     }
+    // 흐름 읽기용: 키로 섹션 원본을 찾는다
+    const sectionsFor = k => {
+      if (!k) return null;
+      const i = +k.slice(1);
+      if (k[0] === 'w' && wd) return { title: '보혈 선포 기도문 · ' + wd.DAYS[i].day, note: notes[wd.DAYS[i].day] || '', secs: [...wd.INTRO, ...wd.DAYS[i].sections, ...wd.CONCLUSION] };
+      const src = k[0] === 's' ? list : k[0] === 'e' ? week : k[0] === 'l' ? w2l : null;
+      if (src && src[i]) return { title: src[i].title, note: src[i].note || src[i].ref || '', secs: src[i].sections };
+      return null;
+    };
+    const flow = sectionsFor(s.flowKey);
+    if (flow) this._flowChars = flow.secs.reduce((n, sec) => n + (sec.h ? sec.h.length : 0) + sec.lines.reduce((m, l) => m + l.length, 0), 0);
     const hours = this.hourData();
     const max = Math.max(...hours, 1);
     const nowH = new Date().getHours();
@@ -797,7 +939,7 @@ class Component extends DCLogic {
     const handed = s.handed;
     const setHand = h => () => { localStorage.setItem('sp_hand', h); this.setState({ handed: h }); };
     const dark = s.theme === 'dark';
-    const onHome = s.tab === 'home' && !s.openKey;
+    const onHome = s.tab === 'home' && !s.openKey && !s.flowKey;
     // 주말 고정 배정: 토 → 에클레시아 1, 일 → 에클레시아 2 (없으면 1)
     const findP = t => list.findIndex(p => p.title === t);
     let weekendIdx = -1;
@@ -806,7 +948,7 @@ class Component extends DCLogic {
       if (weekendIdx < 0) weekendIdx = findP('에클레시아 선포 기도문 1');
     }
     const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
-    const setTab = t => () => this.setState({ tab: t, openKey: null });
+    const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false }); };
     const tabs = [
       { key: 'home', label: '홈', icon: '✦' }, { key: 'prayers', label: '기도문', icon: '𝄞' },
       { key: 'stats', label: '통계', icon: '▥' }, { key: 'settings', label: '설정', icon: '⚙' }
@@ -830,7 +972,7 @@ class Component extends DCLogic {
       clearQuery: () => this.setState({ query: '' }),
       openTitle: open ? open.title : '', openRef: open ? open.ref : '',
       openNote: open && op === 0 ? (open.note || '') : '',
-      isFirstPage: op === 0, chromeOn: !open, headerOn: !open && s.tab !== 'home',
+      isFirstPage: op === 0, chromeOn: !open && !flow, headerOn: !open && !flow && s.tab !== 'home',
       navBg: s.tab === 'home' ? 'rgba(9,9,8,.86)' : 'var(--navbg)',
       navBorder: s.tab === 'home' ? 'rgba(255,255,255,.1)' : 'var(--line)',
       isDark: dark, isLight: !dark, doneMsg: !!s.doneMsg,
@@ -879,7 +1021,26 @@ class Component extends DCLogic {
       fontDownColor: s.fs <= 15 ? 'var(--line)' : 'var(--sub)',
       fontUpColor: s.fs >= 30 ? 'var(--line)' : 'var(--sub)',
       scrollerRef: el => { if (el) { this.scroller = el; } },
-      shellPadBottom: open || onHome ? '0px' : '84px',
+      flowOpen: !!flow, flowTitle: flow ? flow.title : '', flowNote: flow ? flow.note : '',
+      flowSecs: flow ? flow.secs : [],
+      flowPlaying: !!s.flowPlay, flowPaused: !s.flowPlay,
+      flowSpeed: s.flowSpeed, flowSpeedLabel: '분당 ' + s.flowSpeed + '자',
+      flowRef: el => {
+        if (el && this.flowEl !== el) {
+          this.flowEl = el;
+          const r = parseFloat(localStorage.getItem('sp_flow_' + s.flowKey) || '0');
+          if (r > 0.01 && r < 0.99) setTimeout(() => { const m = el.scrollHeight - el.clientHeight; if (m > 0) el.scrollTop = m * r; }, 60);
+        }
+      },
+      toggleFlow: () => {
+        const on = !s.flowPlay;
+        this.setState({ flowPlay: on });
+        this.requestWake(on);
+        if (on) setTimeout(() => this.startFlowLoop(), 0); else { this.stopFlowLoop(); this.saveFlowPos(); }
+      },
+      setFlowSpeed: e => { const v = Number(e.target.value); localStorage.setItem('sp_flow_speed', String(v)); this.setState({ flowSpeed: v }); },
+      closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
+      shellPadBottom: open || flow || onHome ? '0px' : '84px',
       openBlocks: openPages[op].blocks, openPageLabel: (op + 1) + ' / ' + openPages.length,
       barTitle: op === 0 ? '' : open.title,
       openNext: goNext, openPrevBtn: goPrev,
@@ -902,6 +1063,7 @@ class Component extends DCLogic {
       homePrev: () => this.setState({ homePage: Math.max(0, hp - 1) }),
       homeNextLabel: hp === homePages.length - 1 ? '처음으로' : '다음 장',
       navRowDir: handed === 'left' ? 'row-reverse' : 'row',
+      flowRowDir: handed === 'left' ? 'row-reverse' : 'row',
       setLeftHand: setHand('left'), setRightHand: setHand('right'),
       leftHandBg: handed === 'left' ? 'var(--accent)' : 'none', leftHandFg: handed === 'left' ? '#fff' : 'var(--sub)', leftHandBorder: handed === 'left' ? 'var(--accent)' : 'var(--line)',
       rightHandBg: handed === 'right' ? 'var(--accent)' : 'none', rightHandFg: handed === 'right' ? '#fff' : 'var(--sub)', rightHandBorder: handed === 'right' ? 'var(--accent)' : 'var(--line)',
