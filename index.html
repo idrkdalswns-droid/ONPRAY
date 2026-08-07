@@ -234,7 +234,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
 
     <div style="position:absolute;left:24px;right:24px;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;">
       <sc-if value="{{ armorOn }}" hint-placeholder-val="{{ false }}">
-        <div style="position:relative;margin:0 -24px 14px;padding:12px 24px 0;background:linear-gradient(180deg,rgba(8,7,6,0) 0%,rgba(8,7,6,.92) 26%,rgba(8,7,6,.96) 100%);">
+        <div style="position:relative;margin:0 -24px 14px;padding:12px 24px 0;">
           <div style="position:relative;height:56px;margin-bottom:6px;">
             <sc-for list="{{ armorRow }}" as="a" hint-placeholder-count="6">
               <span style="position:absolute;left:{{ a.x }}%;top:{{ a.y }}px;transform:translateX(-50%);display:flex;color:{{ a.color }};opacity:{{ a.op }};animation:{{ a.anim }};">
