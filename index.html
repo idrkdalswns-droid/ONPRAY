@@ -31,6 +31,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
 @keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes slowzoom{0%{transform:scale(1.04)}100%{transform:scale(1.14)}}
 @keyframes shimmer{0%,100%{opacity:.72;filter:drop-shadow(0 0 3px rgba(230,183,86,.5))}50%{opacity:1;filter:drop-shadow(0 0 7px rgba(230,183,86,.9))}}
+@keyframes floatUp{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
 @keyframes dropIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 </style>
 </helmet>
@@ -241,7 +242,6 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
               </span>
             </sc-for>
           </div>
-          <div style="font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.03em;padding-bottom:8px;text-shadow:0 1px 6px rgba(0,0,0,.8);">{{ armorLabel }}</div>
         </div>
       </sc-if>
       <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;">
@@ -791,7 +791,6 @@ class Component extends DCLogic {
     ];
     const times = this.armorTimes();
     const lit = times.length;
-    if (!lit) return { armorOn: false, armorRow: [], armorLabel: '', mapTop: 150, mapSide: 4 };
     const now = Date.now();
     const crownY = [30, 14, 2, 2, 14, 30], crownS = [17, 19, 22, 22, 19, 17];
     const armorRow = P.map((p, i) => {
@@ -801,14 +800,12 @@ class Component extends DCLogic {
         d: p.d, x: (16 + (i / 5) * 68).toFixed(1), y: crownY[i], size: crownS[i],
         color: on ? '#e6b756' : 'rgba(255,255,255,.13)',
         op: fading ? 0.4 : 1,
-        anim: on && !fading ? 'shimmer ' + (2.6 + i * 0.5).toFixed(1) + 's ease-in-out ' + (i * 0.4).toFixed(1) + 's infinite' : 'none'
+        anim: on && !fading
+          ? 'shimmer ' + (2.6 + i * 0.5).toFixed(1) + 's ease-in-out ' + (i * 0.4).toFixed(1) + 's infinite, floatUp ' + (3.4 + i * 0.6).toFixed(1) + 's ease-in-out ' + (i * 0.5).toFixed(1) + 's infinite'
+          : 'none'
       };
     });
-    const names = ['하나', '둘', '셋', '넷', '다섯'];
-    return {
-      armorOn: true, armorRow, mapTop: 92, mapSide: 10,
-      armorLabel: lit >= 6 ? '전신갑주를 모두 입고 이 자리에 서 있습니다' : '여섯 부위 중 ' + names[lit - 1] + '을 입고 있습니다'
-    };
+    return { armorOn: true, armorRow, mapTop: 92, mapSide: 10 };
   }
   prayers() { return window.EXTRA_PRAYERS || []; }
   legacy() {
