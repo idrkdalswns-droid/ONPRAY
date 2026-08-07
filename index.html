@@ -16,8 +16,8 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260803a"></script>
-<script src="column-data.js?v=20260803a"></script>
+<script src="prayers-data.js?v=20260807a"></script>
+<script src="column-data.js?v=20260807a"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
@@ -30,6 +30,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
 @keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
 @keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes slowzoom{0%{transform:scale(1.04)}100%{transform:scale(1.14)}}
+@keyframes shimmer{0%,100%{opacity:.72;filter:drop-shadow(0 0 3px rgba(230,183,86,.5))}50%{opacity:1;filter:drop-shadow(0 0 7px rgba(230,183,86,.9))}}
 @keyframes dropIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 </style>
 </helmet>
@@ -203,7 +204,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <main style="position:relative;min-height:100dvh;overflow:hidden;background:#090908;animation:riseIn .4s ease;">
     <img src="assets/worship-1x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:53% 41%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
-    <div style="position:absolute;left:4%;right:4%;top:150px;mix-blend-mode:screen;transform:perspective(700px) rotateX(7deg);">
+    <div style="position:absolute;left:{{ mapSide }}%;right:{{ mapSide }}%;top:{{ mapTop }}px;mix-blend-mode:screen;transform:perspective(700px) rotateX(7deg);">
       <div style="display:grid;grid-template-columns:repeat(32,1fr);gap:3px;">
         <sc-for list="{{ candles }}" as="c" hint-placeholder-count="80">
           <span style="position:relative;width:100%;aspect-ratio:1;animation:{{ c.anim }};">
@@ -231,6 +232,18 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
     </div>
 
     <div style="position:absolute;left:24px;right:24px;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;">
+      <sc-if value="{{ armorOn }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;margin:0 -24px 14px;padding:12px 24px 0;background:linear-gradient(180deg,rgba(8,7,6,0) 0%,rgba(8,7,6,.92) 26%,rgba(8,7,6,.96) 100%);">
+          <div style="position:relative;height:56px;margin-bottom:6px;">
+            <sc-for list="{{ armorRow }}" as="a" hint-placeholder-count="6">
+              <span style="position:absolute;left:{{ a.x }}%;top:{{ a.y }}px;transform:translateX(-50%);display:flex;color:{{ a.color }};opacity:{{ a.op }};animation:{{ a.anim }};">
+                <svg width="{{ a.size }}" height="{{ a.size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.d }}"></path></svg>
+              </span>
+            </sc-for>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.03em;padding-bottom:8px;text-shadow:0 1px 6px rgba(0,0,0,.8);">{{ armorLabel }}</div>
+        </div>
+      </sc-if>
       <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;">
         <span style="width:7px;height:7px;border-radius:50%;background:{{ liveDotColor }};animation:breathe 2.4s ease-in-out infinite;"></span>
         <sc-if value="{{ liveOk }}" hint-placeholder-val="{{ true }}">
@@ -333,8 +346,8 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
                     <p style="font-size:13px;font-weight:700;color:var(--accent);margin:0 0 12px;letter-spacing:.02em;">{{ sec.h }}</p>
                   </sc-if>
                   <div style="font-family:'Noto Serif KR',serif;font-size:{{ prayerFs }}px;line-height:1.95;display:flex;flex-direction:column;gap:16px;">
-                    <sc-for list="{{ sec.lines }}" as="para" hint-placeholder-count="4">
-                      <p style="margin:0;">{{ para }}</p>
+                    <sc-for list="{{ sec.qlines }}" as="para" hint-placeholder-count="4">
+                      <p style="margin:0;color:{{ para.c }};">{{ para.t }}</p>
                     </sc-for>
                   </div>
                 </div>
@@ -433,8 +446,8 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
                   <p style="font-size:13px;font-weight:700;color:var(--accent);margin:0 0 10px;letter-spacing:.02em;">{{ blk.h }}</p>
                 </sc-if>
                 <div style="font-family:'Noto Serif KR',serif;font-size:{{ prayerFs }}px;line-height:1.85;display:flex;flex-direction:column;gap:13px;">
-                  <sc-for list="{{ blk.lines }}" as="para" hint-placeholder-count="4">
-                    <p style="margin:0;">{{ para }}</p>
+                  <sc-for list="{{ blk.qlines }}" as="para" hint-placeholder-count="4">
+                    <p style="margin:0;color:{{ para.c }};">{{ para.t }}</p>
                   </sc-for>
                 </div>
               </div>
@@ -763,6 +776,40 @@ class Component extends DCLogic {
   }
 
 
+  // 성경 인용(따옴표로 시작하는 줄)은 포인트 컬러로
+  quoteLines(lines) {
+    return (lines || []).map(l => ({ t: l, c: /^[“"]/.test((l || '').trim()) ? 'var(--accent)' : 'inherit' }));
+  }
+  armorVals() {
+    const P = [
+      { d: 'M2 9h20v6H2z M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4', n: '진리의 허리띠' },
+      { d: 'M7 4l5 2 5-2 1 6-1 11H8L7 10z M12 6v17', n: '의의 흉배' },
+      { d: 'M6 4h5v9l6 3v4H6z', n: '평안의 복음의 신발' },
+      { d: 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', n: '믿음의 방패' },
+      { d: 'M4 13a8 8 0 0 1 16 0v5h-4l-1-3h-6l-1 3H4z', n: '구원의 투구' },
+      { d: 'M18 3l3 3-9 9-3-3z M9 12l-6 6 3 3 6-6 M5 16l3 3', n: '성령의 검' }
+    ];
+    const times = this.armorTimes();
+    const lit = times.length;
+    if (!lit) return { armorOn: false, armorRow: [], armorLabel: '', mapTop: 150, mapSide: 4 };
+    const now = Date.now();
+    const crownY = [30, 14, 2, 2, 14, 30], crownS = [17, 19, 22, 22, 19, 17];
+    const armorRow = P.map((p, i) => {
+      const on = i < lit;
+      const fading = on && (this.ARMOR_MS - (now - times[i])) < 8 * 3600 * 1000;
+      return {
+        d: p.d, x: (16 + (i / 5) * 68).toFixed(1), y: crownY[i], size: crownS[i],
+        color: on ? '#e6b756' : 'rgba(255,255,255,.13)',
+        op: fading ? 0.4 : 1,
+        anim: on && !fading ? 'shimmer ' + (2.6 + i * 0.5).toFixed(1) + 's ease-in-out ' + (i * 0.4).toFixed(1) + 's infinite' : 'none'
+      };
+    });
+    const names = ['하나', '둘', '셋', '넷', '다섯'];
+    return {
+      armorOn: true, armorRow, mapTop: 92, mapSide: 10,
+      armorLabel: lit >= 6 ? '전신갑주를 모두 입고 이 자리에 서 있습니다' : '여섯 부위 중 ' + names[lit - 1] + '을 입고 있습니다'
+    };
+  }
   prayers() { return window.EXTRA_PRAYERS || []; }
   legacy() {
     return [
@@ -843,8 +890,23 @@ class Component extends DCLogic {
     setTimeout(() => this.setState({ [key]: '' }), 1800);
   }
 
+  // ── 전신갑주: 완주할 때마다 한 부위, 부위마다 48시간 ──
+  ARMOR_MS = 48 * 3600 * 1000;
+  armorTimes() {
+    let a; try { a = JSON.parse(localStorage.getItem('sp_armor') || '[]'); } catch (e) { a = []; }
+    const now = Date.now();
+    const alive = a.filter(t => typeof t === 'number' && now - t < this.ARMOR_MS);
+    if (alive.length !== a.length) localStorage.setItem('sp_armor', JSON.stringify(alive));
+    return alive;
+  }
+  wearArmor() {
+    const a = this.armorTimes();
+    if (a.length < 6) { a.push(Date.now()); localStorage.setItem('sp_armor', JSON.stringify(a)); }
+  }
+
   // 선포 완주 기록 · 연속일
   markDone() {
+    this.wearArmor();
     const k = this.dateKey();
     let log; try { log = JSON.parse(localStorage.getItem('sp_done') || '[]'); } catch (e) { log = []; }
     if (log[log.length - 1] !== k) { log.push(k); localStorage.setItem('sp_done', JSON.stringify(log.slice(-400))); }
@@ -1160,6 +1222,7 @@ class Component extends DCLogic {
       toggleTheme: () => { const t = dark ? 'light' : 'dark'; localStorage.setItem('sp_theme', t); document.body.dataset.theme = t; this.setState({ theme: t }); },
       liveCount: s.live, todayTotal: hours.reduce((a, b) => a + b, 0),
       liveDotColor: s.online === false ? '#c9c7c3' : '#3fa66a',
+      ...this.armorVals(),
       liveLine: s.online === null ? '집계를 불러오는 중입니다' : (s.online === false ? '집계 서버에 연결할 수 없습니다' : null),
       liveOk: s.online === true,
       candles,
@@ -1259,7 +1322,7 @@ class Component extends DCLogic {
       postScrollRef: el => { if (el) this.postEl = el; },
       closePost: () => { this.setState({ postNo: null }); },
       flowOpen: !!flow, flowTitle: flow ? flow.title : '', flowNote: flow ? flow.note : '',
-      flowSecs: flow ? flow.secs : [],
+      flowSecs: (flow ? flow.secs : []).map(sec => ({ h: sec.h, qlines: this.quoteLines(sec.lines) })),
       flowPlaying: !!s.flowPlay, flowPaused: !s.flowPlay,
       flowSpeed: s.flowSpeed, flowSpeedLabel: '분당 ' + s.flowSpeed + '자',
       flowRef: el => {
@@ -1278,7 +1341,8 @@ class Component extends DCLogic {
       setFlowSpeed: e => { const v = Number(e.target.value); localStorage.setItem('sp_flow_speed', String(v)); this.setState({ flowSpeed: v }); },
       closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
       shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
-      openBlocks: openPages[op].blocks, openPageLabel: (op + 1) + ' / ' + openPages.length,
+      openBlocks: (openPages[op].blocks || []).map(b => ({ h: b.h, qlines: this.quoteLines(b.lines) })),
+      openPageLabel: (op + 1) + ' / ' + openPages.length,
       barTitle: op === 0 ? '' : open.title,
       openNext: goNext, openPrevBtn: goPrev,
       zoneTap: e => { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX - r.left < r.width * 0.3) goPrev(); else goNext(); },
