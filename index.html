@@ -237,7 +237,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   <!-- ─── 홈 ─── -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <main style="position:relative;min-height:100dvh;overflow:hidden;background:#090908;animation:riseIn .4s ease;">
-    <img src="assets/worship-1x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:53% 41%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
+    <img src="assets/worship-1x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 54%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
     <div style="position:absolute;left:{{ mapSide }}%;right:{{ mapSide }}%;top:{{ mapTop }}px;mix-blend-mode:screen;transform:perspective(700px) rotateX(7deg);">
       <div style="display:grid;grid-template-columns:repeat(32,1fr);gap:3px;">
         <sc-for list="{{ candles }}" as="c" hint-placeholder-count="80">
@@ -1014,7 +1014,7 @@ class Component extends DCLogic {
   // ── 흐름으로 읽기 (자동 스크롤) ─────────────────────────
   openFlow(key) {
     this._flowChars = 0;
-    this.setState({ flowKey: key, flowPlay: false, openKey: null });
+    this.setState({ flowKey: key, flowPlay: false, openKey: null, favSheet: false, tab: 'prayers' });
   }
   closeFlow() {
     this.saveFlowPos();
@@ -1058,8 +1058,13 @@ class Component extends DCLogic {
     } catch (e) {}
   }
   openPrayer(key) {
+    // ⚠ 불변식(INVARIANT): 전체화면 오버레이(기도문 상세·흐름읽기·칼럼)는
+    // 각자의 탭 <main> 안에 DOM으로 들어 있어, 소속 탭이 아니면 렌더되지 않는다.
+    // 따라서 오버레이를 여는 모든 메서드(openPrayer/openFlow/openPost)는
+    // 반드시 해당 tab을 함께 setState 해야 한다. 새 진입점(홈·즐겨찾기·공유 등)은
+    // state를 직접 만지지 말고 이 메서드들을 호출할 것 — 그러면 탭 전환이 자동 보장된다.
     const saved = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
-    this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved, favSheet: false });
+    this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved, favSheet: false, tab: 'prayers' });
   }
   // ── 즐겨찾기 ──
   favKeys() { try { const a = JSON.parse(localStorage.getItem('sp_favs') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
@@ -1361,7 +1366,7 @@ class Component extends DCLogic {
       posts: cposts.map(p => ({
         no: p.no, title: p.title, meta: p.meta,
         img2x: p.photo + '-2x.jpg', srcset: p.photo + '-1x.jpg 780w, ' + p.photo + '-2x.jpg 1560w',
-        open: () => { this.setState({ postNo: p.no }); }
+        open: () => { this.setState({ postNo: p.no, tab: 'column' }); }
       })),
       postOpen: !!post,
       postNo: post ? post.no : '', postTitle: post ? post.title : '', postMeta: post ? post.meta : '',
