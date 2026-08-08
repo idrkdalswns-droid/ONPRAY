@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260807a"></script>
+<script src="prayers-data.js?v=20260808b"></script>
 <script src="column-data.js?v=20260807a"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +33,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
 @keyframes shimmer{0%,100%{opacity:.72;filter:drop-shadow(0 0 3px rgba(230,183,86,.5))}50%{opacity:1;filter:drop-shadow(0 0 7px rgba(230,183,86,.9))}}
 @keyframes floatUp{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
 @keyframes dropIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+@keyframes sheetUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 </style>
 </helmet>
 <div style="max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:{{ shellPadBottom }};">
@@ -127,6 +128,38 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
           </sc-if>
           <button onClick="{{ closeDone }}" style="min-height:46px;display:flex;align-items:center;justify-content:center;border:none;background:none;font-size:13.5px;color:var(--sub);cursor:pointer;font-family:inherit;">다음에 하기</button>
         </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 나의 기도문 (즐겨찾기) 시트 -->
+  <sc-if value="{{ favSheet }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeFavSheet }}" style="position:fixed;inset:0;z-index:70;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:22px 22px 0 0;padding:16px 20px calc(20px + env(safe-area-inset-bottom));animation:sheetUp .28s ease;max-height:78vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div style="width:36px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px;"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          <span style="flex:1;font-family:'Noto Serif KR',serif;font-size:17px;color:var(--text);">나의 기도문</span>
+          <button onClick="{{ closeFavSheet }}" aria-label="닫기" style="flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <sc-if value="{{ hasFavs }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ favItems }}" as="p" hint-placeholder-count="2">
+              <button onClick="{{ p.open }}" style="display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:13px;background:none;color:var(--text);cursor:pointer;font-family:inherit;padding:13px 15px;text-align:left;">
+                <span style="flex:1;min-width:0;font-family:'Noto Serif KR',serif;font-size:15px;">{{ p.title }}</span>
+                <span style="flex:none;color:var(--accent);font-size:12px;font-weight:600;">선포 →</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noFavs }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:14px 10px 8px;">
+            <p style="font-size:14px;color:var(--sub);line-height:1.7;margin:0 0 16px;">아직 담아둔 기도문이 없습니다.<br>기도문 목록에서 하트를 눌러 담아보세요.</p>
+            <button onClick="{{ goPrayersFromFav }}" style="min-height:46px;padding:0 22px;border:1px solid var(--accent);border-radius:13px;background:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">기도문 보러가기</button>
+          </div>
+        </sc-if>
       </div>
     </div>
   </sc-if>
@@ -256,12 +289,22 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
       <sc-if value="{{ isWeekday }}" hint-placeholder-val="{{ true }}">
         <div style="font-size:11px;color:#e6b756;font-weight:700;letter-spacing:.18em;">오늘의 선포</div>
         <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;color:#fff;margin:10px 0 20px;text-shadow:0 2px 20px rgba(0,0,0,.55);">{{ todayDayLabel }} 보혈 선포 기도문</h1>
-        <button onClick="{{ goToday }}" style="width:100%;min-height:54px;border:none;border-radius:15px;background:#8e2b2b;color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 10px 26px rgba(142,43,43,.45);">선포 시작하기</button>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ openFavSheet }}" aria-label="나의 기도문" style="flex:none;width:54px;min-height:54px;border:1px solid rgba(255,255,255,.28);border-radius:15px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6b756" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          </button>
+          <button onClick="{{ goToday }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:#8e2b2b;color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 10px 26px rgba(142,43,43,.45);">선포 시작하기</button>
+        </div>
       </sc-if>
       <sc-if value="{{ isWeekend }}" hint-placeholder-val="{{ false }}">
         <div style="font-size:11px;color:#e6b756;font-weight:700;letter-spacing:.18em;">오늘의 선포</div>
         <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;color:#fff;margin:10px 0 20px;text-shadow:0 2px 20px rgba(0,0,0,.55);">{{ weekendTitle }}</h1>
-        <button onClick="{{ goWeekend }}" style="width:100%;min-height:54px;border:none;border-radius:15px;background:#8e2b2b;color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 10px 26px rgba(142,43,43,.45);">선포 시작하기</button>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ openFavSheet }}" aria-label="나의 기도문" style="flex:none;width:54px;min-height:54px;border:1px solid rgba(255,255,255,.28);border-radius:15px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6b756" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          </button>
+          <button onClick="{{ goWeekend }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:#8e2b2b;color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 10px 26px rgba(142,43,43,.45);">선포 시작하기</button>
+        </div>
       </sc-if>
       <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);">오늘 <strong style="color:rgba(255,255,255,.82);font-weight:600;">{{ todayTotal }}명</strong>이 이 자리에서 선포했습니다</div>
       <sc-if value="{{ streakLabel }}" hint-placeholder-val="{{ false }}">
@@ -303,12 +346,22 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="3">
                   <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;">
-                    <div style="display:flex;flex-direction:column;gap:3px;">
-                      <span style="font-size:16px;font-weight:500;">{{ p.title }}</span>
-                      <sc-if value="{{ p.resume }}" hint-placeholder-val="{{ false }}">
-                        <span style="font-size:12px;color:var(--accent);font-weight:600;">{{ p.resume }}</span>
-                      </sc-if>
-                      <span style="font-size:13px;color:var(--sub);line-height:1.6;">{{ p.ref }}</span>
+                    <div style="display:flex;align-items:flex-start;gap:10px;">
+                      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+                        <span style="font-size:16px;font-weight:500;">{{ p.title }}</span>
+                        <sc-if value="{{ p.resume }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:12px;color:var(--accent);font-weight:600;">{{ p.resume }}</span>
+                        </sc-if>
+                        <span style="font-size:13px;color:var(--sub);line-height:1.6;">{{ p.ref }}</span>
+                      </div>
+                      <button onClick="{{ p.toggleFav }}" aria-label="즐겨찾기" style="flex:none;width:40px;height:40px;margin:-6px -6px 0 0;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;padding:0;">
+                        <sc-if value="{{ p.isFav }}" hint-placeholder-val="{{ false }}">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                        </sc-if>
+                        <sc-if value="{{ p.notFav }}" hint-placeholder-val="{{ true }}">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                        </sc-if>
+                      </button>
                     </div>
                     <div style="display:flex;gap:8px;margin-top:14px;">
                       <button onClick="{{ p.open }}" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;">
@@ -1006,7 +1059,14 @@ class Component extends DCLogic {
   }
   openPrayer(key) {
     const saved = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
-    this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved });
+    this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved, favSheet: false });
+  }
+  // ── 즐겨찾기 ──
+  favKeys() { try { const a = JSON.parse(localStorage.getItem('sp_favs') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  toggleFav(key) {
+    const a = this.favKeys(); const i = a.indexOf(key);
+    if (i >= 0) a.splice(i, 1); else a.push(key);
+    localStorage.setItem('sp_favs', JSON.stringify(a)); this.forceUpdate();
   }
 
   renderVals() {
@@ -1078,24 +1138,19 @@ class Component extends DCLogic {
     const q = (s.query || '').trim().toLowerCase();
     const collapsed = s.collapsed || {};
     const bodyOf = secs => secs.map(x => (x.h || '') + ' ' + x.lines.join(' ')).join(' ').toLowerCase();
+    const favSet = new Set(this.favKeys());
+    const mk = (key, title, ref, body) => ({
+      title, ref, resume: this.resumeLabel(key), body, key,
+      isFav: favSet.has(key), notFav: !favSet.has(key), toggleFav: () => this.toggleFav(key),
+      open: () => this.openPrayer(key), flow: () => this.openFlow(key)
+    });
     const raw = [];
-    if (list.length) raw.push({ label: '선포 기도문', items: list.map((p, i) => ({
-      title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('s' + i),
-      body: bodyOf(p.sections), open: () => this.openPrayer('s' + i), flow: () => this.openFlow('s' + i)
-    })) });
-    if (w2l.length) raw.push({ label: '예배에서 삶으로', items: w2l.map((p, i) => ({
-      title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('l' + i),
-      body: bodyOf(p.sections), open: () => this.openPrayer('l' + i), flow: () => this.openFlow('l' + i)
-    })) });
-    if (week.length) raw.push({ label: '에클레시아 · 승부5 선포', items: week.map((p, i) => ({
-      title: p.title, ref: p.note || p.ref, resume: this.resumeLabel('e' + i),
-      body: bodyOf(p.sections), open: () => this.openPrayer('e' + i), flow: () => this.openFlow('e' + i)
-    })) });
-    if (wd) raw.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d, i) => ({
-      title: d.day + ' 보혈 선포', ref: notes[d.day] || '', resume: this.resumeLabel('w' + i),
-      body: bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]),
-      open: () => this.openPrayer('w' + i), flow: () => this.openFlow('w' + i)
-    })) });
+    if (list.length) raw.push({ label: '선포 기도문', items: list.map((p, i) => mk('s' + i, p.title, p.note || p.ref, bodyOf(p.sections))) });
+    if (w2l.length) raw.push({ label: '예배에서 삶으로', items: w2l.map((p, i) => mk('l' + i, p.title, p.note || p.ref, bodyOf(p.sections))) });
+    if (week.length) raw.push({ label: '에클레시아 · 승부5 선포', items: week.map((p, i) => mk('e' + i, p.title, p.note || p.ref, bodyOf(p.sections))) });
+    if (wd) raw.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d, i) => mk('w' + i, d.day + ' 보혈 선포', notes[d.day] || '', bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]))) });
+    const favItems = [];
+    raw.forEach(g => g.items.forEach(it => { if (it.isFav) favItems.push(it); }));
     let hits = 0;
     const groups = raw.map(g => {
       const items = q ? g.items.filter(it => (it.title + ' ' + it.ref + ' ' + it.body).toLowerCase().includes(q)) : g.items;
@@ -1356,6 +1411,10 @@ class Component extends DCLogic {
       weekendTitle: weekendPrayer ? weekendPrayer.title : '',
       goWeekend: () => { if (weekendIdx >= 0) { this.setState({ tab: 'prayers' }); this.openPrayer('s' + weekendIdx); } },
       goToday: () => { this.setState({ tab: 'prayers' }); this.openPrayer('w' + todayIdx); },
+      favSheet: !!s.favSheet, favItems, hasFavs: favItems.length > 0, noFavs: favItems.length === 0,
+      openFavSheet: () => this.setState({ favSheet: true }),
+      closeFavSheet: () => this.setState({ favSheet: false }),
+      goPrayersFromFav: () => this.setState({ tab: 'prayers', favSheet: false }),
       homeParas: homePages[hp].lines, homeHead: homePages[hp].h, homeTitle: homeR.title, homeRef: homeR.ref, homePageLabel: (hp + 1) + ' / ' + homePages.length,
       homeNext: () => this.setState({ homePage: (hp + 1) % homePages.length }),
       homePrev: () => this.setState({ homePage: Math.max(0, hp - 1) }),
