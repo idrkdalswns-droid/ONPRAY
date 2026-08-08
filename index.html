@@ -17,7 +17,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <script src="prayers-data.js?v=20260808c"></script>
-<script src="column-data.js?v=20260808c"></script>
+<script src="column-data.js?v=20260808e"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
@@ -551,8 +551,10 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
       <sc-for list="{{ posts }}" as="p" hint-placeholder-count="1">
         <button onClick="{{ p.open }}" style="display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);cursor:pointer;text-align:left;color:var(--text);font-family:inherit;">
           <span style="display:block;position:relative;height:132px;background:#111;">
-            <img src="assets/column/light-01-2x.jpg" srcset="assets/column/light-01-1x.jpg 780w, assets/column/light-01-2x.jpg 1560w" sizes="360px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:34% 30%;opacity:.9;">
+            <sc-if value="{{ p.img2x }}" hint-placeholder-val="{{ false }}">
+            <img src="{{ p.img2x }}" srcset="{{ p.srcset }}" sizes="360px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:34% 30%;opacity:.9;">
             <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,9,.3) 0%,rgba(8,8,9,.12) 36%,rgba(8,8,9,.86) 100%);"></span>
+            </sc-if>
             <span style="position:absolute;left:18px;right:18px;bottom:14px;display:block;">
               <span style="display:block;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.62);font-weight:700;margin-bottom:6px;">NO. {{ p.no }}</span>
               <span style="display:block;font-family:'Noto Serif KR',serif;font-size:20px;font-weight:600;line-height:1.4;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);">{{ p.title }}</span>
@@ -571,7 +573,9 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
       <div ref="{{ postScrollRef }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;">
         <div style="max-width:480px;margin:0 auto;">
           <div style="position:relative;height:520px;background:#0b0a09;">
-            <img src="assets/column/light-01-2x.jpg" srcset="assets/column/light-01-1x.jpg 780w, assets/column/light-01-2x.jpg 1560w" sizes="480px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:38% 44%;opacity:.92;">
+            <sc-if value="{{ postImg2x }}" hint-placeholder-val="{{ false }}">
+            <img src="{{ postImg2x }}" srcset="{{ postSrcset }}" sizes="480px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:38% 44%;opacity:.92;">
+            </sc-if>
             <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,6,.5) 0%,rgba(8,7,6,0) 28%,rgba(10,10,11,.5) 70%,#0e0e10 100%);"></div>
             <div style="position:absolute;top:24px;left:24px;right:24px;display:flex;align-items:center;justify-content:space-between;">
               <button onClick="{{ goHome }}" style="font-size:10.5px;letter-spacing:.22em;color:rgba(255,255,255,.7);font-weight:600;border:none;background:none;padding:0;cursor:pointer;font-family:inherit;">ONPRAY</button>
