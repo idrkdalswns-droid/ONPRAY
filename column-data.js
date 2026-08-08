@@ -2,7 +2,7 @@
 window.COLUMN_POSTS = [
   {
     no: "02",
-    title: "바람은 보이지 않는다",
+    title: "바람의 증인",
     date: "2026. 8. 8.",
     meta: "",
     photo: "assets/column/wind-02",

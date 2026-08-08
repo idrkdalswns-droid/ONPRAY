@@ -16,8 +16,8 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260808c"></script>
-<script src="column-data.js?v=20260808e"></script>
+<script src="prayers-data.js?v=20260808g"></script>
+<script src="column-data.js?v=20260808f"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
@@ -584,6 +584,9 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
             <div style="position:absolute;left:24px;right:24px;bottom:32px;">
               <div style="width:26px;height:1px;background:rgba(255,255,255,.45);margin-bottom:16px;"></div>
               <h1 style="font-family:'Noto Serif KR',serif;font-size:28px;font-weight:600;color:#fff;line-height:1.44;margin:0 0 12px;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.55);">{{ postTitle }}</h1>
+              <sc-if value="{{ postDate }}" hint-placeholder-val="{{ false }}">
+                <p style="font-size:11.5px;color:rgba(255,255,255,.5);margin:0;letter-spacing:.06em;font-variant-numeric:tabular-nums;">{{ postDate }}</p>
+              </sc-if>
             </div>
           </div>
           <div style="padding:34px 26px 90px;">
@@ -1058,7 +1061,16 @@ class Component extends DCLogic {
     const s = Math.max(0, Math.floor(sec || 0));
     return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
   }
-  resumeLabel(key) {
+  resumeLabel(key, sig) {
+    if (sig != null) {
+      const stored = localStorage.getItem('sp_sig_' + key);
+      if (stored !== sig) {
+        // 본문이 바뀌었거나 기록이 없는 경우 — 이어읽기 위치를 초기화한다
+        localStorage.removeItem('sp_pos_' + key);
+        localStorage.setItem('sp_sig_' + key, sig);
+        return '';
+      }
+    }
     const p = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
     return p > 0 ? (p + 1) + '장부터 이어서' : '';
   }
@@ -1115,6 +1127,11 @@ class Component extends DCLogic {
     // 반드시 해당 tab을 함께 setState 해야 한다. 새 진입점(홈·즐겨찾기·공유 등)은
     // state를 직접 만지지 말고 이 메서드들을 호출할 것 — 그러면 탭 전환이 자동 보장된다.
     const saved = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
+    const sig = (this._sigs || {})[key];
+    if (sig != null) {
+      const stored = localStorage.getItem('sp_sig_' + key);
+      if (stored !== sig) { localStorage.removeItem('sp_pos_' + key); localStorage.setItem('sp_sig_' + key, sig); this.setState({ openKey: key, openPage: 0, favSheet: false, chooseKey: null, tab: 'prayers' }); return; }
+    }
     this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved, favSheet: false, chooseKey: null, tab: 'prayers' });
   }
   // ── 즐겨찾기 ──
@@ -1196,11 +1213,16 @@ class Component extends DCLogic {
     const collapsed = s.collapsed || {};
     const bodyOf = secs => secs.map(x => (x.h || '') + ' ' + x.lines.join(' ')).join(' ').toLowerCase();
     const favSet = new Set(this.favKeys());
-    const mk = (key, title, ref, body) => ({
-      title, ref, resume: this.resumeLabel(key), body, key,
+    this._sigs = this._sigs || {};
+    const mk = (key, title, ref, body) => {
+      const sig = String(body.length);
+      this._sigs[key] = sig;
+      return {
+      title, ref, resume: this.resumeLabel(key, sig), body, key,
       isFav: favSet.has(key), notFav: !favSet.has(key), toggleFav: () => this.toggleFav(key),
       open: () => this.openPrayer(key), flow: () => this.openFlow(key), choose: () => this.chooseRead(key)
-    });
+    };
+    };
     const raw = [];
     if (list.length) raw.push({ label: '선포 기도문', items: list.map((p, i) => mk('s' + i, p.title, p.note || p.ref, bodyOf(p.sections))) });
     if (w2l.length) raw.push({ label: '예배에서 삶으로', items: w2l.map((p, i) => mk('l' + i, p.title, p.note || p.ref, bodyOf(p.sections))) });
@@ -1433,6 +1455,7 @@ class Component extends DCLogic {
       })),
       postOpen: !!post,
       postNo: post ? post.no : '', postTitle: post ? post.title : '', postMeta: post ? post.meta : '',
+      postDate: post ? (post.date || '') : '',
       postImg2x: post ? post.photo + '-2x.jpg' : '',
       postSrcset: post ? (post.photo + '-1x.jpg 780w, ' + post.photo + '-2x.jpg 1560w') : '',
       postBlocks: post ? post.blocks.map(b => ({ lines: b.lines, isText: b.t === 'p', isQuote: b.t === 'q', isBreak: b.t === 'b' })) : [],
