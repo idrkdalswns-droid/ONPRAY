@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260812a"></script>
+<script src="prayers-data.js?v=20260813c"></script>
 <script src="column-data.js?v=20260808f"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1252,10 +1252,17 @@ class Component extends DCLogic {
     };
     };
     const raw = [];
-    if (list.length) raw.push({ label: '선포 기도문', items: list.map((p) => mk(this.keyFor('s', p.title), p.title, p.note || p.ref, bodyOf(p.sections))) });
-    if (w2l.length) raw.push({ label: '예배에서 삶으로', items: w2l.map((p) => mk(this.keyFor('l', p.title), p.title, p.note || p.ref, bodyOf(p.sections))) });
-    if (week.length) raw.push({ label: '에클레시아 · 승부5 선포', items: week.map((p) => mk(this.keyFor('e', p.title), p.title, p.note || p.ref, bodyOf(p.sections))) });
-    if (wd) raw.push({ label: '보혈 선포 기도문 · 요일별', items: wd.DAYS.map((d) => mk(this.keyFor('w', d.day + ' 보혈 선포'), d.day + ' 보혈 선포', notes[d.day] || '', bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]))) });
+    const pushOrMerge = (label, items) => { const ex = raw.find(g => g.label === label); if (ex) ex.items = ex.items.concat(items); else raw.push({ label, items }); };
+    if (list.length) {
+      const ungrouped = list.filter(p => !p.group);
+      if (ungrouped.length) raw.push({ label: '선포 기도문', items: ungrouped.map((p) => mk(this.keyFor('s', p.title), p.title, p.note || p.ref, bodyOf(p.sections))) });
+      const seen = [];
+      list.forEach(p => { if (p.group && seen.indexOf(p.group) < 0) seen.push(p.group); });
+      seen.forEach(gn => pushOrMerge(gn, list.filter(p => p.group === gn).map((p) => mk(this.keyFor('s', p.title), p.title, p.note || p.ref, bodyOf(p.sections)))));
+    }
+    if (w2l.length) pushOrMerge('예배에서 삶으로', w2l.map((p) => mk(this.keyFor('l', p.title), p.title, p.note || p.ref, bodyOf(p.sections))));
+    if (week.length) pushOrMerge('에클레시아 · 승부5 선포', week.map((p) => mk(this.keyFor('e', p.title), p.title, p.note || p.ref, bodyOf(p.sections))));
+    if (wd) pushOrMerge('보혈 선포 기도문 · 요일별', wd.DAYS.map((d) => mk(this.keyFor('w', d.day + ' 보혈 선포'), d.day + ' 보혈 선포', notes[d.day] || '', bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]))));
     const favItems = [];
     raw.forEach(g => g.items.forEach(it => { if (it.isFav) favItems.push(it); }));
     let hits = 0;
