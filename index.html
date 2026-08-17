@@ -484,7 +484,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ flowRidge.dash }}"></path>
             </svg>
-            <div onPointerDown="{{ flowDragStart }}" style="position:absolute;left:{{ flowRidge.crossLeft }};top:{{ flowRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:-19px 0 0 0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+            <div onPointerDown="{{ flowDragStart }}" style="position:absolute;left:{{ flowRidge.crossLeft }};top:{{ flowRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
               <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
             </div>
           </div>
@@ -519,7 +519,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ openRidge.dash }}"></path>
             </svg>
-            <div onPointerDown="{{ openDragStart }}" style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:-19px 0 0 0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+            <div onPointerDown="{{ openDragStart }}" style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
               <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
             </div>
           </div>
@@ -1211,7 +1211,7 @@ class Component extends DCLogic {
     return {
       dash: (100 - p).toFixed(1),
       crossLeft: p.toFixed(1) + '%',
-      crossTop: (26 - 24 * Math.pow(p / 100, 1.3) - 7).toFixed(1) + 'px'
+      crossTop: (26 - 24 * Math.pow(p / 100, 1.3) - 13).toFixed(1) + 'px'
     };
   }
   // 진행바 십자가 드래그 → 위치 이동 (역발상)
