@@ -16,11 +16,11 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260814d"></script>
+<script src="prayers-data.js?v=20260815a"></script>
 <script src="column-data.js?v=20260808f"></script>
-<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"/><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"/><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"/></svg></template>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&amp;family=Noto+Serif+KR:wght@400;600&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f7f6f4;--card:#ffffff;--text:#1d1d1f;--sub:#6e6e73;--line:#e7e5e1;--accent:#8e2b2b;--flame:#d9a441;--navbg:rgba(255,255,255,.92);}
 [data-theme="dark"]{--bg:#0e0e10;--card:#1a1a1d;--text:#f2f2f4;--sub:#98989f;--line:#2a2a2e;--accent:#c96a5a;--flame:#e0b05a;--navbg:rgba(18,18,20,.92);}
@@ -274,7 +274,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   <!-- ─── 홈 ─── -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <main style="position:relative;min-height:100dvh;overflow:hidden;background:#090908;animation:riseIn .4s ease;">
-    <img src="assets/worship-1x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="100vw" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 54%;filter:grayscale(1) contrast(1.25) brightness(.44);animation:slowzoom 30s ease-in-out infinite alternate;">
+    <img ref="{{ homeBgRef }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%; filter:contrast(1.05) brightness(.62) saturate(1.05); animation:slowzoom 30s ease-in-out infinite alternate">
     <div style="position:absolute;left:{{ mapSide }}%;right:{{ mapSide }}%;top:{{ mapTop }}px;mix-blend-mode:screen;transform:perspective(700px) rotateX(7deg);">
       <div style="display:grid;grid-template-columns:repeat(32,1fr);gap:3px;">
         <sc-for list="{{ candles }}" as="c" hint-placeholder-count="80">
@@ -285,7 +285,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
         </sc-for>
       </div>
     </div>
-    <div style="position:absolute;inset:0;background:radial-gradient(120% 55% at 50% 34%,rgba(230,183,86,.1) 0%,rgba(8,7,6,0) 60%),linear-gradient(180deg,rgba(8,7,6,.62) 0%,rgba(8,7,6,0) 22%,rgba(8,7,6,.3) 54%,rgba(8,7,6,.9) 84%,rgba(8,7,6,.97) 100%);"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 55% at 50% 34%,rgba(230,183,86,.1) 0%,rgba(8,7,6,0) 60%),linear-gradient(180deg,rgba(8,7,6,.5) 0%,rgba(8,7,6,0) 22%,rgba(8,7,6,.22) 50%,rgba(8,7,6,.72) 66%,#090908 76%,#090908 100%);"></div>
 
     <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:22px 14px 0 22px;">
       <button onClick="{{ reloadHome }}" aria-label="홈 새로고침" style="border:none;background:none;padding:0;cursor:pointer;font-size:19px;font-weight:700;letter-spacing:.14em;color:#fff;font-family:inherit;">ONPRAY</button>
@@ -479,13 +479,13 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
           </button>
         </div>
         <div style="position:absolute;top:48px;left:0;right:0;padding:2px 22px 0;max-width:480px;margin:0 auto;box-sizing:border-box;z-index:6;">
-          <div style="position:relative;height:30px;">
-            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;">
+          <div ref="{{ flowRidgeRef }}" style="position:relative;height:30px;touch-action:none;">
+            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;pointer-events:none;">
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ flowRidge.dash }}"></path>
             </svg>
-            <div style="position:absolute;left:{{ flowRidge.crossLeft }};top:{{ flowRidge.crossTop }};transform:translate(-50%,-50%);">
-              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
+            <div onPointerDown="{{ flowDragStart }}" style="position:absolute;left:{{ flowRidge.crossLeft }};top:{{ flowRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:-19px 0 0 0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
             </div>
           </div>
         </div>
@@ -514,13 +514,13 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
     <sc-if value="{{ prayerOpen }}" hint-placeholder-val="{{ false }}">
       <div style="position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:20;">
         <div style="flex:none;padding:6px 20px 0;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
-          <div style="position:relative;height:30px;">
-            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;">
+          <div ref="{{ openRidgeRef }}" style="position:relative;height:30px;touch-action:none;">
+            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;pointer-events:none;">
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
               <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ openRidge.dash }}"></path>
             </svg>
-            <div style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);">
-              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
+            <div onPointerDown="{{ openDragStart }}" style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:-19px 0 0 0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
             </div>
           </div>
         </div>
@@ -746,7 +746,15 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
     </section>
 
     <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
-      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">후원 안내</h2>
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">앱 공유</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;">함께 깨어 기도할 동역자에게 링크를 보내세요</p>
+      <button onClick="{{ copyLink }}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;border:1px solid var(--accent);border-radius:12px;background:none;color:var(--accent);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        {{ copyLinkLabel }}
+      </button>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
       <p style="font-size:13px;color:var(--sub);margin:0 0 14px;">이 사역을 함께 세워 주세요</p>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:12px;padding:14px 16px;">
         <div>
@@ -798,6 +806,7 @@ class Component extends DCLogic {
     flowKey: null, flowPlay: false, flowPct: 0, flowSpeed: (function(){ var v = parseInt(localStorage.getItem('sp_flow_speed') || '240', 10); var opts=[160,240,340,440]; return opts.indexOf(v) >= 0 ? v : opts.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a); })(),
     postNo: null, shareOpen: false, installOpen: false, shareKind: 'today', shareBtnBusy: '', savedMsg: '',
     bgm: localStorage.getItem('sp_bgm') || 'none', bgmPlay: false,
+    heroY: (function(){ var v = parseInt(localStorage.getItem('sp_hero_y') || '72', 10); return isNaN(v) ? 72 : Math.max(0, Math.min(100, v)); })(),
     muteWeek: (function(){ const u = parseInt(localStorage.getItem('sp_done_mute') || '0', 10); return !!(u && Date.now() < u); })(),
     bgmSheet: false, bgmPos: 0, bgmDur: 0,
     bgmVol: parseInt(localStorage.getItem('sp_bgm_vol') || '45', 10),
@@ -1205,6 +1214,29 @@ class Component extends DCLogic {
       crossTop: (26 - 24 * Math.pow(p / 100, 1.3) - 7).toFixed(1) + 'px'
     };
   }
+  // 진행바 십자가 드래그 → 위치 이동 (역발상)
+  ridgePct(container, clientX) {
+    const r = container.getBoundingClientRect();
+    if (r.width <= 0) return 0;
+    return Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+  }
+  flowDrag(e) {
+    if (!this._flowRidgeEl || !this.flowEl) return;
+    const f = this.ridgePct(this._flowRidgeEl, e.clientX);
+    const m = this.flowEl.scrollHeight - this.flowEl.clientHeight;
+    if (m > 0) this.flowEl.scrollTop = m * f;
+  }
+  openDrag(e) {
+    if (!this._openRidgeEl || !this.state.openKey) return;
+    const total = this._openPageCount || 1;
+    const f = this.ridgePct(this._openRidgeEl, e.clientX);
+    const page = Math.max(0, Math.min(total - 1, Math.round(f * (total - 1))));
+    if (page !== this.state.openPage) {
+      localStorage.setItem('sp_pos_' + this.state.openKey, String(page));
+      this.setState({ openPage: page });
+      if (this.scroller) this.scroller.scrollTop = 0;
+    }
+  }
   chooseRead(key) { this.setState({ chooseKey: key }); }
   favKeys() { try { const a = JSON.parse(localStorage.getItem('sp_favs') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
   toggleFav(key) {
@@ -1421,12 +1453,11 @@ class Component extends DCLogic {
     const setHand = h => () => { localStorage.setItem('sp_hand', h); this.setState({ handed: h }); };
     const dark = s.theme === 'dark';
     const onHome = s.tab === 'home' && !s.openKey && !s.flowKey && !s.postNo;
-    // 주말 고정 배정: 토 → 에클레시아 1, 일 → 에클레시아 2 (없으면 1)
+    // 주말 고정 배정: 토·일 모두 60분 통독 선포
     const findP = t => list.findIndex(p => p.title === t);
     let weekendIdx = -1;
     if (isWeekend) {
-      weekendIdx = dow === 6 ? findP('에클레시아 선포 기도문 1') : findP('에클레시아 선포 기도문 2');
-      if (weekendIdx < 0) weekendIdx = findP('에클레시아 선포 기도문 1');
+      weekendIdx = findP('창세에서 재림까지 — 60분 통독 선포');
     }
     const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
     const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false, postNo: null, collapsed: {}, query: '' }); };
@@ -1436,6 +1467,15 @@ class Component extends DCLogic {
     ].map(t => ({ ...t, go: setTab(t.key), color: s.tab === t.key ? 'var(--accent)' : 'var(--sub)', weight: s.tab === t.key ? 700 : 400 }));
     return {
       isHome: s.tab === 'home', isPrayers: s.tab === 'prayers', isColumn: s.tab === 'column' && !post, isSettings: s.tab === 'settings',
+      homeBgRef: (el) => {
+        if (!el) return;
+        const isWorship = Math.floor(Date.now() / 86400000) % 2 === 0;
+        const b = isWorship ? 'assets/worship' : 'assets/sunset';
+        const src = b + '-1x.webp';
+        if (el.getAttribute('src') !== src) { el.src = src; el.srcset = b + '-1x.webp 1170w, ' + b + '-2x.webp 2340w'; el.sizes = '100vw'; }
+        el.style.objectPosition = isWorship ? '50% 48%' : '50% 62%';
+        el.style.filter = isWorship ? 'contrast(1.08) brightness(.72) saturate(1.02)' : 'contrast(1.05) brightness(.62) saturate(1.05)';
+      },
       themeIcon: dark ? '☀︎' : '☾',
       toggleTheme: () => { const t = dark ? 'light' : 'dark'; localStorage.setItem('sp_theme', t); document.body.dataset.theme = t; this.setState({ theme: t }); },
       liveCount: s.live, todayTotal: hours.reduce((a, b) => a + b, 0),
@@ -1600,6 +1640,25 @@ class Component extends DCLogic {
       openNext: goNext, openPrevBtn: goPrev,
       openRidge: this.ridge(Math.round((op + 1) / openPages.length * 100)),
       flowRidge: this.ridge(s.flowPct),
+      openRidgeRef: el => { if (el) this._openRidgeEl = el; },
+      flowRidgeRef: el => { if (el) this._flowRidgeEl = el; },
+      openDragStart: e => {
+        this._openPageCount = openPages.length;
+        e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+        const mv = ev => this.openDrag(ev);
+        const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+        this.openDrag(e);
+      },
+      flowDragStart: e => {
+        this.stopFlowLoop && this.stopFlowLoop();
+        if (this.state.flowPlay) this.setState({ flowPlay: false });
+        e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+        const mv = ev => this.flowDrag(ev);
+        const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+        this.flowDrag(e);
+      },
       openToTop: () => { if (op !== 0) { savePos(0); this.setState({ openPage: 0 }); } if (this.scroller) this.scroller.scrollTop = 0; },
       zoneTap: e => { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX - r.left < r.width * 0.3) goPrev(); else goNext(); },
       touchStart: e => { const t = e.touches[0]; this._tx = t.clientX; this._ty = t.clientY; },
@@ -1637,6 +1696,15 @@ class Component extends DCLogic {
       darkToggleBg: dark ? 'var(--accent)' : '#c9c7c3', darkKnobLeft: dark ? 28 : 4,
       copyAccount: () => { navigator.clipboard && navigator.clipboard.writeText('국민 92311516646'); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1600); },
       copyLabel: s.copied ? '복사됨 ✓' : '복사',
+      heroY: s.heroY,
+      setHeroY: e => { const v = Math.max(0, Math.min(100, Number(e.target.value))); localStorage.setItem('sp_hero_y', String(v)); this.setState({ heroY: v }); },
+      resetHeroY: () => { localStorage.setItem('sp_hero_y', '72'); this.setState({ heroY: 72 }); },
+      copyLink: () => {
+        const url = location.href.split('#')[0];
+        if (navigator.clipboard) navigator.clipboard.writeText(url).catch(() => {});
+        this.setState({ linkCopied: true }); setTimeout(() => this.setState({ linkCopied: false }), 1600);
+      },
+      copyLinkLabel: s.linkCopied ? '링크가 복사되었습니다 ✓' : '공유 링크 복사',
       tabs
     };
   }
