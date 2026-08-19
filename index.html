@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260815a"></script>
+<script src="prayers-data.js?v=20260819b"></script>
 <script src="column-data.js?v=20260808f"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -197,6 +197,25 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
             <button onClick="{{ goPrayersFromFav }}" style="min-height:46px;padding:0 22px;border:1px solid var(--accent);border-radius:13px;background:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">기도문 보러가기</button>
           </div>
         </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 새 소식 팝업 (버전당 1회) -->
+  <sc-if value="{{ patchOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:75;background:rgba(8,7,6,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:28px;">
+      <div style="width:100%;max-width:340px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:riseIn .3s ease;">
+        <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:8px;">새로워졌습니다</div>
+        <div style="font-family:'Noto Serif KR',serif;font-size:18px;color:var(--text);margin-bottom:14px;">이번 업데이트</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;">
+          <sc-for list="{{ patchItems }}" as="it" hint-placeholder-count="3">
+            <div style="display:flex;gap:9px;align-items:flex-start;">
+              <span style="flex:none;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:7px;"></span>
+              <span style="font-size:13.5px;color:var(--sub);line-height:1.65;">{{ it }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ closePatch }}" style="width:100%;min-height:46px;border:1px solid var(--accent);border-radius:13px;background:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">닫기</button>
       </div>
     </div>
   </sc-if>
@@ -1206,12 +1225,34 @@ class Component extends DCLogic {
     for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
     return prefix + h.toString(36);
   }
+  PATCH_VER = '20260819b';
+  PATCH_NOTES = [
+    "다니엘의 기도 아침·점심·저녁 전면 개정",
+    "십자가 진행 마커 위치 정확도 개선 — 드래그로 이동 가능",
+    "홈 배경 이미지 격일 자동 전환",
+    "완주 팝업 일주일 감추기 옵션 추가"
+  ];
   ridge(pct) {
     const p = Math.max(0, Math.min(100, pct || 0));
+    // 실제 SVG 경로: M2 26 C 110 24 190 17 260 6 L 310 2  (viewBox 0 0 312 30, 세로 1:1 px)
+    // 근사식이 아니라 경로 위의 정확한 점을 샘플링한다 → 어느 위치에서도 십자가가 능선에 정확히 앉음.
+    const xT = 2 + (310 - 2) * p / 100;
+    let y;
+    if (xT <= 260) {
+      // 큐빅 베지어 (2,26)->(110,24)->(190,17)->(260,6), x는 단조 증가하므로 t를 이분 탐색
+      const bx = t => { const u = 1 - t; return u*u*u*2 + 3*u*u*t*110 + 3*u*t*t*190 + t*t*t*260; };
+      const by = t => { const u = 1 - t; return u*u*u*26 + 3*u*u*t*24 + 3*u*t*t*17 + t*t*t*6; };
+      let lo = 0, hi = 1;
+      for (let i = 0; i < 24; i++) { const m = (lo + hi) / 2; if (bx(m) < xT) lo = m; else hi = m; }
+      y = by((lo + hi) / 2);
+    } else {
+      // 직선 (260,6)->(310,2)
+      y = 6 + (2 - 6) * ((xT - 260) / (310 - 260));
+    }
     return {
       dash: (100 - p).toFixed(1),
-      crossLeft: p.toFixed(1) + '%',
-      crossTop: (26 - 24 * Math.pow(p / 100, 1.3) - 13).toFixed(1) + 'px'
+      crossLeft: (xT / 312 * 100).toFixed(2) + '%',
+      crossTop: (y - 3).toFixed(1) + 'px'   // 능선 위 작은 간격 (한 값으로 전 구간 일관)
     };
   }
   // 진행바 십자가 드래그 → 위치 이동 (역발상)
@@ -1638,8 +1679,11 @@ class Component extends DCLogic {
       openPageLabel: (op + 1) + ' / ' + openPages.length,
       barTitle: op === 0 ? '' : open.title,
       openNext: goNext, openPrevBtn: goPrev,
-      openRidge: this.ridge(Math.round((op + 1) / openPages.length * 100)),
+      openRidge: this.ridge(Math.round(op / Math.max(1, openPages.length - 1) * 100)),
       flowRidge: this.ridge(s.flowPct),
+      patchOpen: s.tab === 'home' && !s.patchClosed && localStorage.getItem('sp_patch_seen') !== this.PATCH_VER,
+      patchItems: this.PATCH_NOTES,
+      closePatch: () => { localStorage.setItem('sp_patch_seen', this.PATCH_VER); this.setState({ patchClosed: true }); },
       openRidgeRef: el => { if (el) this._openRidgeEl = el; },
       flowRidgeRef: el => { if (el) this._flowRidgeEl = el; },
       openDragStart: e => {
