@@ -462,7 +462,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
                 </div>
               </sc-for>
             </div>
-            <div style="height:320px;"></div>
+            <div style="height:300px;"></div>
           </div>
         </div>
         <div style="position:absolute;left:0;right:0;top:0;height:140px;background:linear-gradient(180deg,var(--bg) 46%,rgba(0,0,0,0));pointer-events:none;"></div>
@@ -508,9 +508,16 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
             </div>
           </div>
         </div>
-        <div style="position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:456px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.12);box-sizing:border-box;">
-          <div style="display:flex;align-items:center;gap:14px;flex-direction:{{ flowRowDir }};">
-            <button onClick="{{ toggleFlow }}" aria-label="자동 스크롤 재생 또는 정지" style="flex:none;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);cursor:pointer;padding:0;">
+        <div style="position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:456px;margin:0 auto;box-sizing:border-box;">
+          <sc-if value="{{ flowSpeedOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px;margin-bottom:8px;box-shadow:0 8px 24px rgba(0,0,0,.14);display:flex;flex-direction:column;gap:4px;animation:riseIn .18s ease;">
+              <sc-for list="{{ flowSpeedOpts }}" as="opt" hint-placeholder-count="4">
+                <button onClick="{{ opt.pick }}" style="width:100%;min-height:40px;border:none;border-radius:10px;background:{{ opt.bg }};color:{{ opt.fg }};font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left;padding:0 14px;">{{ opt.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.12);flex-direction:{{ flowRowDir }};">
+            <button onClick="{{ toggleFlow }}" aria-label="자동 스크롤 재생 또는 정지" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);cursor:pointer;padding:0;">
               <sc-if value="{{ flowPlaying }}" hint-placeholder-val="{{ false }}">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
               </sc-if>
@@ -518,31 +525,16 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l12 7.5-12 7.5z"></path></svg>
               </sc-if>
             </button>
-            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;">
-              <span style="font-size:12px;color:var(--sub);">흐르는 속도</span>
-              <div style="display:flex;gap:6px;">
-                <sc-for list="{{ flowSpeedOpts }}" as="opt" hint-placeholder-count="4">
-                  <button onClick="{{ opt.pick }}" style="flex:1;min-height:34px;border:1px solid {{ opt.border }};border-radius:9px;background:{{ opt.bg }};color:{{ opt.fg }};font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;padding:0 2px;">{{ opt.label }}</button>
-                </sc-for>
-              </div>
-            </div>
+            <button onClick="{{ flowFinish }}" disabled="{{ flowFinishDisabled }}" style="flex:1;min-width:0;height:48px;border:none;border-radius:13px;background:{{ flowFinishBg }};color:{{ flowFinishFg }};font-size:14.5px;font-weight:700;font-family:inherit;cursor:{{ flowFinishCursor }};white-space:nowrap;padding:0 8px;">선포 마쳤습니다</button>
+            <button onClick="{{ toggleSpeedMenu }}" aria-label="흐르는 속도" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);font-family:inherit;cursor:pointer;padding:0;position:relative;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5 4.5l9 5.5-9 5.5z" opacity="0.45"></path><path d="M11 4.5l9 5.5-9 5.5z"></path></svg>
+            </button>
           </div>
         </div>
       </div>
     </sc-if>
     <sc-if value="{{ prayerOpen }}" hint-placeholder-val="{{ false }}">
       <div style="position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:20;">
-        <div style="flex:none;padding:6px 20px 0;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
-          <div ref="{{ openRidgeRef }}" style="position:relative;height:30px;touch-action:none;">
-            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;pointer-events:none;">
-              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
-              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ openRidge.dash }}"></path>
-            </svg>
-            <div onPointerDown="{{ openDragStart }}" style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
-              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
-            </div>
-          </div>
-        </div>
         <div style="flex:none;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
           <button onClick="{{ closePrayer }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;font-family:inherit;padding:0;">
             <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
@@ -570,6 +562,17 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
             </sc-if>
           </button>
+        </div>
+        <div style="flex:none;padding:2px 22px 0;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+          <div ref="{{ openRidgeRef }}" style="position:relative;height:30px;touch-action:none;">
+            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;pointer-events:none;">
+              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
+              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ openRidge.dash }}"></path>
+            </svg>
+            <div onPointerDown="{{ openDragStart }}" style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
+            </div>
+          </div>
         </div>
         <div ref="{{ scrollerRef }}" onClick="{{ zoneTap }}" onTouchStart="{{ touchStart }}" onTouchEnd="{{ touchEnd }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;padding:0 20px 6px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
           <sc-if value="{{ isFirstPage }}" hint-placeholder-val="{{ true }}">
@@ -1155,7 +1158,7 @@ class Component extends DCLogic {
   // ── 흐름으로 읽기 (자동 스크롤) ─────────────────────────
   openFlow(key) {
     this._flowChars = 0;
-    this.setState({ flowKey: key, flowPlay: false, openKey: null, favSheet: false, chooseKey: null, tab: 'prayers' });
+    this.setState({ flowKey: key, flowPlay: false, flowAtEnd: false, flowSpeedOpen: false, openKey: null, favSheet: false, chooseKey: null, tab: 'prayers' });
   }
   closeFlow() {
     this.saveFlowPos();
@@ -1185,7 +1188,7 @@ class Component extends DCLogic {
       if (acc >= 1) { el.scrollTop += Math.floor(acc); acc -= Math.floor(acc); }
       if (el.scrollTop >= max - 1) {
         this.markDone(); this.stopFlowLoop();
-        this.setState({ flowPlay: false, doneMsg: this.doneAllowed() });
+        this.setState({ flowPlay: false, flowAtEnd: true, doneMsg: this.doneAllowed() });
         return;
       }
       this._raf = requestAnimationFrame(step);
@@ -1481,7 +1484,7 @@ class Component extends DCLogic {
     const savePos = p => { if (s.openKey) localStorage.setItem('sp_pos_' + s.openKey, String(p)); };
     const goNext = () => {
       const n = op + 1;
-      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ openKey: null, openPage: 0, doneMsg: this.doneAllowed() }); return; }
+      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ tab: 'home', openKey: null, openPage: 0, doneMsg: this.doneAllowed() }); return; }
       savePos(n); this.setState({ openPage: n }); if (this.scroller) this.scroller.scrollTop = 0;
     };
     const goPrev = () => { if (op > 0) { savePos(op - 1); this.setState({ openPage: op - 1 }); if (this.scroller) this.scroller.scrollTop = 0; } };
@@ -1634,6 +1637,13 @@ class Component extends DCLogic {
       flowSecs: (flow ? flow.secs : []).map(sec => ({ h: sec.h, qlines: this.quoteLines(sec.lines) })),
       flowPlaying: !!s.flowPlay, flowPaused: !s.flowPlay,
       flowSpeed: s.flowSpeed, flowSpeedLabel: '분당 ' + s.flowSpeed + '자',
+      flowSpeedOpen: !!s.flowSpeedOpen,
+      toggleSpeedMenu: () => this.setState({ flowSpeedOpen: !this.state.flowSpeedOpen }),
+      flowSpeedCur: ({ 160: '느리게', 240: '보통', 340: '빠르게', 440: '매우 빠르게' })[s.flowSpeed] || '보통',
+      flowFinishDisabled: !s.flowAtEnd,
+      flowFinishBg: s.flowAtEnd ? 'var(--accent)' : 'color-mix(in oklch, var(--accent) 16%, transparent)',
+      flowFinishFg: s.flowAtEnd ? '#fff' : 'var(--sub)',
+      flowFinishCursor: s.flowAtEnd ? 'pointer' : 'default',
       flowSpeedOpts: [
         { label: '느리게', v: 160 },
         { label: '보통', v: 240 },
@@ -1646,7 +1656,7 @@ class Component extends DCLogic {
           border: on ? 'var(--accent)' : 'var(--line)',
           bg: on ? 'var(--accent)' : 'transparent',
           fg: on ? '#fff' : 'var(--sub)',
-          pick: () => { localStorage.setItem('sp_flow_speed', String(o.v)); this.setState({ flowSpeed: o.v }); }
+          pick: () => { localStorage.setItem('sp_flow_speed', String(o.v)); this.setState({ flowSpeed: o.v, flowSpeedOpen: false }); }
         };
       }),
       flowRef: el => {
@@ -1660,7 +1670,8 @@ class Component extends DCLogic {
               this._flowRaf = null;
               const m = el.scrollHeight - el.clientHeight;
               const pct = m > 0 ? Math.round(el.scrollTop / m * 100) : 0;
-              if (pct !== this.state.flowPct) this.setState({ flowPct: pct });
+              const atEnd = m <= 0 || el.scrollTop >= m - 6;
+              if (pct !== this.state.flowPct || atEnd !== this.state.flowAtEnd) this.setState({ flowPct: pct, flowAtEnd: atEnd });
             });
           }, { passive: true });
         }
@@ -1674,6 +1685,7 @@ class Component extends DCLogic {
       setFlowSpeed: e => { const v = Number(e.target.value); localStorage.setItem('sp_flow_speed', String(v)); this.setState({ flowSpeed: v }); },
       flowToTop: () => { if (this.flowEl) this.flowEl.scrollTo({ top: 0, behavior: 'smooth' }); },
       closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
+      flowFinish: () => { if (!this.state.flowAtEnd) return; this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
       shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
       openBlocks: (openPages[op].blocks || []).map(b => ({ h: b.h, qlines: this.quoteLines(b.lines) })),
       openPageLabel: (op + 1) + ' / ' + openPages.length,
