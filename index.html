@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260819b"></script>
+<script src="prayers-data.js?v=20260822a"></script>
 <script src="column-data.js?v=20260808f"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -205,8 +205,8 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   <sc-if value="{{ patchOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;z-index:75;background:rgba(8,7,6,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:28px;">
       <div style="width:100%;max-width:340px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:riseIn .3s ease;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:8px;">새로워졌습니다</div>
-        <div style="font-family:'Noto Serif KR',serif;font-size:18px;color:var(--text);margin-bottom:14px;">이번 업데이트</div>
+        <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:8px;text-align:center;">새로워졌습니다</div>
+        <div style="font-family:'Noto Serif KR',serif;font-size:18px;color:var(--text);margin-bottom:14px;text-align:center;">이번 업데이트</div>
         <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;">
           <sc-for list="{{ patchItems }}" as="it" hint-placeholder-count="3">
             <div style="display:flex;gap:9px;align-items:flex-start;">
@@ -1228,12 +1228,11 @@ class Component extends DCLogic {
     for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
     return prefix + h.toString(36);
   }
-  PATCH_VER = '20260819b';
+  PATCH_VER = '20260822a';
   PATCH_NOTES = [
-    "다니엘의 기도 아침·점심·저녁 전면 개정",
-    "십자가 진행 마커 위치 정확도 개선 — 드래그로 이동 가능",
-    "홈 배경 이미지 격일 자동 전환",
-    "완주 팝업 일주일 감추기 옵션 추가"
+    "새 기도문 — Miracles, Wonders and Signs (기사와 표적을 구하는 중보)",
+    "흐름으로 읽기 — 선포 마쳤습니다 버튼, 속도 옵션 개편",
+    "십자가 능선 진행바 두 읽기 모드 통일"
   ];
   ridge(pct) {
     const p = Math.max(0, Math.min(100, pct || 0));
