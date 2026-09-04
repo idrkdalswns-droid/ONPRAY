@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js?v=20260808c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ONPRAY — 깨어 기도하는 자리</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ONPRAY">
+<meta name="theme-color" content="#f7f6f4">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="prayers-data.js?v=20260904a"></script>
+<script src="column-data.js?v=20260903a"></script>
+<script src="words-data.js?v=20260903a"></script>
+<script src="david-data.js?v=20260903a"></script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&amp;family=Noto+Serif+KR:wght@400;600&amp;family=Noto+Serif+Hebrew:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f4;--card:#ffffff;--text:#1d1d1f;--sub:#6e6e73;--line:#e7e5e1;--accent:#8e2b2b;--flame:#d9a441;--navbg:rgba(255,255,255,.92);}
+.heb{font-family:'Noto Serif Hebrew','Noto Serif KR',serif;direction:rtl;}
+[data-theme="dark"]{--bg:#0e0e10;--card:#1a1a1d;--text:#f2f2f4;--sub:#98989f;--line:#2a2a2e;--accent:#c96a5a;--flame:#e0b05a;--navbg:rgba(18,18,20,.92);}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Noto Sans KR',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity:.75;}
+@keyframes flicker{0%,100%{opacity:.9;transform:scale(1)}25%{opacity:.55;transform:scale(.86)}55%{opacity:1;transform:scale(1.12)}80%{opacity:.7;transform:scale(.94)}}
+@keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes slowzoom{0%{transform:scale(1.04)}100%{transform:scale(1.14)}}
+@keyframes shimmer{0%,100%{opacity:.72;filter:drop-shadow(0 0 3px rgba(230,183,86,.5))}50%{opacity:1;filter:drop-shadow(0 0 7px rgba(230,183,86,.9))}}
+@keyframes shimmerRed{0%,100%{opacity:.72;filter:drop-shadow(0 0 3px rgba(210,75,75,.5))}50%{opacity:1;filter:drop-shadow(0 0 8px rgba(224,90,90,.95))}}
+@keyframes shimmerWhite{0%,100%{opacity:.78;filter:drop-shadow(0 0 4px rgba(245,241,234,.55))}50%{opacity:1;filter:drop-shadow(0 0 10px rgba(255,255,255,1))}}
+@keyframes floatUp{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+@keyframes sheetUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes lotFloat{from{translate:0 -6px}to{translate:0 7px}}
+@keyframes lotDraw{0%{opacity:.2;transform:scale(.7)}60%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes dvPop{0%{transform:scale(.4);opacity:.3}55%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
+.wkeep,.wkeep *{word-break:keep-all;overflow-wrap:break-word;text-wrap:pretty;}
+</style>
+</helmet>
+<div style="max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:{{ shellPadBottom }};">
+
+  <sc-if value="{{ headerOn }}" hint-placeholder-val="{{ true }}">
+  <header style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 8px 20px;">
+    <button onClick="{{ reloadHome }}" aria-label="홈으로" style="display:flex;align-items:baseline;gap:8px;border:none;background:none;padding:0;cursor:pointer;color:var(--text);font-family:inherit;text-align:left;">
+      <span style="font-size:19px;font-weight:700;letter-spacing:.06em;">ONPRAY</span>
+      <span style="font-size:12px;color:var(--sub);letter-spacing:.04em;">깨어 기도하는 자리</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:2px;">
+    <button onClick="{{ toggleBgm }}" aria-label="배경음악" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ barBgmColor }};padding:0;">
+      <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+      </sc-if>
+      <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+      </sc-if>
+    </button>
+    <button onClick="{{ toggleTheme }}" aria-label="다크모드 전환" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);padding:0;">
+      <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+      </sc-if>
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path></svg>
+      </sc-if>
+    </button>
+    </div>
+  </header>
+  </sc-if>
+
+  <sc-if value="{{ bgmSheet }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeBgmSheet }}" style="position:fixed;inset:0;z-index:60;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:0 0 22px 22px;padding:calc(14px + env(safe-area-inset-top)) 20px 18px;animation:dropIn .25s ease;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <span style="flex:1;min-width:0;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ bgmTrackTitle }}</span>
+          <button onClick="{{ closeBgmSheet }}" aria-label="닫기" style="flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-direction:row-reverse;">
+          <button onClick="{{ toggleBgm }}" aria-label="재생 또는 일시정지" style="flex:none;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);cursor:pointer;padding:0;">
+            <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+            </sc-if>
+            <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l12 7.5-12 7.5z"></path></svg>
+            </sc-if>
+          </button>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+            <input type="range" min="0" max="{{ bgmDur }}" step="1" value="{{ bgmPos }}" onChange="{{ seekBgm }}" onInput="{{ seekBgm }}" aria-label="재생 위치" style="width:100%;height:32px;accent-color:var(--accent);background:none;cursor:pointer;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;">
+              <span>{{ bgmPosLabel }}</span>
+              <span>{{ bgmDurLabel }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ doneMsg }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDone }}" style="position:fixed;inset:0;z-index:70;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:28px 24px calc(22px + env(safe-area-inset-bottom));animation:riseIn .3s ease;">
+        <div style="text-align:center;">
+          <div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);margin-bottom:16px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+          </div>
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:21px;font-weight:600;margin:0 0 8px;">선포를 마쳤습니다</h3>
+          <p style="font-size:13.5px;color:var(--sub);margin:0 0 24px;line-height:1.7;">{{ doneLine }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <button onClick="{{ openShare }}" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:0 18px;border:none;border-radius:15px;background:var(--accent);color:#fff;cursor:pointer;font-family:inherit;text-align:left;">
+            <span style="flex:none;display:flex;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg>
+            </span>
+            <span style="flex:1;display:flex;flex-direction:column;">
+              <span style="font-size:15px;font-weight:700;">동역자에게 함께 하자고 전하기</span>
+              <span style="font-size:11.5px;opacity:.82;">카카오톡 · 문자로 바로</span>
+            </span>
+          </button>
+          <sc-if value="{{ canInstall }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ openInstall }}" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:0 18px;border:1px solid var(--line);border-radius:15px;background:none;color:var(--text);cursor:pointer;font-family:inherit;text-align:left;">
+              <span style="flex:none;display:flex;color:var(--sub);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"></rect><path d="M12 7v8M8 11h8"></path></svg>
+              </span>
+              <span style="flex:1;display:flex;flex-direction:column;">
+                <span style="font-size:15px;font-weight:600;">홈 화면에 추가하기</span>
+                <span style="font-size:11.5px;color:var(--sub);">매일 앱처럼 한 번에 열기</span>
+              </span>
+            </button>
+          </sc-if>
+          <button onClick="{{ closeDone }}" style="min-height:46px;display:flex;align-items:center;justify-content:center;border:none;background:none;font-size:13.5px;color:var(--sub);cursor:pointer;font-family:inherit;">다음에 하기</button>
+          <button onClick="{{ toggleMute }}" style="min-height:44px;display:flex;align-items:center;justify-content:center;gap:9px;border:none;background:none;cursor:pointer;font-family:inherit;padding:0;">
+            <span style="flex:none;width:19px;height:19px;border-radius:5px;border:1px solid {{ muteBorder }};background:{{ muteBg }};display:flex;align-items:center;justify-content:center;color:#fff;">
+              <sc-if value="{{ muteWeek }}" hint-placeholder-val="{{ false }}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+              </sc-if>
+            </span>
+            <span style="font-size:12.5px;color:var(--sub);">일주일 동안 이 창 보지 않기</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 읽기 방식 선택 -->
+  <sc-if value="{{ chooseOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeChoose }}" style="position:fixed;inset:0;z-index:72;background:rgba(8,7,6,.58);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:22px 22px 0 0;padding:18px 20px calc(22px + env(safe-area-inset-bottom));animation:sheetUp .28s ease;">
+        <div style="width:36px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 16px;"></div>
+        <p style="font-family:'Noto Serif KR',serif;font-size:16px;color:var(--text);text-align:center;margin:0 0 4px;">어떻게 선포할까요</p>
+        <p style="font-size:12.5px;color:var(--sub);text-align:center;margin:0 0 18px;">읽기 방식을 선택하세요</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button onClick="{{ chooseChapter }}" style="display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:15px;background:none;color:var(--text);cursor:pointer;font-family:inherit;padding:16px 18px;text-align:left;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M4 5h7v14H4zM13 5h7v14h-7"></path></svg>
+            <span style="flex:1;display:flex;flex-direction:column;gap:2px;">
+              <span style="font-size:15.5px;font-weight:600;">장 넘기며 읽기</span>
+              <span style="font-size:12.5px;color:var(--sub);">한 장씩 넘기며 또박또박 선포합니다</span>
+            </span>
+          </button>
+          <button onClick="{{ chooseFlow }}" style="display:flex;align-items:center;gap:14px;border:1px solid var(--accent);border-radius:15px;background:none;color:var(--text);cursor:pointer;font-family:inherit;padding:16px 18px;text-align:left;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M12 4v16M6 10l6-6 6 6"></path></svg>
+            <span style="flex:1;display:flex;flex-direction:column;gap:2px;">
+              <span style="font-size:15.5px;font-weight:600;">흐름으로 읽기</span>
+              <span style="font-size:12.5px;color:var(--sub);">자동으로 흐르는 화면을 따라 선포합니다</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 나의 기도문 (즐겨찾기) 시트 -->
+  <sc-if value="{{ favSheet }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeFavSheet }}" style="position:fixed;inset:0;z-index:70;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:22px 22px 0 0;padding:16px 20px calc(20px + env(safe-area-inset-bottom));animation:sheetUp .28s ease;max-height:78vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div style="width:36px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 14px;"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          <span style="flex:1;font-family:'Noto Serif KR',serif;font-size:17px;color:var(--text);">나의 기도문</span>
+          <button onClick="{{ closeFavSheet }}" aria-label="닫기" style="flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <sc-if value="{{ hasFavs }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ favItems }}" as="p" hint-placeholder-count="2">
+              <button onClick="{{ p.choose }}" style="display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:13px;background:none;color:var(--text);cursor:pointer;font-family:inherit;padding:13px 15px;text-align:left;">
+                <span style="flex:1;min-width:0;font-family:'Noto Serif KR',serif;font-size:15px;">{{ p.title }}</span>
+                <span style="flex:none;color:var(--accent);font-size:12px;font-weight:600;">선포 →</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noFavs }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:14px 10px 8px;">
+            <p style="font-size:14px;color:var(--sub);line-height:1.7;margin:0 0 16px;">아직 담아둔 기도문이 없습니다.<br>기도문 목록에서 하트를 눌러 담아보세요.</p>
+            <button onClick="{{ goPrayersFromFav }}" style="min-height:46px;padding:0 22px;border:1px solid var(--accent);border-radius:13px;background:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">기도문 보러가기</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 새 소식 팝업 (버전당 1회) -->
+  <sc-if value="{{ patchOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:75;background:rgba(8,7,6,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:28px;">
+      <div style="width:100%;max-width:340px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:riseIn .3s ease;">
+        <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:8px;text-align:center;">새로워졌습니다</div>
+        <div style="font-family:'Noto Serif KR',serif;font-size:18px;color:var(--text);margin-bottom:14px;text-align:center;">이번 업데이트</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;">
+          <sc-for list="{{ patchItems }}" as="it" hint-placeholder-count="3">
+            <div style="display:flex;gap:9px;align-items:flex-start;">
+              <span style="flex:none;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:7px;"></span>
+              <span style="font-size:13.5px;color:var(--sub);line-height:1.65;">{{ it }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ closePatch }}" style="width:100%;min-height:46px;border:1px solid var(--accent);border-radius:13px;background:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">닫기</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 공유 카드 -->
+  <sc-if value="{{ shareOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:80;background:var(--bg);display:flex;flex-direction:column;">
+      <div style="flex:none;display:flex;align-items:center;gap:10px;padding:14px 16px 12px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+        <span style="flex:1;font-size:15px;font-weight:700;">함께 하자고 전하기</span>
+        <button onClick="{{ closeShare }}" aria-label="닫기" style="flex:none;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:0 20px 16px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+        <div ref="{{ cardRef }}" style="position:relative;border-radius:20px;overflow:hidden;background:#0b0a09;aspect-ratio:4/5;">
+          <img src="assets/worship-2x.webp" srcset="assets/worship-1x.webp 1170w, assets/worship-2x.webp 2340w" sizes="440px" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:47.5% 40%;filter:grayscale(1) contrast(1.22) brightness(.46);">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,6,.5) 0%,rgba(8,7,6,.1) 34%,rgba(8,7,6,.88) 100%);"></div>
+          <div style="position:absolute;top:20px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.18em;color:#fff;">ONPRAY</span>
+            <span style="font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.5);">{{ shareDate }}</span>
+          </div>
+          <div style="position:absolute;left:22px;right:22px;bottom:22px;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:14px;">
+              <span style="width:6px;height:6px;border-radius:50%;background:#6fd39b;"></span>
+              <span style="font-size:11.5px;color:rgba(255,255,255,.78);">{{ shareLive }}</span>
+            </div>
+            <p style="font-family:'Noto Serif KR',serif;font-size:19px;font-weight:600;line-height:1.62;color:#fff;margin:0 0 12px;text-shadow:0 2px 20px rgba(0,0,0,.5);">{{ shareQuote }}</p>
+            <div style="width:22px;height:1px;background:rgba(255,255,255,.4);margin-bottom:10px;"></div>
+            <span style="font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;">onpray.pages.dev</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:14px;">
+          <sc-for list="{{ shareTabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.pick }}" style="flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;border:1px solid {{ t.border }};border-radius:11px;background:none;font-size:12.5px;color:{{ t.color }};font-weight:{{ t.weight }};cursor:pointer;font-family:inherit;">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:none;padding:0 16px calc(18px + env(safe-area-inset-bottom));max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;">
+        <button onClick="{{ doShare }}" style="min-height:54px;display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:15px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><path d="M12 16V3M7 8l5-5 5 5"></path></svg>
+          {{ shareBtnLabel }}
+        </button>
+        <button onClick="{{ saveCard }}" style="min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:14px;background:none;color:var(--sub);font-size:13.5px;cursor:pointer;font-family:inherit;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5M12 15V3"></path></svg>
+          {{ saveBtnLabel }}
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- 홈 화면 추가 안내 -->
+  <sc-if value="{{ installOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeInstall }}" style="position:fixed;inset:0;z-index:80;background:rgba(8,7,6,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:26px 24px calc(26px + env(safe-area-inset-bottom));animation:riseIn .3s ease;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="flex:1;font-size:16px;font-weight:700;">홈 화면에 추가하기</span>
+          <button onClick="{{ closeInstall }}" aria-label="닫기" style="flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;padding:0;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <p style="font-size:13px;color:var(--sub);margin:0 0 22px;line-height:1.7;">주소창 없이 앱처럼 열리고,<br>선포하던 자리에서 바로 이어집니다.</p>
+        <div style="display:flex;flex-direction:column;gap:15px;">
+          <sc-for list="{{ installSteps }}" as="st" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <span style="flex:none;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;color:var(--accent);font-size:12px;font-weight:700;">{{ st.n }}</span>
+              <span style="flex:1;font-size:14px;line-height:1.6;">{{ st.text }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ closeInstall }}" style="width:100%;margin-top:24px;min-height:50px;border:none;border-radius:14px;background:var(--accent);color:#fff;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;">알겠습니다</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ─── 홈 ─── -->
+  <sc-if value="{{ statsMode }}" hint-placeholder-val="{{ false }}">{{ statsBody }}</sc-if>
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;min-height:100dvh;overflow:hidden;background:#090908;animation:riseIn .4s ease;">
+    <sc-if value="{{ heroIsJoshua }}" hint-placeholder-val="{{ true }}">
+    <img src="assets/joshua-hero.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 0%;">
+    </sc-if>
+    <sc-if value="{{ heroIsOita }}" hint-placeholder-val="{{ false }}">
+    <img src="assets/oita-hero.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 0%;">
+    </sc-if>
+    <div style="position:absolute;inset:0;background:{{ heroGrad }};"></div>
+
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top),10px) 14px 0 22px;">
+      <button onClick="{{ reloadHome }}" aria-label="홈 새로고침" style="border:none;background:none;padding:0;cursor:pointer;font-size:19px;font-weight:700;letter-spacing:.14em;color:#fff;font-family:inherit;">ONPRAY</button>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button onClick="{{ toggleBgm }}" aria-label="배경음악" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ heroBgmColor }};padding:0;">
+          <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+          </sc-if>
+          <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+          </sc-if>
+        </button>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:24px;right:24px;bottom:calc(86px + env(safe-area-inset-bottom));text-align:center;">
+      <sc-if value="{{ armorOn }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;margin:0 -24px 14px;padding:12px 24px 0;">
+          <div style="position:relative;height:56px;margin-bottom:6px;">
+            <sc-for list="{{ armorRow }}" as="a" hint-placeholder-count="6">
+              <span style="position:absolute;left:{{ a.x }}%;top:{{ a.y }}px;transform:translateX(-50%);display:flex;color:{{ a.color }};opacity:{{ a.op }};animation:{{ a.anim }};">
+                <svg width="{{ a.size }}" height="{{ a.size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.d }}"></path></svg>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isWeekday }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ openFavSheet }}" aria-label="나의 기도문" style="flex:none;width:54px;min-height:54px;border:1px solid rgba(255,255,255,.28);border-radius:15px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6b756" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          </button>
+          <button onClick="{{ goToday }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:{{ heroCtaBg }};color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:{{ heroCtaShadow }};">{{ todayCtaLabel }}</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isWeekend }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ openFavSheet }}" aria-label="나의 기도문" style="flex:none;width:54px;min-height:54px;border:1px solid rgba(255,255,255,.28);border-radius:15px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6b756" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          </button>
+          <button onClick="{{ goWeekend }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:{{ heroCtaBg }};color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:{{ heroCtaShadow }};">{{ weekendCtaLabel }}</button>
+        </div>
+      </sc-if>
+      <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);">오늘 <strong style="color:rgba(255,255,255,.82);font-weight:600;">{{ todayTotal }}명</strong>이 이 자리에서 선포했습니다</div>
+      <sc-if value="{{ streakLabel }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:6px;font-size:12px;color:#e6b756;font-weight:600;">{{ streakLabel }}</div>
+      </sc-if>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ─── 기도문 ─── -->
+  <sc-if value="{{ isPrayers }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px;animation:riseIn .4s ease;">
+    <sc-if value="{{ noPrayerOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="position:relative;display:flex;align-items:center;">
+          <span style="position:absolute;left:14px;display:flex;color:var(--sub);pointer-events:none;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          </span>
+          <input type="search" value="{{ query }}" onChange="{{ setQuery }}" placeholder="기도문 검색" style="width:100%;min-height:48px;box-sizing:border-box;padding:0 42px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--text);font-size:15px;font-family:inherit;">
+          <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ clearQuery }}" aria-label="검색어 지우기" style="position:absolute;right:6px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:none;border-radius:50%;background:none;color:var(--sub);cursor:pointer;padding:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+            </button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ searchInfo }}" hint-placeholder-val="{{ false }}">
+          <p style="font-size:13px;color:var(--sub);margin:-4px 0 0 6px;">{{ searchInfo }}</p>
+        </sc-if>
+        <sc-for list="{{ prayerGroups }}" as="g" hint-placeholder-count="3">
+          <section>
+            <button onClick="{{ g.toggle }}" style="width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;padding:6px 6px 10px;cursor:pointer;color:var(--sub);font-family:inherit;text-align:left;">
+              <span style="display:flex;transform:rotate({{ g.rotate }}deg);transition:transform .2s;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+              </span>
+              <span style="flex:1;font-size:13px;font-weight:700;letter-spacing:.1em;">{{ g.label }}</span>
+              <span style="font-size:12px;font-variant-numeric:tabular-nums;">{{ g.count }}</span>
+            </button>
+            <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="3">
+                  <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;">
+                    <div style="display:flex;align-items:flex-start;gap:10px;">
+                      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;">
+                        <span style="font-size:16px;font-weight:500;">{{ p.title }}</span>
+                        <sc-if value="{{ p.resume }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size:12px;color:var(--accent);font-weight:600;">{{ p.resume }}</span>
+                        </sc-if>
+                        <span style="font-size:13px;color:var(--sub);line-height:1.6;">{{ p.ref }}</span>
+                      </div>
+                      <button onClick="{{ p.toggleFav }}" aria-label="즐겨찾기" style="flex:none;width:40px;height:40px;margin:-6px -6px 0 0;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;padding:0;">
+                        <sc-if value="{{ p.isFav }}" hint-placeholder-val="{{ false }}">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                        </sc-if>
+                        <sc-if value="{{ p.notFav }}" hint-placeholder-val="{{ true }}">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                        </sc-if>
+                      </button>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:14px;">
+                      <button onClick="{{ p.open }}" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7v14H4zM13 5h7v14h-7"></path></svg>
+                        장 넘기며 읽기
+                      </button>
+                      <button onClick="{{ p.flow }}" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--accent);border-radius:12px;background:none;color:var(--accent);font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 10l6-6 6 6"></path></svg>
+                        흐름으로 읽기
+                      </button>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </section>
+        </sc-for>
+        <sc-if value="{{ noResult }}" hint-placeholder-val="{{ false }}">
+          <p style="font-size:14px;color:var(--sub);text-align:center;padding:32px 20px;line-height:1.7;">검색 결과가 없습니다.<br>다른 낱말로 찾아보세요.</p>
+        </sc-if>
+        <p style="font-size:13px;color:var(--sub);text-align:center;margin:4px 0 12px;line-height:1.6;">기도문 업데이트를 요청하시겠어요?<br><a href="mailto:idrkdalswns@gmail.com">idrkdalswns@gmail.com</a> 으로 문의해 주세요</p>
+      </div>
+    </sc-if>
+    <sc-if value="{{ flowOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;background:var(--bg);z-index:20;">
+        <div ref="{{ flowRef }}" onClick="{{ toggleFlow }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;">
+          <div style="max-width:480px;margin:0 auto;padding:0 22px;box-sizing:border-box;">
+            <div style="height:150px;"></div>
+            <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em;">{{ flowTitle }}</h1>
+            <p style="font-size:12.5px;color:var(--sub);margin:0 0 34px;line-height:1.65;">{{ flowNote }}</p>
+            <div style="display:flex;flex-direction:column;gap:26px;">
+              <sc-for list="{{ flowSecs }}" as="sec" hint-placeholder-count="4">
+                <div>
+                  <sc-if value="{{ sec.h }}" hint-placeholder-val="{{ false }}">
+                    <p style="font-size:13px;font-weight:700;color:var(--accent);margin:0 0 12px;letter-spacing:.02em;">{{ sec.h }}</p>
+                  </sc-if>
+                  <div style="font-family:'Noto Serif KR',serif;font-size:{{ prayerFs }}px;line-height:1.95;display:flex;flex-direction:column;gap:16px;">
+                    <sc-for list="{{ sec.qlines }}" as="para" hint-placeholder-count="4">
+                      <p style="margin:0;color:{{ para.c }};">{{ para.t }}</p>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="height:300px;"></div>
+          </div>
+        </div>
+        <div style="position:absolute;left:0;right:0;top:0;height:140px;background:linear-gradient(180deg,var(--bg) 46%,rgba(0,0,0,0));pointer-events:none;"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:190px;background:linear-gradient(0deg,var(--bg) 48%,rgba(0,0,0,0));pointer-events:none;"></div>
+        <sc-if value="{{ flowPlaying }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:0;right:0;top:42%;height:62px;border-top:1px solid color-mix(in oklch, var(--accent) 22%, transparent);border-bottom:1px solid color-mix(in oklch, var(--accent) 22%, transparent);background:color-mix(in oklch, var(--accent) 4%, transparent);pointer-events:none;"></div>
+        </sc-if>
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;margin:0 auto;box-sizing:border-box;">
+          <button onClick="{{ closeFlowView }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;font-family:inherit;padding:0;">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <span style="flex:1;min-width:0;font-size:12.5px;color:var(--accent);font-weight:600;white-space:nowrap;">흐름으로 읽기</span>
+          <button onClick="{{ flowToTop }}" aria-label="맨 위로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);font-family:inherit;padding:0;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+          </button>
+          <button onClick="{{ toggleTheme }}" aria-label="다크모드 전환" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);font-family:inherit;padding:0;">
+            <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+            </sc-if>
+            <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path></svg>
+            </sc-if>
+          </button>
+          <button onClick="{{ fontDown }}" aria-label="글자 작게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:12px;line-height:1;white-space:nowrap;color:{{ fontDownColor }};font-family:inherit;padding:0;">가−</button>
+          <button onClick="{{ fontUp }}" aria-label="글자 크게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:16px;line-height:1;white-space:nowrap;color:{{ fontUpColor }};font-family:inherit;padding:0;">가+</button>
+          <button onClick="{{ toggleBgm }}" aria-label="배경음악" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ barBgmColor }};font-family:inherit;padding:0;">
+            <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+            </sc-if>
+            <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+            </sc-if>
+          </button>
+        </div>
+        <div style="position:absolute;top:48px;left:0;right:0;padding:2px 22px 0;max-width:480px;margin:0 auto;box-sizing:border-box;z-index:6;">
+          <div ref="{{ flowRidgeRef }}" style="position:relative;height:30px;touch-action:none;">
+            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;pointer-events:none;">
+              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
+              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ flowRidge.dash }}"></path>
+            </svg>
+            <div onPointerDown="{{ flowDragStart }}" style="position:absolute;left:{{ flowRidge.crossLeft }};top:{{ flowRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:456px;margin:0 auto;box-sizing:border-box;">
+          <sc-if value="{{ flowSpeedOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px;margin-bottom:8px;box-shadow:0 8px 24px rgba(0,0,0,.14);display:flex;flex-direction:column;gap:4px;animation:riseIn .18s ease;">
+              <sc-for list="{{ flowSpeedOpts }}" as="opt" hint-placeholder-count="4">
+                <button onClick="{{ opt.pick }}" style="width:100%;min-height:40px;border:none;border-radius:10px;background:{{ opt.bg }};color:{{ opt.fg }};font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left;padding:0 14px;">{{ opt.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.12);flex-direction:{{ flowRowDir }};">
+            <button onClick="{{ toggleFlow }}" aria-label="자동 스크롤 재생 또는 정지" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);cursor:pointer;padding:0;">
+              <sc-if value="{{ flowPlaying }}" hint-placeholder-val="{{ false }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+              </sc-if>
+              <sc-if value="{{ flowPaused }}" hint-placeholder-val="{{ true }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l12 7.5-12 7.5z"></path></svg>
+              </sc-if>
+            </button>
+            <button onClick="{{ flowFinish }}" disabled="{{ flowFinishDisabled }}" style="flex:1;min-width:0;height:48px;border:none;border-radius:13px;background:{{ flowFinishBg }};color:{{ flowFinishFg }};font-size:14.5px;font-weight:700;font-family:inherit;cursor:{{ flowFinishCursor }};white-space:nowrap;padding:0 8px;">선포 마쳤습니다</button>
+            <button onClick="{{ toggleSpeedMenu }}" aria-label="흐르는 속도" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);font-family:inherit;cursor:pointer;padding:0;position:relative;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5 4.5l9 5.5-9 5.5z" opacity="0.45"></path><path d="M11 4.5l9 5.5-9 5.5z"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ prayerOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:20;">
+        <div style="flex:none;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+          <button onClick="{{ closePrayer }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--sub);cursor:pointer;font-family:inherit;padding:0;">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <span style="flex:1;min-width:0;font-size:12.5px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ barTitle }}</span>
+          <span style="flex:none;font-size:12.5px;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap;padding:0 2px;">{{ openPageLabel }}</span>
+          <button onClick="{{ openToTop }}" aria-label="처음으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);font-family:inherit;padding:0;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>
+          </button>
+          <button onClick="{{ toggleTheme }}" aria-label="다크모드 전환" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--sub);font-family:inherit;padding:0;">
+            <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg>
+            </sc-if>
+            <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path></svg>
+            </sc-if>
+          </button>
+          <button onClick="{{ fontDown }}" aria-label="글자 작게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:12px;line-height:1;white-space:nowrap;color:{{ fontDownColor }};font-family:inherit;padding:0;">가−</button>
+          <button onClick="{{ fontUp }}" aria-label="글자 크게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:16px;line-height:1;white-space:nowrap;color:{{ fontUpColor }};font-family:inherit;padding:0;">가+</button>
+          <button onClick="{{ toggleBgm }}" aria-label="배경음악" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ barBgmColor }};font-family:inherit;padding:0;">
+            <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+            </sc-if>
+            <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+            </sc-if>
+          </button>
+        </div>
+        <div style="flex:none;padding:2px 22px 0;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+          <div ref="{{ openRidgeRef }}" style="position:relative;height:30px;touch-action:none;">
+            <svg viewBox="0 0 312 30" width="100%" height="30" preserveAspectRatio="none" style="display:block;overflow:visible;pointer-events:none;">
+              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linecap="round"></path>
+              <path d="M2 26 C 110 24 190 17 260 6 L 310 2" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="{{ openRidge.dash }}"></path>
+            </svg>
+            <div onPointerDown="{{ openDragStart }}" style="position:absolute;left:{{ openRidge.crossLeft }};top:{{ openRidge.crossTop }};transform:translate(-50%,-50%);width:38px;height:38px;margin:0;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;">
+              <svg width="14" height="18" viewBox="0 0 14 18" style="overflow:visible;pointer-events:none;"><g stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" style="filter:drop-shadow(0 0 4px color-mix(in oklch, var(--accent) 80%, transparent))"><path d="M7 3 v12 M2.5 8 h9"></path></g></svg>
+            </div>
+          </div>
+        </div>
+        <div ref="{{ scrollerRef }}" onClick="{{ zoneTap }}" onTouchStart="{{ touchStart }}" onTouchEnd="{{ touchEnd }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;padding:0 20px 6px;max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;">
+          <sc-if value="{{ isFirstPage }}" hint-placeholder-val="{{ true }}">
+            <h1 style="font-family:'Noto Serif KR',serif;font-size:23px;font-weight:600;margin:8px 0 5px;letter-spacing:-.01em;">{{ openTitle }}</h1>
+            <p style="font-size:12.5px;color:var(--sub);margin:0 0 14px;line-height:1.6;">{{ openNote }}</p>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <sc-for list="{{ openBlocks }}" as="blk" hint-placeholder-count="2">
+              <div style="animation:riseIn .3s ease;">
+                <sc-if value="{{ blk.h }}" hint-placeholder-val="{{ false }}">
+                  <p style="font-size:13px;font-weight:700;color:var(--accent);margin:0 0 10px;letter-spacing:.02em;">{{ blk.h }}</p>
+                </sc-if>
+                <div style="font-family:'Noto Serif KR',serif;font-size:{{ prayerFs }}px;line-height:1.85;display:flex;flex-direction:column;gap:13px;">
+                  <sc-for list="{{ blk.qlines }}" as="para" hint-placeholder-count="4">
+                    <p style="margin:0;color:{{ para.c }};">{{ para.t }}</p>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="flex:none;display:flex;align-items:center;gap:8px;padding:6px 12px calc(6px + env(safe-area-inset-bottom));max-width:480px;width:100%;margin:0 auto;box-sizing:border-box;border-top:1px solid var(--line);flex-direction:{{ navRowDir }};">
+          <button onClick="{{ openNext }}" style="flex:1;height:46px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">{{ openNextLabel }}</button>
+          <button onClick="{{ openPrevBtn }}" style="width:76px;height:46px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--sub);font-size:14px;cursor:pointer;font-family:inherit;opacity:{{ openPrevOpacity }};">이전</button>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+  </sc-if>
+
+  <!-- ─── 묵상 칼럼 ─── -->
+  <sc-if value="{{ isColumn }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px 0;animation:riseIn .4s ease;">
+    <div style="height:12px;"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <sc-for list="{{ posts }}" as="p" hint-placeholder-count="1">
+        <button onClick="{{ p.open }}" style="display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);cursor:pointer;text-align:left;color:var(--text);font-family:inherit;">
+          <span style="display:block;position:relative;height:132px;background-color:#111;background-image:{{ p.bg }};background-size:cover;background-position:34% 30%;">
+            <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,9,.3) 0%,rgba(8,8,9,.12) 36%,rgba(8,8,9,.86) 100%);"></span>
+            <span style="position:absolute;left:18px;right:18px;bottom:14px;display:block;">
+              <span style="display:block;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.62);font-weight:700;margin-bottom:6px;">NO. {{ p.no }}</span>
+              <span style="display:block;font-family:'Noto Serif KR',serif;font-size:20px;font-weight:600;line-height:1.4;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);">{{ p.title }}</span>
+            </span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <p style="font-size:11.5px;color:var(--sub);text-align:center;margin:22px 0 8px;line-height:1.7;">기록은 천천히 쌓입니다</p>
+  </main>
+  </sc-if>
+
+  <!-- ─── 칼럼 읽기 (어두운 표지) ─── -->
+  <sc-if value="{{ postOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:#0e0e10;z-index:30;">
+      <div ref="{{ postScrollRef }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+        <div style="max-width:480px;margin:0 auto;">
+          <div style="position:relative;height:520px;background-color:#0b0a09;background-image:{{ postBg }};background-size:cover;background-position:38% 44%;">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,6,.5) 0%,rgba(8,7,6,0) 28%,rgba(10,10,11,.5) 70%,#0e0e10 100%);"></div>
+            <div style="position:absolute;top:24px;left:24px;right:24px;display:flex;align-items:center;justify-content:space-between;">
+              <button onClick="{{ goHome }}" style="font-size:10.5px;letter-spacing:.22em;color:rgba(255,255,255,.7);font-weight:600;border:none;background:none;padding:0;cursor:pointer;font-family:inherit;">ONPRAY</button>
+              <span style="font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.42);font-variant-numeric:tabular-nums;">NO. {{ postNo }}</span>
+            </div>
+            <div style="position:absolute;left:24px;right:24px;bottom:32px;">
+              <div style="width:26px;height:1px;background:rgba(255,255,255,.45);margin-bottom:16px;"></div>
+              <h1 style="font-family:'Noto Serif KR',serif;font-size:28px;font-weight:600;color:#fff;line-height:1.44;margin:0 0 12px;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.55);">{{ postTitle }}</h1>
+              <sc-if value="{{ postDate }}" hint-placeholder-val="{{ false }}">
+                <p style="font-size:11.5px;color:rgba(255,255,255,.5);margin:0;letter-spacing:.06em;font-variant-numeric:tabular-nums;">{{ postDate }}</p>
+              </sc-if>
+            </div>
+          </div>
+          <div style="padding:34px 26px 90px;">
+            <div style="display:flex;flex-direction:column;gap:26px;">
+              <sc-for list="{{ postBlocks }}" as="blk" hint-placeholder-count="5">
+                <div>
+                  <sc-if value="{{ blk.isText }}" hint-placeholder-val="{{ true }}">
+                    <p style="font-family:'Noto Serif KR',serif;font-size:{{ postFs }}px;line-height:2.15;color:rgba(255,255,255,.86);margin:0;">
+                      <sc-for list="{{ blk.lines }}" as="ln" hint-placeholder-count="3">
+                        <span style="display:block;">{{ ln }}</span>
+                      </sc-for>
+                    </p>
+                  </sc-if>
+                  <sc-if value="{{ blk.isQuote }}" hint-placeholder-val="{{ false }}">
+                    <p style="font-family:'Noto Serif KR',serif;font-size:{{ postQuoteFs }}px;font-weight:600;line-height:1.75;color:#fff;margin:6px 0;padding-left:16px;border-left:2px solid #e6b756;">
+                      <sc-for list="{{ blk.lines }}" as="ln" hint-placeholder-count="2">
+                        <span style="display:block;">{{ ln }}</span>
+                      </sc-for>
+                    </p>
+                  </sc-if>
+                  <sc-if value="{{ blk.isBreak }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:9px;padding:4px 0;">
+                      <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);"></span>
+                      <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);"></span>
+                      <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.3);"></span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:4px;padding:0 8px 0 2px;height:48px;max-width:480px;margin:0 auto;box-sizing:border-box;">
+        <button onClick="{{ closePost }}" aria-label="목록으로" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:rgba(255,255,255,.8);cursor:pointer;font-family:inherit;padding:0;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+        </button>
+        <span style="flex:1;"></span>
+        <button onClick="{{ fontDown }}" aria-label="글자 작게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:12px;line-height:1;white-space:nowrap;color:rgba(255,255,255,.7);font-family:inherit;padding:0;">가−</button>
+        <button onClick="{{ fontUp }}" aria-label="글자 크게" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:16px;line-height:1;white-space:nowrap;color:rgba(255,255,255,.7);font-family:inherit;padding:0;">가+</button>
+        <button onClick="{{ toggleBgm }}" aria-label="배경음악" style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:{{ postBgmColor }};font-family:inherit;padding:0;">
+          <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+          </sc-if>
+          <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4V5z"></path><path d="M22 9l-6 6M16 9l6 6"></path></svg>
+          </sc-if>
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ─── 설정 ─── -->
+  <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:8px 16px;display:flex;flex-direction:column;gap:16px;animation:riseIn .4s ease;">
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">배경음악</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;line-height:1.55;">선포할 때 함께 흐를 음악을 고르세요.<br>읽기 화면 상단에서 바로 멈추고 이어 들을 수 있습니다.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <sc-for list="{{ bgmList }}" as="t" hint-placeholder-count="2">
+          <button onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:12px;min-height:52px;border:1px solid {{ t.border }};border-radius:13px;background:{{ t.bg }};color:var(--text);cursor:pointer;font-family:inherit;padding:0 16px;text-align:left;">
+            <span style="flex:none;display:flex;color:{{ t.iconColor }};">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </span>
+            <span style="flex:1;display:flex;flex-direction:column;gap:2px;">
+              <span style="font-size:15px;font-weight:{{ t.weight }};">{{ t.title }}</span>
+              <sc-if value="{{ t.artist }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12.5px;color:var(--sub);">{{ t.artist }}</span>
+              </sc-if>
+            </span>
+            <sc-if value="{{ t.selected }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:none;display:flex;color:var(--accent);">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+              </span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ bgmOn }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <button onClick="{{ toggleBgm }}" aria-label="재생 또는 일시정지" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);cursor:pointer;padding:0;">
+              <sc-if value="{{ bgmPlaying }}" hint-placeholder-val="{{ false }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+              </sc-if>
+              <sc-if value="{{ bgmPaused }}" hint-placeholder-val="{{ true }}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l12 7.5-12 7.5z"></path></svg>
+              </sc-if>
+            </button>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+              <input type="range" min="0" max="{{ bgmDur }}" step="1" value="{{ bgmPos }}" onChange="{{ seekBgm }}" onInput="{{ seekBgm }}" aria-label="재생 위치" style="width:100%;height:32px;accent-color:var(--accent);background:none;cursor:pointer;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;">
+                <span>{{ bgmPosLabel }}</span>
+                <span>{{ bgmDurLabel }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 14px;">화면 설정</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:48px;">
+        <span style="font-size:15px;">다크모드 <span style="font-size:12px;color:var(--sub);">새벽·밤 기도용</span></span>
+        <button onClick="{{ toggleTheme }}" style="min-width:56px;min-height:32px;border-radius:16px;border:none;cursor:pointer;background:{{ darkToggleBg }};position:relative;transition:background .25s;">
+          <span style="position:absolute;top:4px;left:{{ darkKnobLeft }}px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.3);"></span>
+        </button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:48px;border-top:1px solid var(--line);margin-top:8px;padding-top:8px;">
+        <span style="font-size:15px;">주 사용 손 <span style="font-size:12px;color:var(--sub);">넘김 버튼 위치</span></span>
+        <div style="display:flex;gap:6px;">
+          <button onClick="{{ setLeftHand }}" style="min-width:56px;min-height:44px;border:1px solid {{ leftHandBorder }};border-radius:12px;background:{{ leftHandBg }};color:{{ leftHandFg }};font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">왼손</button>
+          <button onClick="{{ setRightHand }}" style="min-width:56px;min-height:44px;border:1px solid {{ rightHandBorder }};border-radius:12px;background:{{ rightHandBg }};color:{{ rightHandFg }};font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">오른손</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;min-height:48px;border-top:1px solid var(--line);margin-top:8px;padding-top:8px;">
+        <span style="font-size:15px;">기도문 글자 크기 <span style="font-size:12px;color:var(--sub);">{{ prayerFs }}px</span></span>
+        <div style="display:flex;gap:6px;">
+          <button onClick="{{ fontDown }}" style="min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:14px;cursor:pointer;">가−</button>
+          <button onClick="{{ fontUp }}" style="min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:12px;background:none;color:var(--text);font-size:19px;cursor:pointer;">가+</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">앱 공유</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;">함께 깨어 기도할 동역자에게 링크를 보내세요</p>
+      <button onClick="{{ copyLink }}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;border:1px solid var(--accent);border-radius:12px;background:none;color:var(--accent);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        {{ copyLinkLabel }}
+      </button>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;">이 사역을 함께 세워 주세요</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg);border-radius:12px;padding:14px 16px;">
+        <div>
+          <div style="font-size:13px;color:var(--sub);">국민은행</div>
+          <div style="font-size:17px;font-weight:600;letter-spacing:.02em;font-variant-numeric:tabular-nums;">92311516646</div>
+        </div>
+        <button onClick="{{ copyAccount }}" style="min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">{{ copyLabel }}</button>
+      </div>
+    </section>
+
+    <section style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;">
+      <h2 style="font-size:16px;font-weight:700;margin:0 0 4px;">기도문 업데이트 요청</h2>
+      <p style="font-size:13px;color:var(--sub);margin:0 0 14px;line-height:1.55;">추가하고 싶은 기도문이나 수정 요청을<br>이메일로 보내 주세요</p>
+      <a href="mailto:idrkdalswns@gmail.com?subject=기도문 업데이트 요청" style="display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;">이메일 보내기</a>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ─── 원어 (말씀 렸즈) ─── -->
+  <!-- ─── 다윗의 노래 ─── -->
+  <sc-if value="{{ isDavid }}" hint-placeholder-val="{{ false }}">
+  <main style="position:relative;min-height:100dvh;">{{ davidBody }}</main>
+  </sc-if>
+
+  <sc-if value="{{ isWords }}" hint-placeholder-val="{{ false }}">
+  <main style="position:relative;min-height:100dvh;">{{ wordsBody }}</main>
+  </sc-if>
+
+  <!-- ─── 하단 탭 ─── -->
+  <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}">
+  <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);background:{{ navBg }};backdrop-filter:blur(16px);border-top:1px solid {{ navBorder }};padding-bottom:env(safe-area-inset-bottom);">
+    <button onClick="{{ goHome }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabHomeColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabHomeWeight }};">홈</span>
+    </button>
+    <button onClick="{{ goPrayers }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabPrayColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabPrayWeight }};">기도문</span>
+    </button>
+    <button onClick="{{ goDavid }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabDavidColor }};">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabDavidWeight }};">다윗의 노래</span>
+    </button>
+    <button onClick="{{ goWords }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabWordsColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.8L18.7 9.7 14 11.6 12 16.4 10 11.6 5.3 9.7 10.1 7.8z"></path><path d="M18 15l.9 2.2L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.8z"></path></svg>
+      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabWordsWeight }};">원어</span>
+    </button>
+    <button onClick="{{ goSettings }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabSetColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabSetWeight }};">설정</span>
+    </button>
+  </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:900},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#8e2b2b&quot;,&quot;options&quot;:[&quot;#8e2b2b&quot;,&quot;#a34d2e&quot;,&quot;#5a4a8e&quot;,&quot;#2e6e5e&quot;],&quot;section&quot;:&quot;스타일&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    tab: 'home', theme: localStorage.getItem('sp_theme') || 'light',
+    fs: parseInt(localStorage.getItem('sp_fs') || '19', 10),
+    openKey: null, live: 0, counts: [], copied: false,
+    homePage: 0, openPage: 0, handed: localStorage.getItem('sp_hand') || 'right',
+    flowKey: null, flowPlay: false, flowPct: 0, flowSpeed: (function(){ var v = parseInt(localStorage.getItem('sp_flow_speed') || '440', 10); var opts=[240,340,440,540,640]; return opts.indexOf(v) >= 0 ? v : opts.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a); })(),
+    postNo: null, shareOpen: false, installOpen: false, shareKind: 'today', shareBtnBusy: '', savedMsg: '',
+    bgm: localStorage.getItem('sp_bgm') || 'd-major-pad', bgmPlay: false,
+    heroY: (function(){ var v = parseInt(localStorage.getItem('sp_hero_y') || '72', 10); return isNaN(v) ? 72 : Math.max(0, Math.min(100, v)); })(),
+    muteWeek: (function(){ const u = parseInt(localStorage.getItem('sp_done_mute') || '0', 10); return !!(u && Date.now() < u); })(),
+    bgmSheet: false, bgmPos: 0, bgmDur: 0,
+    bgmVol: parseInt(localStorage.getItem('sp_bgm_vol') || '45', 10),
+    hours: null, online: null,
+    hours2: null,
+    wv: 'gate', wSec: null, wBk: null, wCh: null, wEntry: null, wMode: 'chapters', wq: '', wDepth: 'B', dv: 'map', dvSong: null, dvMode: 'page', dvPage: 0, dvPlay: false
+  };
+
+  DB = 'https://onpray-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+  componentDidMount() {
+    document.body.dataset.theme = this.state.theme;
+    if (/[?&]stats=1/.test(location.search)) { this.setState({ statsMode: true }); this.statsLoad(); }
+    const grab = () => { if (window.PRAYER_DATA && window.COLUMN_POSTS) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
+    if (!grab()) { let n = 0; const t = setInterval(() => { if (grab() || ++n > 50) clearInterval(t); }, 100); }
+    this.cid = localStorage.getItem('sp_cid') || (Math.random().toString(36).slice(2) + Date.now().toString(36));
+    localStorage.setItem('sp_cid', this.cid);
+    this.lastHour = new Date().getHours();
+    this.hourTimer = setInterval(() => { const h = new Date().getHours(); if (h !== this.lastHour) { this.lastHour = h; this.recordVisit(); } }, 60000);
+    this.recordVisit();
+    this.syncLive();
+    this.liveTimer = setInterval(() => this.syncLive(), 15000);
+    this.measure();
+    if (!window.htmlToImage) {
+      const sc = document.createElement('script');
+      sc.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js';
+      document.head.appendChild(sc);
+    }
+    this.onResize = () => { clearTimeout(this.rzT); this.rzT = setTimeout(() => this.measure(true), 150); };
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('orientationchange', this.onResize);
+    this.onLeave = () => { try { fetch(this.DB + '/pres/' + this.bucket() + '/' + this.cid + '.json', { method: 'DELETE', keepalive: true }); } catch (e) {} };
+    window.addEventListener('pagehide', this.onLeave);
+    // ── 당겨서 새로고침 (모바일) ──
+    this.ptrY = null; this.ptrFired = false;
+    this.onPtrStart = e => { this.ptrY = e.touches && e.touches.length === 1 ? e.touches[0].clientY : null; this.ptrFired = false; };
+    this.onPtrMove = e => {
+      if (this.ptrY == null || this.ptrFired || !e.touches || !e.touches.length) return;
+      // 홈 랜딩에서만 당겨서 새로고침 (기도문/흐름/칼럼 열람 중엔 비활성)
+      const s = this.state;
+      if (s.tab !== 'home' || s.openKey || s.flowKey || s.postNo != null) return;
+      const dy = e.touches[0].clientY - this.ptrY;
+      if (dy < 70) return;
+      let el = e.target;
+      while (el && el !== document.body) {
+        if (el.scrollHeight - el.clientHeight > 2 && getComputedStyle(el).overflowY !== 'visible') {
+          if (el.scrollTop > 0) return; break;
+        }
+        el = el.parentElement;
+      }
+      this.ptrFired = true; location.reload();
+    };
+    window.addEventListener('touchstart', this.onPtrStart, { passive: true });
+    window.addEventListener('touchmove', this.onPtrMove, { passive: true });
+  }
+  componentWillUnmount() {
+    clearInterval(this.liveTimer); clearTimeout(this.rzT); clearInterval(this.hourTimer); clearInterval(this.posTimer); clearTimeout(this._skT);
+    window.removeEventListener('pagehide', this.onLeave); this.onLeave && this.onLeave();
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('orientationchange', this.onResize);
+    window.removeEventListener('touchstart', this.onPtrStart);
+    window.removeEventListener('touchmove', this.onPtrMove);
+  }
+  measure(force) {
+    const el = this.scroller;
+    const h = el ? el.clientHeight : 0, w = el ? el.clientWidth - 40 : 0;
+    if (h > 120 && (force || Math.abs(h - (this.state.boxH || 0)) > 4 || Math.abs(w - (this.state.boxW || 0)) > 4)) {
+      this.setState({ boxH: h, boxW: w });
+    } else if (force) { this.forceUpdate(); }
+  }
+  componentDidUpdate() { if (this.scroller && !this._m) { this._m = 1; setTimeout(() => { this._m = 0; this.measure(); }, 30); } }
+
+  dateKey() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+  // 실제 방문 1회 기록 (오늘 · 현재 시간대에 이 세션의 고유 키를 남김)
+  async recordVisit() {
+    try {
+      await fetch(this.DB + '/counts/' + this.dateKey() + '/' + new Date().getHours() + '/' + this.cid + '.json',
+        { method: 'PUT', body: 'true' });
+    } catch (e) {}
+  }
+
+  bucket(offset) { return Math.floor(Date.now() / 1800000) + (offset || 0); } // 30분 단위
+
+  // ── 운영자 조회수 통계 (?stats=1) ──
+  statsMap() {
+    const m = {};
+    const kf = (p, t) => m[this.keyFor(p, t)] = t;
+    (window.EXTRA_PRAYERS || []).forEach(p => kf('s', p.title));
+    (window.ECCLESIA_WEEK || []).forEach(p => kf('e', p.title));
+    (window.WORSHIP_TO_LIFE || []).forEach(p => kf('l', p.title));
+    const wd = window.PRAYER_DATA;
+    if (wd) wd.DAYS.forEach(d => m[this.keyFor('w', d.day + ' 보혈 선포')] = '보혈 선포 · ' + d.day);
+    const dv = window.DAVID_SONGS;
+    if (dv) dv.parts.forEach(pt => pt.songs.forEach(sg => m['D_' + sg.id] = '다윗의 노래 · ' + sg.title));
+    const wb = window.WORD_BOOKS || {};
+    Object.keys(wb).forEach(c => (wb[c].entries || []).forEach(e => { if (!e.stub) m['W_' + e.id] = '원어 · ' + (e.word_ko || e.id); }));
+    return m;
+  }
+  async statsLoad() {
+    try {
+      const data = await fetch(this.DB + '/views.json').then(r => r.json());
+      const map = this.statsMap();
+      const rows = Object.keys(data || {}).map(k => ({ key: k, n: (data[k] && data[k].n) || 0, title: map[k] || '(삭제/미상) ' + k }));
+      rows.sort((a, b) => b.n - a.n);
+      // 조회 0인 등록 기도문도 표시
+      Object.keys(map).forEach(k => { if (!data || !(k in data)) rows.push({ key: k, n: 0, title: map[k] }); });
+      this.setState({ statsRows: rows, statsMode: true });
+    } catch (e) { this.setState({ statsRows: [], statsErr: String(e), statsMode: true }); }
+  }
+  statsBody() {
+    const rows = this.state.statsRows;
+    const H = (t, s) => this.wh('div', { padding: '16px 18px', borderBottom: '1px solid var(--line)' },
+      [this.wh('div', { key: 'a', fontSize: 17, fontWeight: 700, color: 'var(--text)' }, t),
+       this.wh('div', { key: 'b', fontSize: 12, color: 'var(--sub)', marginTop: 3 }, s)]);
+    if (!rows) return this.wh('div', {}, [H('조회수 통계', '불러오는 중…')]);
+    const total = rows.reduce((a, r) => a + r.n, 0);
+    return this.wh('div', { position: 'fixed', inset: 0, background: 'var(--bg)', overflowY: 'auto', zIndex: 100 },
+      [ H('조회수 통계', '전체 조회 ' + total.toLocaleString() + '회 · 조회 많은 순 (익명 집계)'),
+        ...rows.map((r, i) => this.wh('div', { key: r.key, display: 'flex', alignItems: 'center', gap: 12, padding: '11px 18px', borderBottom: '1px solid var(--line)', opacity: r.n === 0 ? 0.5 : 1 },
+          [ this.wh('span', { key: 'r', flex: 'none', width: 26, fontSize: 12, color: 'var(--sub)', fontVariantNumeric: 'tabular-nums' }, String(i + 1)),
+            this.wh('span', { key: 't', flex: 1, minWidth: 0, fontSize: 14.5, color: 'var(--text)', wordBreak: 'keep-all' }, r.title),
+            this.wh('span', { key: 'n', flex: 'none', fontSize: 15, fontWeight: 700, color: r.n === 0 ? 'var(--sub)' : 'var(--accent)', fontVariantNumeric: 'tabular-nums' }, r.n.toLocaleString()) ])) ]);
+  }
+
+  // 기도문 조회 집계 (익명 · 카운트만). key는 keyFor 해시 / 'D_'+id / 'W_'+id
+  logView(key) {
+    if (!key) return;
+    try {
+      fetch(this.DB + '/views/' + encodeURIComponent(key) + '.json', {
+        method: 'PATCH',
+        body: JSON.stringify({ n: { '.sv': { increment: 1 } } })
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  // 접속 중 표시: 30초 버킷에 자기 키만 기록하고, 최근 2개 버킷의 키 개수만 shallow 로 읽는다
+  // (전체 노드를 내려받지 않으므로 트래픽이 접속자 수에 비례하지 않는다)
+  async syncLive() {
+    const b = this.bucket();
+    try {
+      await fetch(this.DB + '/pres/' + b + '/' + this.cid + '.json', { method: 'PUT', body: 'true' });
+      // 최근 6개 버킷 = 3시간
+      const buckets = await Promise.all([0, 1, 2, 3, 4, 5].map(i =>
+        fetch(this.DB + '/pres/' + (b - i) + '.json?shallow=true').then(r => r.json()).catch(() => null)
+      ));
+      const set = new Set();
+      buckets.forEach(o => Object.keys(o || {}).forEach(k => set.add(k)));
+      this.setState({ live: Math.max(1, set.size), online: true });
+      this.fetchCounts();
+      if (this._gc !== b && Math.random() < 0.1) { this._gc = b; this.gcPresence(b); }
+    } catch (e) {
+      this.setState({ online: false });
+    }
+  }
+
+  // 오래된 버킷 정리 — 목록을 읽지 않고 버킷 번호를 계산해 삭제한다 (읽기 권한 불필요)
+  gcPresence(b) {
+    for (let i = 7; i <= 26; i++) {
+      fetch(this.DB + '/pres/' + (b - i) + '.json', { method: 'DELETE' }).catch(() => {});
+    }
+  }
+
+  // 시간대별 집계는 자주 바뀌지 않으므로 2분에 한 번만 읽는다
+  async fetchCounts(force) {
+    const now = Date.now();
+    if (!force && this._cAt && now - this._cAt < 120000) return;
+    this._cAt = now;
+    try {
+      const counts = (await fetch(this.DB + '/counts/' + this.dateKey() + '.json').then(r => r.json())) || {};
+      this.setState({ hours: Array.from({ length: 24 }, (_, h) => Object.keys(counts[h] || {}).length) });
+    } catch (e) {}
+  }
+
+
+  // 성경 인용(따옴표로 시작하는 줄)은 포인트 컬러로
+  quoteLines(lines) {
+    return (lines || []).map(l => ({ t: l, c: /^[“"]/.test((l || '').trim()) ? 'var(--accent)' : 'inherit' }));
+  }
+  armorVals() {
+    const P = [
+      { d: 'M2 9h20v6H2z M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4', n: '진리의 허리띠' },
+      { d: 'M7 4l5 2 5-2 1 6-1 11H8L7 10z M12 6v17', n: '의의 흉배' },
+      { d: 'M6 4h5v9l6 3v4H6z', n: '평안의 복음의 신발' },
+      { d: 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z', n: '믿음의 방패' },
+      { d: 'M4 13a8 8 0 0 1 16 0v5h-4l-1-3h-6l-1 3H4z', n: '구원의 투구' },
+      { d: 'M18 3l3 3-9 9-3-3z M9 12l-6 6 3 3 6-6 M5 16l3 3', n: '성령의 검' }
+    ];
+    const times = this.armorTimes();
+    const count = times.length;
+    const now = Date.now();
+    const oldest = count ? Math.min.apply(null, times) : 0;      // 다음에 만료될 완주
+    const edgeIndex = count ? (count - 1) % 6 : -1;               // 만료 시 강등될 맨 앞 부위
+    const edgeFading = count > 0 && (this.ARMOR_MS - (now - oldest)) < 8 * 3600 * 1000;
+    const crownY = [30, 14, 2, 2, 14, 30], crownS = [17, 19, 22, 22, 19, 17];
+    const TIERS = [
+      { color: '#e6b756', glow: 'shimmer' },      // 1차 · 황금
+      { color: '#d24b4b', glow: 'shimmerRed' },    // 2차 · 붉은빛
+      { color: '#f5f1ea', glow: 'shimmerWhite' }   // 3차 · 흰빛
+    ];
+    const armorRow = P.map((p, i) => {
+      // 단계는 오직 개수로 결정 (부위 0..5 순서로 채워짐: 황금→붉은→흰)
+      let tier = 0;
+      if (count > i + 12) tier = 3;
+      else if (count > i + 6) tier = 2;
+      else if (count > i) tier = 1;
+      const on = tier > 0;
+      const T = on ? TIERS[tier - 1] : null;
+      const fading = on && i === edgeIndex && edgeFading;         // 만료 임박 부위만 흐리게
+      return {
+        d: p.d, x: (16 + (i / 5) * 68).toFixed(1), y: crownY[i], size: crownS[i],
+        color: on ? T.color : 'rgba(255,255,255,.32)',
+        op: fading ? 0.4 : 1,
+        anim: on && !fading
+          ? T.glow + ' ' + (2.6 + i * 0.5).toFixed(1) + 's ease-in-out ' + (i * 0.4).toFixed(1) + 's infinite, floatUp ' + (3.4 + i * 0.6).toFixed(1) + 's ease-in-out ' + (i * 0.5).toFixed(1) + 's infinite'
+          : 'none'
+      };
+    });
+    return { armorOn: true, armorRow, mapTop: 92, mapSide: 10 };
+  }
+  prayers() { return window.EXTRA_PRAYERS || []; }
+  legacy() {
+    return [
+      { group: '전신갑주', title: '전신갑주 기도문', ref: '에베소서 6:10-18', paras: [
+        '주님, 오늘 하나님의 전신갑주를 입습니다.',
+        '진리로 허리띠를 띠고, 의의 호심경을 붙입니다.',
+        '평안의 복음이 준비한 것으로 신을 신습니다.',
+        '모든 것 위에 믿음의 방패를 들어 악한 자의 모든 불화살을 소멸합니다.',
+        '구원의 투구와 성령의 검, 곧 하나님의 말씀을 가집니다.',
+        '모든 기도와 간구를 하되 항상 성령 안에서 기도하며 깨어 있겠습니다. 아멘.'] },
+      { group: '성경 인물들의 기도문', title: '다니엘의 기도', ref: '다니엘 9:4-19', paras: [
+        '크시고 두려워할 주 하나님, 주를 사랑하고 주의 계명을 지키는 자를 위하여 언약을 지키시고 긍휼을 베푸시는 이시여.',
+        '우리는 범죄하여 패역하며 행악하며 반역하여 주의 법도와 규례를 떠났사오나,',
+        '주여 들으소서. 주여 용서하소서. 주여 귀를 기울이시고 행하소서.',
+        '지체하지 마옵소서. 나의 하나님이여, 주 자신을 위하여 하시옵소서.'] },
+      { group: '성경 인물들의 기도문', title: '한나의 기도', ref: '사무엘상 2:1-10', paras: [
+        '내 마음이 여호와로 말미암아 즐거워하며 내 뿔이 여호와로 말미암아 높아졌습니다.',
+        '여호와와 같이 거룩하신 이가 없으시니 주밖에 다른 이가 없고 우리 하나님 같은 반석도 없으십니다.',
+        '가난한 자를 진토에서 일으키시며 빈궁한 자를 거름더미에서 올리시는 하나님을 찬양합니다.'] },
+      { group: '성경 인물들의 기도문', title: '다윗의 회개 기도', ref: '시편 51:1-12', paras: [
+        '하나님이여 주의 인자를 따라 내게 은혜를 베푸시며 주의 많은 긍휼을 따라 내 죄악을 지워 주소서.',
+        '나의 죄악을 말갛게 씻으시며 나의 죄를 깨끗이 제하소서.',
+        '하나님이여 내 속에 정한 마음을 창조하시고 내 안에 정직한 영을 새롭게 하소서.',
+        '주의 구원의 즐거움을 내게 회복시켜 주시고 자원하는 심령을 주사 나를 붙드소서.'] },
+      { group: '성경 인물들의 기도문', title: '야베스의 기도', ref: '역대상 4:10', paras: [
+        '주께서 내게 복을 주시려거든 나의 지역을 넓히시고,',
+        '주의 손으로 나를 도우사 나로 환난을 벗어나 근심이 없게 하옵소서.'] },
+      { group: '성경 인물들의 기도문', title: '바울의 기도', ref: '에베소서 3:16-19', paras: [
+        '그의 영광의 풍성함을 따라 그의 성령으로 말미암아 속사람을 능력으로 강건하게 하시오며,',
+        '믿음으로 말미암아 그리스도께서 내 마음에 계시게 하시옵소서.',
+        '그리스도의 사랑의 너비와 길이와 높이와 깊이를 깨달아, 하나님의 모든 충만하신 것으로 충만하게 하시기를 구합니다. 아멘.'] },
+      { group: '신규 업데이트 기도문', title: '나라와 민족을 위한 기도', ref: '2026. 7. 업데이트', paras: [
+        '주님, 이 나라와 민족 위에 하나님의 긍휼을 부어 주소서.',
+        '위정자들에게 지혜를, 교회에는 거룩한 부흥을, 다음 세대에게는 믿음의 유산을 허락하소서.',
+        '이 땅의 모든 어둠이 예수 그리스도의 빛 앞에 물러가기를 선포합니다. 아멘.'] }
+    ];
+  }
+
+  hourData() { return this.state.hours || Array.from({ length: 24 }, () => 0); }
+
+  isStandalone() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+  isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+
+  async shareCard(save) {
+    const el = this.cardEl;
+    const text = 'ONPRAY — 깨어 기도하는 자리\nhttps://onpray.pages.dev';
+    let file = null;
+    if (el && window.htmlToImage) {
+      try {
+        const blob = await window.htmlToImage.toBlob(el, { pixelRatio: 2, backgroundColor: '#0b0a09' });
+        if (blob) file = new File([blob], 'onpray.png', { type: 'image/png' });
+      } catch (e) {}
+    }
+    if (save) {
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a'); a.href = url; a.download = 'onpray.png'; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+        this.flash('savedMsg', '이미지를 저장했습니다');
+      } else { this.flash('savedMsg', '이미지를 만들 수 없습니다'); }
+      return;
+    }
+    try {
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], text: text });
+      } else if (navigator.share) {
+        await navigator.share({ title: 'ONPRAY', text: text, url: 'https://onpray.pages.dev' });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        this.flash('shareBtnBusy', '링크를 복사했습니다');
+      }
+    } catch (e) {}
+  }
+  flash(key, msg) {
+    this.setState({ [key]: msg });
+    setTimeout(() => this.setState({ [key]: '' }), 1800);
+  }
+
+  // ── 전신갑주: 완주할 때마다 한 부위, 부위마다 48시간 ──
+  ARMOR_MS = 48 * 3600 * 1000;
+  armorTimes() {
+    let a; try { a = JSON.parse(localStorage.getItem('sp_armor') || '[]'); } catch (e) { a = []; }
+    const now = Date.now();
+    const alive = a.filter(t => typeof t === 'number' && now - t < this.ARMOR_MS);
+    if (alive.length !== a.length) localStorage.setItem('sp_armor', JSON.stringify(alive));
+    return alive;
+  }
+  wearArmor() {
+    const a = this.armorTimes();
+    if (a.length < 18) { a.push(Date.now()); localStorage.setItem('sp_armor', JSON.stringify(a)); }
+  }
+
+  // 선포 완주 기록 · 연속일
+  markDone() {
+    this.wearArmor();
+    const k = this.dateKey();
+    let log; try { log = JSON.parse(localStorage.getItem('sp_done') || '[]'); } catch (e) { log = []; }
+    if (log[log.length - 1] !== k) { log.push(k); localStorage.setItem('sp_done', JSON.stringify(log.slice(-400))); }
+  }
+  streak() {
+    let log; try { log = JSON.parse(localStorage.getItem('sp_done') || '[]'); } catch (e) { log = []; }
+    if (!log.length) return 0;
+    const d = new Date(); let n = 0;
+    for (;;) {
+      const k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      if (log.includes(k)) { n++; d.setDate(d.getDate() - 1); } else break;
+    }
+    return n;
+  }
+  tracks() {
+    return [
+      { id: 'none', title: '사용하지 않음' },
+      { id: 'bless-the-lord', title: 'Bless The Lord O My Soul', artist: 'CalledOut Music', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fbless-the-lord.mp3?alt=media&token=0c69c8a2-1918-4035-95cb-1a45bb1a1e87' },
+      { id: 'give-thanks', title: 'Give Thanks', artist: 'UPPERROOM', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fgive-thanks.mp3?alt=media&token=1daa4b99-150c-4727-98da-395a3919cc29' },
+      { id: 'd-major-pad', title: 'D Major Pad', artist: '연주 · 기도 배경', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fd-major-pad.mp3?alt=media&token=d3c2f44f-0d90-4853-a2b0-960eaffb9232' }
+    ];
+  }
+  bgmPick(id) {
+    localStorage.setItem('sp_bgm', id);
+    if (id === 'none') { this.bgmStop(); this.setState({ bgm: id, bgmPlay: false }); return; }
+    this.setState({ bgm: id, bgmPlay: true }, () => this.bgmSync(true));
+  }
+  bgmStop() {
+    if (this.audio) { this.audio.pause(); this.audio.src = ''; this.audio = null; }
+    clearInterval(this.posTimer); this.posTimer = null;
+    this.setState({ bgmPos: 0, bgmDur: 0 });
+  }
+  bgmSync(forcePlay) {
+    const t = this.tracks().find(x => x.id === this.state.bgm);
+    if (!t || !t.file) { this.bgmStop(); return; }
+    if (!this.audio) {
+      this.audio = new Audio(t.file);
+      this.audio.loop = true;
+      this.audio.preload = 'metadata';
+      this.audio.addEventListener('loadedmetadata', () => this.setState({ bgmDur: Math.floor(this.audio.duration || 0) }));
+      if (!this.posTimer) this.posTimer = setInterval(() => {
+        if (this.audio && !this._seeking) this.setState({ bgmPos: Math.floor(this.audio.currentTime || 0) });
+      }, 500);
+    } else if (!this.audio.src.endsWith(t.file)) { this.audio.src = t.file; }
+    this.audio.volume = this.state.bgmVol / 100;
+    if (forcePlay || this.state.bgmPlay) this.audio.play().catch(() => this.setState({ bgmPlay: false }));
+    else this.audio.pause();
+  }
+  fmt(sec) {
+    const s = Math.max(0, Math.floor(sec || 0));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  resumeLabel(key, sig) {
+    if (sig != null) {
+      const stored = localStorage.getItem('sp_sig_' + key);
+      if (stored !== sig) {
+        // 본문이 바뀌었거나 기록이 없는 경우 — 이어읽기 위치를 초기화한다
+        localStorage.removeItem('sp_pos_' + key);
+        localStorage.setItem('sp_sig_' + key, sig);
+        return '';
+      }
+    }
+    const p = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
+    return p > 0 ? (p + 1) + '장부터 이어서' : '';
+  }
+  // ── 흐름으로 읽기 (자동 스크롤) ─────────────────────────
+  openFlow(key) {
+    this.logView(key);
+    this._flowChars = 0;
+    this.setState({ flowKey: key, flowPlay: false, flowAtEnd: false, flowSpeedOpen: false, openKey: null, favSheet: false, chooseKey: null, tab: 'prayers' });
+  }
+  closeFlow() {
+    this.saveFlowPos();
+    this.stopFlowLoop();
+    this.setState({ flowKey: null, flowPlay: false, collapsed: {}, query: '' });
+  }
+  saveFlowPos() {
+    const el = this.flowEl;
+    if (el && this.state.flowKey) {
+      const max = el.scrollHeight - el.clientHeight;
+      localStorage.setItem('sp_flow_' + this.state.flowKey, max > 0 ? (el.scrollTop / max).toFixed(4) : '0');
+    }
+  }
+  stopFlowLoop() { if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; } }
+  startFlowLoop() {
+    if (this._raf) return;
+    let last = performance.now(), acc = 0;
+    const step = now => {
+      const el = this.flowEl;
+      if (!el || !this.state.flowPlay) { this._raf = null; return; }
+      const dt = Math.min(120, now - last); last = now;
+      const max = el.scrollHeight - el.clientHeight;
+      if (max <= 0) { this._raf = requestAnimationFrame(step); return; }
+      const chars = this._flowChars || 1;
+      const pxPerChar = el.scrollHeight / chars;
+      acc += (this.state.flowSpeed / 60) * pxPerChar * (dt / 1000);
+      if (acc >= 1) { el.scrollTop += Math.floor(acc); acc -= Math.floor(acc); }
+      if (el.scrollTop >= max - 1) {
+        this.markDone(); this.stopFlowLoop();
+        this.setState({ flowPlay: false, flowAtEnd: true, doneMsg: this.doneAllowed() });
+        return;
+      }
+      this._raf = requestAnimationFrame(step);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+  async requestWake(on) {
+    try {
+      if (on && navigator.wakeLock && !this._wake) this._wake = await navigator.wakeLock.request('screen');
+      else if (!on && this._wake) { await this._wake.release(); this._wake = null; }
+    } catch (e) {}
+  }
+  openPrayer(key) {
+    this.logView(key);
+    // ⚠ 불변식(INVARIANT): 전체화면 오버레이(기도문 상세·흐름읽기·칼럼)는
+    // 각자의 탭 <main> 안에 DOM으로 들어 있어, 소속 탭이 아니면 렌더되지 않는다.
+    // 따라서 오버레이를 여는 모든 메서드(openPrayer/openFlow/openPost)는
+    // 반드시 해당 tab을 함께 setState 해야 한다. 새 진입점(홈·즐겨찾기·공유 등)은
+    // state를 직접 만지지 말고 이 메서드들을 호출할 것 — 그러면 탭 전환이 자동 보장된다.
+    const saved = parseInt(localStorage.getItem('sp_pos_' + key) || '0', 10);
+    const sig = (this._sigs || {})[key];
+    if (sig != null) {
+      const stored = localStorage.getItem('sp_sig_' + key);
+      if (stored !== sig) { localStorage.removeItem('sp_pos_' + key); localStorage.setItem('sp_sig_' + key, sig); this.setState({ openKey: key, openPage: 0, favSheet: false, chooseKey: null, tab: 'prayers' }); return; }
+    }
+    this.setState({ openKey: key, openPage: isNaN(saved) ? 0 : saved, favSheet: false, chooseKey: null, tab: 'prayers' });
+  }
+  // ── 즐겨찾기 ──
+  doneAllowed() {
+    const until = parseInt(localStorage.getItem('sp_done_mute') || '0', 10);
+    if (until && Date.now() < until) return false;
+    if (until) localStorage.removeItem('sp_done_mute');
+    return true;
+  }
+  keyFor(prefix, title) {
+    let h = 5381;
+    const t = String(title || '');
+    for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
+    return prefix + h.toString(36);
+  }
+  PATCH_VER = '20260904a';
+  PATCH_NOTES = [
+    "홈 배너 — 격일로 이미지가 바뀝니다 (매일 오전 7시 전환)",
+    "새 기도문 — 기도의 자리에서 경영하는 자"
+  ];
+  // ── 말씀 렌즈(원어) 탭 ──
+  WA = { width:['뜻의 폭','◐'], sound:['소리','♪'], form:['형태','⌗'], journey:['여정','→'], canon:['정경','⋯'], split:['번역의 갈림','⑂'], contrast:['대조','⇄'], background:['배경','▦'], name:['이름','✦'] };
+  wh(tag, style, kids) { return React.createElement(tag, { style }, kids); }
+  wGold() { return '#e6b756'; }
+  wGo(patch) { this.setState(patch); if (this.wScroller) this.wScroller.scrollTop = 0; }
+  wScroll(kids, pad) {
+    return this.wh('div', { position:'absolute', top:0, left:0, right:0, bottom: pad===false?0:58, overflowY:'auto', WebkitOverflowScrolling:'touch' }, kids);
+  }
+  wBackBar(label, onBack) {
+    return this.wh('div', { position:'sticky', top:0, zIndex:5, display:'flex', alignItems:'center', gap:8, padding:'14px 16px 10px', background:'var(--bg)' },
+      [ React.createElement('button', { key:'b', onClick:onBack, style:{ flex:'none', width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', border:'none', background:'none', color:'var(--sub)', cursor:'pointer', padding:0, fontFamily:'inherit' } },
+          this.wh('svg', {}, null) || null),
+        this.wh('span', { key:'l', fontSize:13, color:'var(--sub)' }, label) ]);
+  }
+  wHeader(title, sub) {
+    return this.wh('div', { padding:'6px 20px 12px' },
+      [ this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:23,fontWeight:600,color:'var(--text)'},title),
+        sub && this.wh('div',{key:'s',fontSize:13,color:'var(--sub)',marginTop:4},sub) ]);
+  }
+  wHl(e) {
+    const t = e.anchor_kr||'', hl = e.anchor_hl;
+    if (!hl || t.indexOf(hl)<0) return t;
+    const i = t.indexOf(hl);
+    return [ this.wh('span',{key:'a'},t.slice(0,i)),
+      this.wh('span',{key:'b',color:this.wGold(),borderBottom:'1.5px solid '+this.wGold(),paddingBottom:1},hl),
+      this.wh('span',{key:'c'},t.slice(i+hl.length)) ];
+  }
+  wVerseCard(e) {
+    if (e.stub) return this.wh('div',{key:e.id,margin:'0 20px 10px',padding:'13px 16px',background:'var(--bg)',border:'1px dashed var(--line)',borderRadius:13,display:'flex',alignItems:'center',justifyContent:'space-between',opacity:.6},
+      [ this.wh('span',{key:'r',fontSize:13,color:'var(--sub)'}, e.anchor||''), this.wh('span',{key:'s',fontSize:11,color:'var(--sub)'},'준비 중') ]);
+    return React.createElement('button',{key:e.id,onClick:()=>this.wGo({wv:'reader',wEntry:e.id}),style:{display:'block',width:'auto',textAlign:'left',margin:'0 20px 12px',padding:'15px 17px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:15,cursor:'pointer',fontFamily:'inherit',boxSizing:'border-box',width:'calc(100% - 40px)'}},
+      [ this.wh('div',{key:'ref',display:'flex',alignItems:'center',gap:8,marginBottom:8},
+          [ this.wh('span',{key:'r',fontSize:11.5,color:this.wGold(),fontWeight:600},e.anchor),
+            React.createElement('span',{key:'w',className:'heb',style:{fontSize:15,color:'var(--text)'}},e.word_orig),
+            this.wh('span',{key:'t',fontSize:11,color:'var(--sub)'},e.translit) ]),
+        this.wh('div',{key:'kr',fontFamily:"'Noto Serif KR',serif",fontSize:15,lineHeight:1.75,color:'var(--text)'},this.wHl(e)),
+        e.hook && this.wh('div',{key:'h',fontSize:12,color:'var(--sub)',marginTop:8,lineHeight:1.6},e.hook),
+        this.wh('div',{key:'ang',display:'flex',gap:8,marginTop:10,flexWrap:'wrap'},
+          (e.angles||[]).map(a=>this.wh('span',{key:a,fontSize:10.5,color:this.wGold(),opacity:.85},(this.WA[a]||['',''])[1]+' '+(this.WA[a]||['',''])[0]))) ]);
+  }
+  wScreenSections() {
+    const idx = window.WORD_INDEX || {sections:[],books:[]};
+    const rows = idx.sections.map(sec => {
+      const books = idx.books.filter(b=>b.section===sec.code);
+      const done = books.filter(b=>b.status!=='planned');
+      return React.createElement('button',{key:sec.code,onClick:()=>this.wGo({wv:'books',wSec:sec.code}),style:{display:'block',textAlign:'left',margin:'0 20px 12px',padding:'16px 18px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:16,cursor:'pointer',fontFamily:'inherit',width:'calc(100% - 40px)',boxSizing:'border-box'}},
+        [ this.wh('div',{key:'h',display:'flex',alignItems:'baseline',justifyContent:'space-between'},
+            [ this.wh('span',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:17,color:'var(--text)'},sec.title),
+              this.wh('span',{key:'c',fontSize:11,color:'var(--sub)'},books.length+'권') ]),
+          done.length ? this.wh('div',{key:'d',marginTop:8,fontSize:12,color:this.wGold(),lineHeight:1.6},done.map(b=>b.title_ko+' · 렌즈 '+b.count).join('  ·  ')) : null ]);
+    });
+    return this.wScroll([ this.wHeader('말씀 렌즈','성경 한 절을 원어로 여는 묵상'), ...rows,
+      this.wh('div',{key:'n',margin:'4px 20px 24px',fontSize:11,color:'var(--sub)',lineHeight:1.7,opacity:.7},'예정된 책은 회색으로 표시됩니다.') ]);
+  }
+  wScreenBooks() {
+    const idx = window.WORD_INDEX || {sections:[],books:[]};
+    const sec = (idx.sections.find(s=>s.code===this.state.wSec))||{title:'',code:this.state.wSec};
+    const books = idx.books.filter(b=>b.section===this.state.wSec);
+    const rows = books.map(b=>{
+      const planned = b.status==='planned';
+      const row = [ this.wh('div',{key:'l'},
+          [ this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:16,color:'var(--text)'},b.title_ko),
+            this.wh('div',{key:'s',fontSize:11.5,color:'var(--sub)',marginTop:3}, planned?'예정':('렌즈 '+b.count+' · '+b.chapters_covered+'/'+b.chapters+'장')) ]),
+        this.wh('span',{key:'r',fontSize:13,color:planned?'var(--sub)':this.wGold()}, planned?'—':'›') ];
+      if (planned) return this.wh('div',{key:b.code,margin:'0 20px 10px',padding:'15px 18px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:14,display:'flex',alignItems:'center',justifyContent:'space-between',opacity:.5},row);
+      return React.createElement('button',{key:b.code,onClick:()=>this.wGo({wv:'chapters',wBk:b.code,wCh:null,wMode:'chapters',wq:''}),style:{display:'flex',alignItems:'center',justifyContent:'space-between',margin:'0 20px 10px',padding:'15px 18px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:14,cursor:'pointer',fontFamily:'inherit',width:'calc(100% - 40px)',boxSizing:'border-box'}},row);
+    });
+    return this.wScroll([ this.wTop(()=>this.wGo({wv:'sections'}),'책장'), this.wHeader(sec.title), ...rows ]);
+  }
+  wTop(onBack, label) {
+    return this.wh('div',{key:'top',position:'sticky',top:0,zIndex:5,display:'flex',alignItems:'center',gap:6,padding:'12px 14px 6px',background:'var(--bg)'},
+      [ React.createElement('button',{key:'b',onClick:onBack,style:{flex:'none',height:36,display:'flex',alignItems:'center',gap:4,border:'none',background:'none',color:'var(--sub)',cursor:'pointer',fontFamily:'inherit',fontSize:13,padding:'0 4px'}},'‹ '+label) ]);
+  }
+  wModeBar(book) {
+    const mk = (key,label)=>{ const on=this.state.wMode===key; return React.createElement('button',{key:key,onClick:()=>this.setState({wMode:key}),style:{fontSize:12,fontWeight:on?600:400,color:on?this.wGold():'var(--sub)',padding:'6px 12px',borderRadius:8,background:on?'rgba(230,183,86,.12)':'transparent',border:'1px solid '+(on?'rgba(230,183,86,.3)':'transparent'),cursor:'pointer',fontFamily:'inherit'}},label); };
+    return this.wh('div',{key:'modes',margin:'0 20px 12px',display:'flex',gap:6},[ mk('chapters','장 따라 읽기'), mk('verses','절 목록') ]);
+  }
+  wSearchBar() {
+    return React.createElement('input',{key:'sb',value:this.state.wq,placeholder:'개역개정 단어·장절로 찾기',onChange:e=>this.setState({wq:e.target.value}),style:{margin:'2px 20px 14px',width:'calc(100% - 40px)',boxSizing:'border-box',height:42,borderRadius:12,background:'var(--card)',border:'1px solid var(--line)',color:'var(--text)',fontSize:14,padding:'0 14px',fontFamily:'inherit',outline:'none'}});
+  }
+  wScreenChapters() {
+    const book = (window.WORD_BOOKS||{})[this.state.wBk] || {entries:[],title_ko:''};
+    const entries = book.entries||[];
+    const q = (this.state.wq||'').trim();
+    if (q) {
+      const hit = entries.filter(e=>!e.stub && ((e.search||'').indexOf(q)>=0 || (e.anchor||'').indexOf(q)>=0 || (e.word_ko||'').indexOf(q)>=0));
+      return this.wScroll([ this.wTop(()=>this.wGo({wv:'books'}),book.title_ko), this.wSearchBar(),
+        this.wh('div',{key:'c',margin:'0 20px 12px',fontSize:11.5,color:'var(--sub)'},'"'+q+'" · '+hit.length+'개'),
+        ...hit.map(e=>this.wVerseCard(e)) ]);
+    }
+    if (this.state.wMode==='verses') {
+      let last=null; const out=[];
+      entries.forEach(e=>{ if(e.chapter!==last){ last=e.chapter; out.push(this.wh('div',{key:'h'+e.chapter,position:'sticky',top:0,background:'var(--bg)',padding:'8px 20px',fontSize:12,fontWeight:700,color:this.wGold(),borderBottom:'1px solid var(--line)',zIndex:4},e.chapter+'장')); } out.push(this.wVerseCard(e)); });
+      return this.wScroll([ this.wTop(()=>this.wGo({wv:'books'}),book.title_ko), this.wModeBar(book), this.wSearchBar(), ...out ]);
+    }
+    const chapsWith = new Set(entries.filter(e=>!e.stub).map(e=>e.chapter));
+    const maxCh = book.chapters||Math.max.apply(null,[...chapsWith,1]);
+    const cur = this.state.wCh || Math.min.apply(null,[...chapsWith].length?[...chapsWith]:[1]);
+    const strip=[];
+    for(let c=1;c<=maxCh;c++){ const on=chapsWith.has(c); const sel=c===cur;
+      strip.push(React.createElement('button',{key:c,onClick:on?()=>this.setState({wCh:c}):null,disabled:!on,style:{flex:'none',width:38,height:38,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:600,cursor:on?'pointer':'default',fontFamily:'inherit',background:sel?this.wGold():(on?'rgba(230,183,86,.12)':'transparent'),color:sel?'#141312':(on?this.wGold():'var(--sub)'),border:'1px solid '+(on?'rgba(230,183,86,.3)':'var(--line)'),opacity:on?1:.4}},c)); }
+    const chE = entries.filter(e=>e.chapter===cur);
+    return this.wScroll([ this.wTop(()=>this.wGo({wv:'books'}),book.title_ko), this.wHeader(book.title_ko),
+      this.wModeBar(book), this.wSearchBar(),
+      this.wh('div',{key:'strip',display:'flex',gap:7,overflowX:'auto',padding:'0 20px 16px'},strip),
+      this.wh('div',{key:'ch',margin:'0 20px 10px',fontSize:12.5,color:'var(--sub)',fontWeight:600},cur+'장 · 렌즈 '+chE.filter(e=>!e.stub).length),
+      ...chE.map(e=>this.wVerseCard(e)) ]);
+  }
+  wScreenReader() {
+    const book = (window.WORD_BOOKS||{})[this.state.wBk] || {entries:[]};
+    const e = (book.entries||[]).find(x=>x.id===this.state.wEntry);
+    if (!e) return this.wScroll([ this.wTop(()=>this.wGo({wv:'chapters'}),'') ]);
+    const photo = 'assets/words/'+(e.photo? e.photo.split('/').pop() : e.id)+'-2x.jpg';
+    const angles = (e.blocks||[]).filter(b=>b.t==='d');
+    const openN = this.state.wDepth==='A'?3 : this.state.wDepth==='C'?99 : 5;
+    const cover = this.wh('div',{key:'cover',position:'relative',height:440},
+      [ React.createElement('img',{key:'img',src:photo,alt:'',style:{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}),
+        this.wh('div',{key:'sc',position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(14,14,16,.72) 0%,rgba(14,14,16,.12) 30%,rgba(14,14,16,.4) 62%,var(--bg) 100%)'}),
+        React.createElement('button',{key:'back',onClick:()=>this.wGo({wv:'chapters',wEntry:null}),style:{position:'absolute',top:44,left:16,width:38,height:38,borderRadius:'50%',border:'none',background:'rgba(0,0,0,.35)',color:'#fff',cursor:'pointer',fontSize:18,fontFamily:'inherit'}},'‹'),
+        this.wh('div',{key:'top',position:'absolute',top:50,left:64,fontSize:12,color:this.wGold(),fontWeight:600},e.anchor),
+        this.wh('div',{key:'bot',position:'absolute',left:20,right:20,bottom:18},
+          [ this.wh('div',{key:'kr',fontFamily:"'Noto Serif KR',serif",fontSize:22,lineHeight:1.5,color:'#fff',textShadow:'0 2px 12px rgba(0,0,0,.6)'},e.anchor_kr),
+            e.literal && this.wh('div',{key:'lit',fontSize:12.5,color:'rgba(255,255,255,.78)',marginTop:8,lineHeight:1.6},e.literal),
+            e.hook && this.wh('div',{key:'hook',fontSize:12,color:this.wGold(),marginTop:10,lineHeight:1.6},e.hook) ]) ]);
+    const lens = this.wh('div',{key:'lens',margin:'16px 20px',padding:'14px 16px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:14,display:'flex',alignItems:'center',gap:12},
+      [ React.createElement('span',{key:'o',className:'heb',style:{fontSize:26,color:'var(--text)',lineHeight:1}},e.word_orig),
+        this.wh('div',{key:'m',flex:1},
+          [ this.wh('div',{key:'ko',fontSize:14,color:'var(--text)',fontWeight:600},e.word_ko+' · '+e.gloss),
+            this.wh('div',{key:'tr',fontSize:11.5,color:'var(--sub)',marginTop:3},e.translit+'  ·  '+e.strongs) ]) ]);
+    const sib = (book.entries||[]).filter(x=>x.anchor_key===e.anchor_key && x.id!==e.id && !x.stub);
+    const other = sib.length ? this.wh('div',{key:'other',margin:'0 20px 14px'},
+      [ this.wh('div',{key:'t',fontSize:11.5,color:'var(--sub)',marginBottom:8},'이 절의 다른 렌즈'),
+        this.wh('div',{key:'r',display:'flex',gap:8,flexWrap:'wrap'},
+          sib.map(x=>React.createElement('button',{key:x.id,className:'heb',onClick:()=>this.wGo({wv:'reader',wEntry:x.id}),style:{fontSize:13,color:this.wGold(),padding:'6px 12px',border:'1px solid rgba(230,183,86,.3)',borderRadius:9,background:'none',cursor:'pointer',fontFamily:'inherit'}},x.word_orig))) ]) : null;
+    const preS = (e.blocks||[]).find(b=>b.t==='s');
+    const preP = (e.blocks||[]).find(b=>b.t==='p');
+    const pre = preS ? this.wh('div',{key:'pre',margin:'0 20px 16px',padding:'15px 17px',background:'var(--card)',borderRadius:12,borderLeft:'2px solid var(--line)'},
+      [ this.wh('div',{key:'t',fontSize:12,color:'var(--sub)',fontWeight:600,marginBottom:7},preS.title),
+        this.wh('div',{key:'p',fontSize:13,lineHeight:1.75,color:'var(--text)',opacity:.82},(preP&&preP.lines&&preP.lines[0])||'') ]) : null;
+    const blocks = angles.map((a,i)=>{
+      const open = i<openN;
+      const A = this.WA[a.angle]||['',(a.title)];
+      const head = React.createElement('button',{key:'hd',onClick:()=>{const o={...(this.state.wOpen||{})};o[e.id+':'+i]=!(this.wIsOpen(e.id,i,openN));this.setState({wOpen:o});},style:{display:'flex',alignItems:'center',gap:9,width:'100%',padding:'13px 16px',border:'none',background:'none',cursor:'pointer',fontFamily:'inherit',borderBottom:this.wIsOpen(e.id,i,openN)?'1px solid var(--line)':'none'}},
+        [ this.wh('span',{key:'i',fontSize:14,color:this.wGold()},A[1]),
+          this.wh('span',{key:'t',flex:1,fontSize:14,color:'var(--text)',fontFamily:"'Noto Serif KR',serif",textAlign:'left'},a.title),
+          this.wh('span',{key:'c',fontSize:14,color:'var(--sub)'},this.wIsOpen(e.id,i,openN)?'−':'+') ]);
+      const body = this.wIsOpen(e.id,i,openN) ? this.wh('div',{key:'bd',padding:'14px 16px'},
+        [ this.wh('div',{key:'rd',padding:'11px 14px',marginBottom:12,background:'rgba(230,183,86,.1)',borderLeft:'2px solid '+this.wGold(),borderRadius:'0 8px 8px 0',fontSize:12.5,lineHeight:1.7,color:'var(--text)',fontStyle:'italic'},'이렇게 읽힙니다 — '+a.reading),
+          ...(this.wProse(a.blocks)) ]) : null;
+      return this.wh('div',{key:i,margin:'0 20px 10px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:13,overflow:'hidden'},[head,body]);
+    });
+    return this.wScroll([ cover, lens, other, pre,
+      this.wh('div',{key:'angh',margin:'2px 20px 10px',fontSize:11.5,color:'var(--sub)',fontWeight:600},'각도 '+angles.length+'개'),
+      ...blocks,
+      this.wh('div',{key:'foot',margin:'18px 20px 40px',fontSize:10.5,color:'var(--sub)',opacity:.6,lineHeight:1.6},'성경 본문: 개역개정 ⓒ 대한성서공회') ], false);
+  }
+  wIsOpen(id,i,openN){ const m=this.state.wOpen||{}; const k=id+':'+i; return k in m ? m[k] : (i<openN); }
+  wProse(blocks){
+    const out=[]; (blocks||[]).forEach((b,j)=>{
+      if(b.t==='p'&&b.lines) b.lines.forEach((ln,k)=>out.push(this.wh('div',{key:j+'-'+k,fontSize:12.5,lineHeight:1.85,color:'var(--text)',opacity:.82,marginBottom:10},ln)));
+    });
+    return out;
+  }
+  // ═══ 다윗의 노래: 인생 지도 · 시편 통독 ═══
+  dvSongs(){ const p=(window.DAVID_SONGS||{}).parts||[]; const all=[]; p.forEach(pt=>pt.songs.forEach(sg=>all.push(sg))); return all; }
+  dvFind(id){ return this.dvSongs().find(s=>s.id===id); }
+  dvRead(){ try{ const at=parseInt(localStorage.getItem('sp_david_complete_at')||'0',10); if(at && Date.now()>=at+86400000){ localStorage.removeItem('sp_david_read'); localStorage.removeItem('sp_david_complete_at'); return []; } return JSON.parse(localStorage.getItem('sp_david_read')||'[]'); }catch(e){ return []; } }
+  dvFinish(id){ this.markDone(); let r=[]; try{ r=JSON.parse(localStorage.getItem('sp_david_read')||'[]'); }catch(e){} if(r.indexOf(id)<0){ r.push(id); localStorage.setItem('sp_david_read',JSON.stringify(r)); } const total=this.dvSongs().filter(s=>s.body).length; if(r.length>=total && !localStorage.getItem('sp_david_complete_at')){ localStorage.setItem('sp_david_complete_at', String(Date.now())); } this.setState({ dv:'done' }); }
+  dvOpen(id){ const sg=this.dvFind(id); if(!sg||!sg.body) return; this.logView('D_'+id); this.dvStopScroll(); this.setState({ dv:'reader', dvSong:id, dvPage:0, dvPlay:false, dvAtEnd:false, dvPct:0 }, ()=>{ if(this._dvScroll) this._dvScroll.scrollTop=0; }); }
+  dvNode(x,y,side,sg,read,idx,total){
+    const locked=!sg.body, now=!locked&&!read;
+    const t=idx/Math.max(1,total-1); // 0=와인 → 1=골드
+    const lerp=(a,b)=>Math.round(a+(b-a)*t);
+    const r=lerp(142,230), g=lerp(43,183), b=lerp(43,65);
+    const rgb=r+','+g+','+b;
+    const dot=this.wh('div',{position:'absolute',left:x-8,top:y-8,width:16,height:16,borderRadius:'50%',
+      background:read?'rgb('+rgb+')':'transparent',
+      border:read?'none':('2px solid rgba('+rgb+','+(locked?.28:.55)+')'),
+      boxSizing:'border-box',
+      boxShadow:read?('0 0 0 4px rgba('+rgb+',.14), 0 0 18px rgba('+rgb+','+(0.45+0.35*t).toFixed(3)+')'):'none',
+      animation:read?'dvPop .5s ease':'none',zIndex:3});
+    const col='rgb('+rgb+')';
+    const card=React.createElement('div',{onClick:()=>this.dvOpen(sg.id),style:{position:'absolute',top:y-26,[side==='l'?'left':'right']:side==='l'?x+18:342-x+18,width:150,zIndex:3,textAlign:side==='l'?'left':'right',cursor:locked?'default':'pointer',opacity:locked?.55:1}},
+      [ this.wh('div',{key:'pl',fontSize:9.5,letterSpacing:'.12em',color:'#a89d8a',fontStyle:'italic'},sg.place),
+        this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:14.5,color:'var(--text)',fontWeight:600,marginTop:2,lineHeight:1.3},sg.title),
+        this.wh('div',{key:'ps',fontSize:10,color:'var(--sub)',marginTop:2},sg.ps),
+        read?this.wh('div',{key:'st',fontSize:9.5,color:col,fontWeight:700,marginTop:3},'읽음'):
+        locked?this.wh('div',{key:'st',fontSize:9.5,color:'#b0aca4',marginTop:3},'본문 준비 중'):
+        this.wh('div',{key:'st',display:'inline-block',fontSize:10,color:'#fff',fontWeight:700,marginTop:4,background:col,borderRadius:9,padding:'2px 9px'},'선포하기') ]);
+    return React.createElement('div',{key:sg.id},[dot,card]);
+  }
+  dvMap(){
+    const H=1470, read=this.dvRead(), S=this.dvSongs();
+    const pos=[[70,140],[250,290],[92,430],[248,570],[96,710],[250,840],[95,990],[250,1130],[118,1260],[228,1380]];
+    const path='M70 140 C 210 180, 290 220, 250 290 C 215 350, 120 360, 92 430 C 65 500, 200 510, 248 570 C 296 630, 150 660, 96 710 C 45 757, 200 770, 250 840 C 300 910, 140 930, 95 990 C 52 1045, 210 1060, 250 1130 C 288 1195, 150 1210, 118 1260 C 90 1302, 190 1325, 228 1380';
+    const ct=(cx,cy,r,o)=>React.createElement('ellipse',{key:'c'+cx+'_'+cy,cx,cy,rx:r,ry:r*.45,fill:'none',stroke:'var(--line)',strokeWidth:1,opacity:o});
+    return this.wh('div',{position:'absolute',inset:0,overflowY:'auto',WebkitOverflowScrolling:'touch',background:'var(--bg)',paddingTop:56,paddingBottom:90},
+      [ this.wh('div',{key:'hd',padding:'14px 20px 2px',maxWidth:480,margin:'0 auto'},
+          [ this.wh('div',{key:'k',fontSize:10.5,letterSpacing:'.24em',color:'#b8843a',fontWeight:700},'시편 · 다윗의 일생을 따라'),
+            this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:24,color:'var(--text)',margin:'6px 0 4px'},'다윗의 노래'),
+            this.wh('div',{key:'s',fontSize:12,lineHeight:1.7,color:'var(--sub)'},'순서 없이, 그날의 감동을 따라 지도 위 어느 노래든 소리 내어 선포하세요.') ]),
+        this.wh('div',{key:'map',position:'relative',width:342,height:H,margin:'0 auto'},
+          [ React.createElement('svg',{key:'svg',viewBox:'0 0 342 '+H,style:{position:'absolute',inset:0,width:342,height:H}},[
+              ct(60,250,70,.8), ct(280,390,60,.7), ct(70,590,55,.7), ct(270,710,70,.6), ct(60,870,60,.7), ct(280,1030,55,.6), ct(80,1170,60,.6), ct(250,1310,65,.6),
+              React.createElement('path',{key:'sh',d:path,fill:'none',stroke:'var(--line)',strokeWidth:7,strokeLinecap:'round'}),
+              React.createElement('linearGradient',{key:'gr',id:'dvroad',x1:'0',y1:'0',x2:'0',y2:'1'},[
+                React.createElement('stop',{key:'a',offset:'0%',stopColor:'#8e2b2b'}),
+                React.createElement('stop',{key:'b',offset:'100%',stopColor:'#e6b741'}) ]),
+              React.createElement('path',{key:'rd',d:path,fill:'none',stroke:'url(#dvroad)',strokeWidth:2.5,strokeDasharray:'1 9',strokeLinecap:'round',opacity:.55}) ]),
+            ...S.map((sg,i)=> pos[i]? this.dvNode(pos[i][0],pos[i][1], i%2===0?'l':'r', sg, read.indexOf(sg.id)>=0, i, S.length) : null) ]) ]);
+  }
+  dvReader(){
+    const sg=this.dvFind(this.state.dvSong); if(!sg||!sg.body) return this.dvMap();
+    const mode='flow';
+    return this.wh('div',{position:'fixed',inset:0,zIndex:20,display:'flex',flexDirection:'column',background:'var(--bg)'},
+      [ this.dvHeader(sg, mode), this.dvFlow(sg) ]);
+  }
+  dvBgmTap(){ const s=this.state; if(s.bgm==='none'){ const t=this.tracks().find(x=>x.file); if(t){ this.bgmPick(t.id); return; } } this.setState({bgmPlay:!s.bgmPlay},()=>this.bgmSync()); }
+  dvTop(){ if(this._dvScroll) this._dvScroll.scrollTo({top:0,behavior:'smooth'}); }
+  dvHeader(sg,mode){
+    const isDark=this.state.theme==='dark';
+    const ib=(k,fn,label,txt,fsz,col)=>React.createElement('button',{key:k,onClick:fn,'aria-label':label,style:{flex:'none',width:44,height:44,display:'flex',alignItems:'center',justifyContent:'center',border:'none',background:'none',cursor:'pointer',color:col||'var(--sub)',fontFamily:'inherit',fontSize:fsz||13,lineHeight:1,padding:0}},txt);
+    const svg=(d,w)=>React.createElement('svg',{width:w||19,height:w||19,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.8,strokeLinecap:'round',strokeLinejoin:'round'}, Array.isArray(d)?d.map((p,i)=>React.createElement('path',{key:i,d:p})):React.createElement('path',{d}));
+    const seg=(k,label,active,fn)=>React.createElement('button',{key:k,onClick:fn,style:{flex:1,minHeight:34,border:'none',borderRadius:9,background:active?'var(--card)':'transparent',color:active?'var(--accent)':'var(--sub)',fontWeight:active?700:500,fontSize:13,cursor:'pointer',fontFamily:'inherit',boxShadow:active?'0 1px 3px rgba(0,0,0,.1)':'none'}},label);
+    const bgmIcon = this.state.bgmPlay
+      ? svg(['M11 5L6 9H3v6h3l5 4V5z','M15.5 8.5a5 5 0 0 1 0 7','M18.5 5.5a9 9 0 0 1 0 13'],18)
+      : svg(['M11 5L6 9H3v6h3l5 4V5z','M22 9l-6 6M16 9l6 6'],18);
+    return this.wh('div',{key:'hd',flex:'none',background:'var(--bg)'},
+      [ this.wh('div',{key:'row',display:'flex',alignItems:'center',gap:2,padding:'0 6px 0 2px',height:48,maxWidth:480,margin:'0 auto'},
+          [ React.createElement('button',{key:'bk',onClick:()=>{this.dvStopScroll();this.setState({dv:'map',dvPlay:false});},'aria-label':'지도로',style:{flex:'none',width:44,height:44,display:'flex',alignItems:'center',justifyContent:'center',border:'none',background:'none',cursor:'pointer',color:'var(--sub)',fontFamily:'inherit',padding:0}}, svg('M15 18l-6-6 6-6',21)),
+            this.wh('span',{key:'t',flex:1,minWidth:0,fontSize:12.5,color:'var(--accent)',fontWeight:600,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'},sg.title),
+            ib('top',()=>this.dvTop(),'맨 위로', svg('M12 19V5M5 12l7-7 7 7',19)),
+            ib('th',()=>this.toggleThemeNow(),'다크모드 전환', isDark?svg(['M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z'],19):svg(['M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z'],19)),
+            ib('fd',()=>this.fsDown(),'글자 작게','가−',12),
+            ib('fu',()=>this.fsUp(),'글자 크게','가+',16),
+            ib('bg',()=>this.dvBgmTap(),'배경음악', bgmIcon, 13, this.state.bgmPlay?'var(--accent)':'var(--sub)') ]),
+        this.dvRidge() ]);
+  }
+  dvRidge(){
+    const r=this.ridge(this.state.dvPct||0);
+    return this.wh('div',{key:'ridge',padding:'2px 22px 4px',maxWidth:480,margin:'0 auto',boxSizing:'border-box'},
+      React.createElement('div',{ref:el=>{if(el)this._dvRidgeEl=el;},onPointerDown:e=>this.dvRidgeDrag(e),style:{position:'relative',height:30,touchAction:'none',cursor:'pointer'}},[
+        React.createElement('svg',{key:'s',viewBox:'0 0 312 30',width:'100%',height:30,preserveAspectRatio:'none',style:{display:'block',overflow:'visible',pointerEvents:'none'}},[
+          React.createElement('path',{key:'a',d:'M2 26 C 110 24 190 17 260 6 L 310 2',fill:'none',stroke:'var(--line)',strokeWidth:1.5,strokeLinecap:'round'}),
+          React.createElement('path',{key:'b',d:'M2 26 C 110 24 190 17 260 6 L 310 2',fill:'none',stroke:'var(--accent)',strokeWidth:1.5,strokeLinecap:'round',pathLength:'100',strokeDasharray:'100',strokeDashoffset:r.dash})
+        ]),
+        this.wh('div',{key:'x',position:'absolute',left:r.crossLeft,top:r.crossTop,transform:'translate(-50%,-50%)',width:38,height:38,margin:0,display:'flex',alignItems:'center',justifyContent:'center'},
+          React.createElement('svg',{width:14,height:18,viewBox:'0 0 14 18',style:{overflow:'visible',pointerEvents:'none'}},
+            React.createElement('g',{stroke:'var(--accent)',strokeWidth:2.1,strokeLinecap:'round',style:{filter:'drop-shadow(0 1px 2px rgba(0,0,0,.3))'}},[
+              React.createElement('path',{key:'v',d:'M7 1 V17'}),
+              React.createElement('path',{key:'h',d:'M2 6 H12'}) ]))) ]));
+  }
+  dvRidgeDrag(e){
+    e.preventDefault();
+    const el=this._dvRidgeEl, sc=this._dvScroll; if(!el||!sc) return;
+    this.dvStopScroll(); if(this.state.dvPlay) this.setState({dvPlay:false});
+    const move=ev=>{ const f=this.ridgePct(el, ev.clientX); const m=sc.scrollHeight-sc.clientHeight; if(m>0) sc.scrollTop=m*f; };
+    move(e);
+    const up=()=>{ window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up); };
+    window.addEventListener('pointermove',move); window.addEventListener('pointerup',up);
+  }
+  dvCoverInner(sg,onDark){
+    return [ this.wh('div',{key:'k',textAlign:'center',fontSize:10.5,letterSpacing:'.22em',color:'#e6b756',fontWeight:700},'다윗의 노래'),
+      this.wh('div',{key:'t',textAlign:'center',fontFamily:"'Noto Serif KR',serif",fontSize:24,color:'#f7f4ee',margin:'8px 0 4px'},sg.title),
+      this.wh('div',{key:'ps',textAlign:'center',fontSize:11.5,color:'rgba(247,244,238,.55)'},sg.ps+' — 약 20분') ];
+  }
+  dvPsalm(p,i){
+    return this.wh('div',{key:'p'+i,margin:'0 22px 30px'},
+      [ this.wh('div',{key:'h',display:'flex',alignItems:'center',gap:10,margin:'0 0 14px'},
+          [ this.wh('span',{key:'l',width:18,height:2,background:'#b8843a'}),
+            this.wh('span',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:19,color:'var(--text)',fontWeight:600},p.t) ]),
+        ...p.lines.map((ln,j)=>this.wh('div',{key:j,fontFamily:"'Noto Serif KR',serif",fontSize:this.state.fs+'px',lineHeight:1.95,color:'var(--text)',marginBottom:12,wordBreak:'keep-all'},ln)) ]);
+  }
+  // 흐름 읽기 — 전편 연속 스크롤 + 자동 스크롤 컨트롤
+  dvFlow(sg){
+    return this.wh('div',{key:'flow',flex:1,position:'relative',minHeight:0},
+      [ React.createElement('div',{key:'sc',ref:el=>{if(el){this._dvScroll=el; if(!el._dvBound){el._dvBound=true; el.addEventListener('scroll',()=>{ if(this._dvEndRaf) return; this._dvEndRaf=requestAnimationFrame(()=>{ this._dvEndRaf=null; const m=el.scrollHeight-el.clientHeight; const atEnd=m<=4||el.scrollTop>=m-6; const pct=m>0?Math.round(el.scrollTop/m*100):0; if(atEnd!==this.state.dvAtEnd||pct!==this.state.dvPct) this.setState({dvAtEnd:atEnd,dvPct:pct}); }); },{passive:true}); }}},style:{position:'absolute',inset:0,overflowY:'auto',WebkitOverflowScrolling:'touch'}},
+          this.wh('div',{maxWidth:480,margin:'0 auto'},
+          [ this.wh('div',{key:'cv',padding:'22px 22px 20px',background:'linear-gradient(165deg,#26221c,#161512)'}, this.dvCoverInner(sg)),
+            sg.intro?this.wh('div',{key:'lead',margin:'20px 22px 24px',fontSize:14,lineHeight:1.95,color:'var(--sub)'},sg.intro):null,
+            ...sg.body.map((p,i)=>this.dvPsalm(p,i)),
+            this.wh('div',{key:'sp',height:150}) ])),
+        this.wh('div',{key:'bar',position:'absolute',left:12,right:12,bottom:'calc(14px + env(safe-area-inset-bottom))',zIndex:15,maxWidth:456,margin:'0 auto',display:'flex',alignItems:'center',gap:10,background:'var(--card)',border:'1px solid var(--line)',borderRadius:18,padding:'10px 12px',boxShadow:'0 8px 24px rgba(0,0,0,.14)'},
+          [ React.createElement('button',{key:'pl',onClick:()=>this.dvToggleScroll(),'aria-label':'자동 스크롤 재생 또는 정지',style:{flex:'none',width:48,height:48,borderRadius:'50%',border:'1px solid var(--accent)',background:'none',color:'var(--accent)',cursor:'pointer',fontSize:15,fontFamily:'inherit'}}, this.state.dvPlay?'❚❚':'▶'),
+            React.createElement('button',{key:'fin',onClick:()=>{ if(!this.state.dvAtEnd) return; this.dvFinish(sg.id); },disabled:!this.state.dvAtEnd,style:{flex:1,minWidth:0,height:48,borderRadius:13,border:'none',background:this.state.dvAtEnd?'var(--accent)':'color-mix(in oklch, var(--accent) 16%, transparent)',color:this.state.dvAtEnd?'#fff':'var(--sub)',fontSize:14.5,fontWeight:700,cursor:this.state.dvAtEnd?'pointer':'default',fontFamily:'inherit',whiteSpace:'nowrap'}},'선포 마쳤습니다'),
+            React.createElement('button',{key:'sp',onClick:()=>this.dvCycleSpeed(),'aria-label':'흐르는 속도',style:{flex:'none',height:48,padding:'0 13px',borderRadius:13,border:'1px solid var(--line)',background:'none',color:'var(--sub)',cursor:'pointer',fontSize:12,fontWeight:600,fontFamily:'inherit',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',lineHeight:1.25}},[this.wh('span',{key:'a'},'속도'),this.wh('span',{key:'b',fontSize:10,color:'var(--accent)'},this.dvSpeedLabel())]) ]) ]);
+  }
+  dvSpeedLabel(){ return ({240:'느리게',340:'조금 느리게',440:'보통',540:'빠르게',640:'매우 빠르게'})[this.state.flowSpeed]||'보통'; }
+  dvCycleSpeed(){ const o=[240,340,440,540,640]; const n=o[(o.indexOf(this.state.flowSpeed)+1)%o.length]; localStorage.setItem('sp_flow_speed',String(n)); this.setState({flowSpeed:n}); }
+  // 장 넘김 — 한 편씩, 좌우 탭으로 이동
+  dvPaged(sg){
+    const pages=[{cover:true}].concat(sg.body.map((p,i)=>({p,i})));
+    const n=pages.length, pg=Math.min(this.state.dvPage||0, n-1), cur=pages[pg], last=pg===n-1;
+    const go=d=>{ const np=Math.max(0,Math.min(n-1,pg+d)); if(np!==pg){ this.setState({dvPage:np},()=>{ if(this._dvScroll) this._dvScroll.scrollTop=0; }); } };
+    let content;
+    if(cur.cover){ content=this.wh('div',{key:'cvp'},
+      [ this.wh('div',{key:'cv',padding:'26px 22px 22px',background:'linear-gradient(165deg,#26221c,#161512)',borderRadius:16,margin:'8px 16px 20px'}, this.dvCoverInner(sg)),
+        sg.intro?this.wh('div',{key:'lead',margin:'0 22px',fontSize:this.state.fs-3+'px',lineHeight:1.95,color:'var(--sub)'},sg.intro):null ]); }
+    else content=this.dvPsalm(cur.p,cur.i);
+    return this.wh('div',{key:'paged',flex:1,position:'relative',minHeight:0},
+      [ React.createElement('div',{key:'sc',ref:el=>{if(el)this._dvScroll=el;},style:{position:'absolute',inset:0,overflowY:'auto',WebkitOverflowScrolling:'touch',paddingBottom:120}}, this.wh('div',{maxWidth:480,margin:'0 auto',paddingTop:8}, content)),
+        // 좌우 탭 영역
+        React.createElement('button',{key:'lz',onClick:()=>go(-1),'aria-label':'이전','disabled':pg===0,style:{position:'absolute',left:0,top:0,bottom:110,width:'26%',border:'none',background:'none',cursor:pg===0?'default':'pointer',opacity:0}}),
+        React.createElement('button',{key:'rz',onClick:()=>go(1),'aria-label':'다음','disabled':last,style:{position:'absolute',right:0,top:0,bottom:110,width:'26%',border:'none',background:'none',cursor:last?'default':'pointer',opacity:0}}),
+        this.wh('div',{key:'bar',position:'absolute',left:12,right:12,bottom:'calc(14px + env(safe-area-inset-bottom))',zIndex:15,maxWidth:456,margin:'0 auto',display:'flex',alignItems:'center',gap:10,background:'var(--card)',border:'1px solid var(--line)',borderRadius:18,padding:'8px 10px',boxShadow:'0 8px 24px rgba(0,0,0,.14)'},
+          [ React.createElement('button',{key:'pv',onClick:()=>go(-1),'disabled':pg===0,style:{flex:'none',width:46,height:46,borderRadius:12,border:'1px solid var(--line)',background:'var(--card)',color:pg===0?'var(--line)':'var(--sub)',cursor:pg===0?'default':'pointer',fontSize:16,fontFamily:'inherit'}},'‹'),
+            last?React.createElement('button',{key:'fin',onClick:()=>this.dvFinish(sg.id),style:{flex:1,height:46,borderRadius:12,border:'none',background:'var(--accent)',color:'#fff',fontSize:14.5,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}},'선포 마쳤습니다')
+                :this.wh('div',{key:'ind',flex:1,textAlign:'center',fontSize:12.5,color:'var(--sub)'}, (pg+1)+' / '+n),
+            React.createElement('button',{key:'nx',onClick:()=>go(1),'disabled':last,style:{flex:'none',width:46,height:46,borderRadius:12,border:'1px solid var(--line)',background:'var(--card)',color:last?'var(--line)':'var(--sub)',cursor:last?'default':'pointer',fontSize:16,fontFamily:'inherit'}},'›') ]) ]);
+  }
+  dvDone(){
+    const sg=this.dvFind(this.state.dvSong)||{};
+    return this.wh('div',{position:'absolute',inset:0,background:'radial-gradient(120% 80% at 50% 24%,#26221a 0%,#141312 70%)',display:'flex',flexDirection:'column',alignItems:'center',padding:'0 26px',textAlign:'center'},
+      [ this.wh('div',{key:'st',marginTop:100,width:112,height:112,borderRadius:'50%',border:'2px solid #e6b756',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',boxShadow:'0 0 50px rgba(230,183,86,.25)',transform:'rotate(-7deg)'},
+          [ this.wh('div',{key:'a',fontSize:10.5,letterSpacing:'.18em',color:'#e6b756',fontWeight:700},'다윗의 노래'),
+            this.wh('div',{key:'b',fontSize:21,color:'#e6b756',fontWeight:700,marginTop:3},'선포') ]),
+        this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:19,lineHeight:1.65,color:'#f0ede8',marginTop:30},(sg.title||'')+' — 오늘의 노래를 마쳤습니다'),
+        sg.verse?this.wh('div',{key:'q',marginTop:22,padding:'14px 18px',borderRadius:14,background:'rgba(230,183,86,.08)',border:'1px solid rgba(230,183,86,.3)',fontFamily:"'Noto Serif KR',serif",fontSize:14.5,lineHeight:1.8,color:'rgba(240,237,232,.9)',fontStyle:'italic'},sg.verse):null,
+        this.wh('div',{key:'ar',marginTop:22,fontSize:12.5,color:'rgba(240,237,232,.55)'},'전신갑주 완주로 인정되었습니다'),
+        React.createElement('button',{key:'map',onClick:()=>this.setState({dv:'map',dvSong:null}),style:{marginTop:28,alignSelf:'stretch',height:52,borderRadius:16,background:'#e6b756',color:'#141312',fontSize:15,fontWeight:700,border:'none',cursor:'pointer',fontFamily:'inherit'}},'지도로 돌아가기') ]);
+  }
+  dvColor(id){ return '#8e2b2b'; }
+  dvStopScroll(){ if(this._dvRaf){ cancelAnimationFrame(this._dvRaf); this._dvRaf=null; } }
+  dvStartScroll(){
+    if(this._dvRaf) return;
+    let last=performance.now(), acc=0;
+    const step=(now)=>{
+      const el=this._dvScroll; if(!el||!this.state.dvPlay){ this._dvRaf=null; return; }
+      const dt=now-last; last=now;
+      const max=el.scrollHeight-el.clientHeight;
+      const chars=Math.max(1, el.textContent.length);
+      const pxPerChar=el.scrollHeight/chars;
+      acc += (this.state.flowSpeed/60)*pxPerChar*(dt/1000);
+      if(acc>=1){ el.scrollTop+=Math.floor(acc); acc-=Math.floor(acc); }
+      if(el.scrollTop>=max-1){ this._dvRaf=null; this.setState({dvPlay:false}); return; }
+      this._dvRaf=requestAnimationFrame(step);
+    };
+    this._dvRaf=requestAnimationFrame(step);
+  }
+  dvToggleScroll(){ const on=!this.state.dvPlay; this.requestWake(on); this.setState({dvPlay:on},()=>{ if(on) this.dvStartScroll(); else this.dvStopScroll(); }); }
+  fsUp(){ const f=Math.min(30,this.state.fs+2); localStorage.setItem('sp_fs',f); this.setState({fs:f}); }
+  fsDown(){ const f=Math.max(15,this.state.fs-2); localStorage.setItem('sp_fs',f); this.setState({fs:f}); }
+  toggleThemeNow(){ const t=this.state.theme==='dark'?'light':'dark'; localStorage.setItem('sp_theme',t); document.body.dataset.theme=t; this.setState({theme:t}); }
+  davidBody(){
+    const v=this.state.dv;
+    let inner;
+    try{ inner = v==='reader'?this.dvReader() : v==='done'?this.dvDone() : this.dvMap(); }
+    catch(err){ inner=this.wh('div',{padding:24,color:'var(--sub)'},String(err)); }
+    return this.wh('div',{key:'david-'+v,position:'absolute',inset:0},inner);
+  }
+
+  // ═══ 원어 리디자인: 하루 다섯 단어 · 제비뽑기 ═══
+  wPool(){ if(this._wPool)return this._wPool; const b=window.WORD_BOOKS||{}; const p=[]; Object.keys(b).forEach(c=>(b[c].entries||[]).forEach(e=>{ if(!e.stub) p.push(e); })); this._wPool=p; return p; }
+  wFind(id){ return this.wPool().find(e=>e.id===id); }
+  wToday(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+  wSeedStr(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+  wDaily(){
+    const key='onpray_words3_'+this.wToday();
+    if(this._wdKey===key && this._wd) return this._wd;
+    let rec=null; try{ rec=JSON.parse(localStorage.getItem(key)); }catch(e){}
+    if(!rec || !rec.picks || !rec.picks.length){
+      const pool=this.wPool().slice();
+      let seed=this.wSeedStr(this.wToday())||1;
+      const rnd=()=>{ seed=(Math.imul(seed,1664525)+1013904223)>>>0; return seed/4294967296; };
+      for(let i=pool.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+      rec={ picks: pool.slice(0,3).map(e=>e.id), drawn:[], read:[] };
+      try{ localStorage.setItem(key,JSON.stringify(rec)); }catch(e){}
+    }
+    this._wdKey=key; this._wd=rec; return rec;
+  }
+  wSaveDaily(){ try{ localStorage.setItem(this._wdKey,JSON.stringify(this._wd)); }catch(e){} }
+  wDraw(id){ const d=this.wDaily(); if(d.drawn.indexOf(id)<0){ d.drawn.push(id); this.wSaveDaily(); } }
+  wReadMark(id){
+    const d=this.wDaily();
+    if(d.picks.indexOf(id)>=0 && d.read.indexOf(id)<0){ d.read.push(id); this.wSaveDaily(); }
+    if(d.read.length>=3 && !d._streaked){
+      d._streaked=true; this.wSaveDaily();
+      const y=new Date(); y.setDate(y.getDate()-1);
+      const yk=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();
+      const last=localStorage.getItem('onpray_wstreak_last');
+      let n=parseInt(localStorage.getItem('onpray_wstreak')||'0',10)||0;
+      n = (last===yk)? n+1 : 1;
+      localStorage.setItem('onpray_wstreak',String(n));
+      localStorage.setItem('onpray_wstreak_last',this.wToday());
+    }
+  }
+  wStreak(){ return parseInt(localStorage.getItem('onpray_wstreak')||'0',10)||0; }
+  wOpenReader(id){ this.logView('W_'+id); this.wReadMark(id); this.wGo({wv:'reader',wEntry:id}); }
+  wLotTap(id){ const d=this.wDaily(); if(d.drawn.indexOf(id)>=0){ this.wOpenReader(id); return; } this.wDraw(id); this.wGo({wv:'reveal',wEntry:id}); }
+  wDots(read){ return this.wh('div',{display:'flex',gap:6,justifyContent:'center'}, [0,1,2].map(i=>this.wh('div',{key:i,width:i<read?22:8,height:8,borderRadius:4,background:i<read?this.wGold():'rgba(230,183,86,.2)',transition:'width .3s'}))); }
+
+  wScreenGate(){
+    const d=this.wDaily(); const picks=d.picks; const readN=d.read.length;
+    const heb=id=>{ const e=this.wFind(id); return e?e.word_orig:''; };
+    const lots=this.wh('div',{key:'lots',className:'wkeep',display:'flex',gap:13,transform:'rotate(-4deg)'},
+      picks.map((id,i)=>{
+        const drawn=d.drawn.indexOf(id)>=0, isRead=d.read.indexOf(id)>=0;
+        return React.createElement('button',{key:id,onClick:()=>this.wLotTap(id),style:{
+          width:46,height:124+((i*13)%22),borderRadius:'11px 11px 23px 23px',cursor:'pointer',padding:0,
+          background:drawn?'linear-gradient(180deg,#3a3122,#241d12)':'linear-gradient(180deg,#2b2721,#1a1815)',
+          border:'1px solid rgba(230,183,86,'+(drawn?(isRead?'.5':'.9'):'.32')+')',
+          boxShadow:drawn?'0 0 22px rgba(230,183,86,.28)':'0 0 '+(15+(i*9%16))+'px rgba(230,183,86,'+(.1+(i*11%12)/100)+'), inset 0 1px 0 rgba(255,235,190,.16)',
+          display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'inherit',
+          animation:drawn?'lotDraw .5s ease':('lotFloat '+(3.2+i*.5)+'s ease-in-out '+(i*.4)+'s infinite alternate'),
+          transform:'translateY('+((i%2)*14-7)+'px)'
+        }}, drawn?React.createElement('span',{className:'heb',style:{fontSize:17,color:isRead?'rgba(230,183,86,.62)':'#e6b756',writingMode:'vertical-rl'}},heb(id)):null);
+      }));
+    const foot = readN>=3
+      ? '세 단어를 모두 읽었습니다\n제비를 다시 누르면 언제든 다시'
+      : (readN>0 ? '읽은 제비를 다시 누르면 다시 읽을 수 있습니다\n남은 제비를 마저 뽑으세요'
+                 : '마음이 머무는 제비를 뽑으세요\n뽑는 순서대로 오늘의 단어가 열립니다');
+    return this.wh('div',{key:'gate',className:'wkeep',position:'absolute',inset:0,background:'radial-gradient(120% 80% at 50% 28%,#1c1a16 0%,#0e0e10 70%)',display:'flex',flexDirection:'column',animation:'riseIn .4s ease'},
+      [ this.wh('div',{key:'hd',padding:'52px 26px 0',textAlign:'center'},
+          [ this.wh('div',{key:'k',fontSize:11,letterSpacing:'.26em',color:this.wGold(),fontWeight:700},'오늘의 세 단어'),
+            this.wh('div',{key:'v',fontFamily:"'Noto Serif KR',serif",fontSize:16,lineHeight:1.7,color:'#f0ede8',marginTop:15,whiteSpace:'pre-line'},'"제비는 사람이 뽑으나\n모든 일을 작정하기는 여호와께 있느니라"'),
+            this.wh('div',{key:'r',fontSize:12,color:'rgba(240,237,232,.45)',marginTop:8},'잠언 16:33'),
+            this.wh('div',{key:'p',marginTop:18},this.wDots(readN)) ]),
+        this.wh('div',{key:'mid',flex:1,display:'flex',alignItems:'center',justifyContent:'center'},lots),
+        this.wh('div',{key:'ft',padding:'0 26px 40px',textAlign:'center'},
+          this.wh('div',{fontSize:12.5,color:'rgba(240,237,232,.42)',lineHeight:1.7,whiteSpace:'pre-line'},foot)) ]);
+  }
+
+  wScreenReveal(){
+    const e=this.wFind(this.state.wEntry); if(!e) return this.wScreenGate();
+    const d=this.wDaily(); const ord=d.drawn.indexOf(e.id)+1;
+    const ords=['첫','두','세','네','다섯'][Math.max(0,ord-1)]||'';
+    return this.wh('div',{key:'reveal',className:'wkeep',position:'absolute',inset:0,background:'radial-gradient(100% 70% at 50% 40%,#241f15 0%,#0a0908 76%)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'0 30px',textAlign:'center',animation:'riseIn .5s ease'},
+      [ this.wh('div',{key:'n',fontSize:11,letterSpacing:'.28em',color:'rgba(240,237,232,.5)',marginBottom:28},ords+' 번째 단어'),
+        React.createElement('span',{key:'hb',className:'heb',style:{fontSize:70,color:this.wGold(),lineHeight:1,textShadow:'0 0 60px rgba(230,183,86,.5)',animation:'lotDraw .6s ease'}},e.word_orig),
+        this.wh('div',{key:'w',fontSize:16,color:'#f0ede8',fontWeight:700,marginTop:20},e.word_ko+' · '+e.gloss),
+        this.wh('div',{key:'tr',fontSize:12.5,color:'rgba(240,237,232,.5)',marginTop:6},e.translit+'  ·  '+e.anchor),
+        e.hook && this.wh('div',{key:'h',fontFamily:"'Noto Serif KR',serif",fontSize:16,lineHeight:1.7,color:'rgba(240,237,232,.85)',marginTop:28},e.hook),
+        React.createElement('button',{key:'c',onClick:()=>this.wOpenReader(e.id),style:{marginTop:40,width:'100%',height:54,borderRadius:16,background:this.wGold(),color:'#141312',fontSize:15.5,fontWeight:700,border:'none',cursor:'pointer',fontFamily:'inherit'}},'읽어보기'),
+        React.createElement('button',{key:'s',onClick:()=>this.wGo({wv:'gate',wEntry:null}),style:{marginTop:12,background:'none',border:'none',color:'rgba(240,237,232,.5)',fontSize:12.5,cursor:'pointer',fontFamily:'inherit'}},'나중에 읽기 — 제비판에 열어둡니다') ]);
+  }
+
+  wMagTable(t){
+    return this.wh('div',{key:'tbl',margin:'14px 0',border:'1px solid var(--line)',borderRadius:12,overflow:'hidden'},
+      [ this.wh('div',{key:'h',display:'flex',background:'rgba(230,183,86,.1)'},
+          (t.head||[]).map((h,i)=>this.wh('div',{key:i,flex:i===0?'0 0 74px':1,padding:'9px 10px',fontSize:11,fontWeight:700,color:this.wGold(),borderRight:i<(t.head.length-1)?'1px solid var(--line)':'none'},h))),
+        ...(t.rows||[]).map((r,ri)=>this.wh('div',{key:ri,display:'flex',borderTop:'1px solid var(--line)'},
+          r.map((c,ci)=>this.wh('div',{key:ci,flex:ci===0?'0 0 74px':1,padding:'9px 10px',fontSize:11.5,lineHeight:1.55,color:'var(--text)',opacity:ci===0?.9:.8,borderRight:ci<(r.length-1)?'1px solid var(--line)':'none'},c)))) ]);
+  }
+  wMagInner(blocks){
+    const out=[];
+    (blocks||[]).forEach((b,j)=>{
+      if(b.t==='p'&&b.lines){ b.lines.forEach((ln,k)=>out.push(this.wh('div',{key:j+'p'+k,fontSize:15.5,lineHeight:1.9,color:'var(--text)',opacity:.82,marginBottom:12},ln))); }
+      else if(b.t==='t'){ out.push(this.wMagTable(b)); }
+      else if(b.t==='x'){ out.push(React.createElement('button',{key:j+'x',onClick:()=>this.wGo({wv:'reader',wEntry:b.id}),style:{display:'inline-flex',alignItems:'center',gap:7,margin:'2px 0 12px',padding:'9px 14px',borderRadius:11,border:'1px solid rgba(230,183,86,.35)',background:'rgba(230,183,86,.06)',color:this.wGold(),fontSize:13,fontWeight:600,cursor:'pointer',fontFamily:'inherit'}},[this.wh('span',{key:'a'},b.label),this.wh('span',{key:'b',fontSize:12},'›')])); }
+    });
+    return out;
+  }
+  wScreenReader(){
+    const e=this.wFind(this.state.wEntry);
+    if(!e) return this.wScreenGate();
+    const d=this.wDaily(); const readN=d.read.length; const isPick=d.picks.indexOf(e.id)>=0;
+    const photo='assets/words/'+(e.photo? e.photo.split('/').pop() : e.id)+'-2x.jpg';
+    const G=this.wGold();
+    // 커버
+    const cover=this.wh('div',{key:'cover',position:'relative',height:430},
+      [ React.createElement('img',{key:'img',src:photo,alt:'',style:{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}),
+        this.wh('div',{key:'g',position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(14,14,16,.5) 0%,rgba(14,14,16,.08) 32%,rgba(14,14,16,.6) 72%,var(--bg) 100%)'}),
+        React.createElement('button',{key:'back',onClick:()=>this.wGo({wv:'gate',wEntry:null}),style:{position:'absolute',top:44,left:16,width:38,height:38,borderRadius:'50%',border:'none',background:'rgba(0,0,0,.4)',color:'#fff',cursor:'pointer',fontSize:18,fontFamily:'inherit'}},'‹'),
+        this.wh('div',{key:'no',position:'absolute',top:52,left:20,fontSize:10.5,letterSpacing:'.22em',color:'rgba(255,255,255,.75)'},(e.anchor||'').toUpperCase()),
+        this.wh('div',{key:'ctl',position:'absolute',top:44,right:14,display:'flex',gap:6},
+          [ React.createElement('button',{key:'fd',onClick:()=>this.fsDown(),'aria-label':'글자 작게',style:{width:36,height:32,borderRadius:9,border:'1px solid rgba(255,255,255,.28)',background:'rgba(0,0,0,.28)',color:'#fff',fontSize:12,cursor:'pointer',fontFamily:'inherit'}},'가−'),
+            React.createElement('button',{key:'fu',onClick:()=>this.fsUp(),'aria-label':'글자 크게',style:{width:36,height:32,borderRadius:9,border:'1px solid rgba(255,255,255,.28)',background:'rgba(0,0,0,.28)',color:'#fff',fontSize:15,cursor:'pointer',fontFamily:'inherit'}},'가+'),
+            React.createElement('button',{key:'th',onClick:()=>this.toggleThemeNow(),'aria-label':'다크모드 전환',style:{width:36,height:32,borderRadius:9,border:'1px solid rgba(255,255,255,.28)',background:'rgba(0,0,0,.28)',color:'#fff',fontSize:13,cursor:'pointer',fontFamily:'inherit'}}, this.state.theme==='dark'?'☀︎':'☾') ]),
+        React.createElement('span',{key:'hb',className:'heb',style:{position:'absolute',left:22,bottom:118,fontSize:70,color:'#fff',lineHeight:1,textShadow:'0 4px 24px rgba(0,0,0,.55)'}},e.word_orig),
+        this.wh('div',{key:'sub',position:'absolute',left:24,right:24,bottom:90,fontSize:12.5,letterSpacing:'.06em',color:G,fontWeight:700},e.translit+' · '+e.word_ko+' · '+e.anchor),
+        e.hook && this.wh('div',{key:'h',position:'absolute',left:24,right:24,bottom:18,fontFamily:"'Noto Serif KR',serif",fontSize:16.5,lineHeight:1.55,color:'rgba(255,255,255,.94)'},e.hook) ]);
+    // 인트로: 렌즈 카드 + 절 + 직역
+    const lens=this.wh('div',{key:'lens',margin:'20px 22px 0',padding:'14px 16px',background:'var(--card)',border:'1px solid var(--line)',borderRadius:14,display:'flex',alignItems:'center',gap:13},
+      [ React.createElement('span',{key:'o',className:'heb',style:{fontSize:30,color:G,lineHeight:1}},e.word_orig),
+        this.wh('div',{key:'m',flex:1},
+          [ this.wh('div',{key:'a',fontSize:15,color:'var(--text)',fontWeight:700},e.word_ko+' · '+e.gloss),
+            this.wh('div',{key:'b',fontSize:12,color:'var(--sub)',marginTop:3},e.translit+'  ·  '+e.strongs) ]) ]);
+    const verse=this.wh('div',{key:'verse',margin:'16px 22px 0',fontFamily:"'Noto Serif KR',serif",fontSize:17,lineHeight:1.8,color:'var(--text)'},this.wHl(e));
+    const lit=e.literal?this.wh('div',{key:'lit',margin:'12px 22px 0',fontSize:14,color:'var(--sub)',lineHeight:1.7},'직역 — '+e.literal):null;
+    // 본문 흐름
+    const flow=[]; let angN=0;
+    (e.blocks||[]).forEach((b,i)=>{
+      if(b.t==='s'){ flow.push(this.wh('div',{key:'s'+i,margin:'26px 22px 12px',display:'flex',alignItems:'center',gap:10},
+        [ this.wh('span',{key:'l',width:18,height:2,background:G}), this.wh('span',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:18,color:'var(--text)',fontWeight:600},b.title) ])); }
+      else if(b.t==='p'&&b.lines){ b.lines.forEach((ln,k)=>flow.push(this.wh('div',{key:'p'+i+'-'+k,margin:'0 22px 13px',fontSize:16,lineHeight:1.9,color:'var(--text)',opacity:.86},ln))); }
+      else if(b.t==='d'){ angN++;
+        flow.push(this.wh('div',{key:'d'+i,margin:'24px 22px 0'},
+          [ this.wh('div',{key:'hd',display:'flex',alignItems:'baseline',gap:9,marginBottom:11},
+              [ this.wh('span',{key:'n',fontSize:12,color:G,fontWeight:700,fontVariantNumeric:'tabular-nums'},('0'+angN).slice(-2)),
+                this.wh('span',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:17,color:'var(--text)',fontWeight:600},b.title) ]),
+            b.reading?this.wh('div',{key:'rd',padding:'12px 15px',marginBottom:12,background:'rgba(230,183,86,.09)',borderLeft:'2px solid '+G,borderRadius:'0 10px 10px 0',fontSize:14.5,lineHeight:1.75,color:'var(--text)',fontStyle:'italic'},b.reading):null,
+            ...this.wMagInner(b.blocks) ])); }
+    });
+    // 마무리
+    const after=readN; // wOpenReader가 이미 read 반영
+    const done5=after>=3;
+    const finish=this.wh('div',{key:'fin',margin:'34px 22px 0'},
+      [ this.wh('div',{key:'mark',textAlign:'center',marginBottom:22},
+          [ this.wh('div',{key:'l',width:40,height:2,background:G,margin:'0 auto 14px'}),
+            React.createElement('span',{key:'o',className:'heb',style:{fontSize:24,color:'rgba(230,183,86,.6)'}},e.word_orig) ]),
+        isPick?this.wh('div',{key:'card',padding:'18px',borderRadius:18,background:'var(--card)',border:'1px solid rgba(230,183,86,.35)',textAlign:'center'},
+          [ this.wh('div',{key:'a',fontSize:13,color:G,fontWeight:700},done5?'오늘의 세 단어를 모두 읽었습니다':'한 단어를 읽었습니다'),
+            this.wh('div',{key:'d',margin:'12px 0'},this.wDots(after)),
+            this.wh('div',{key:'b',fontSize:12,color:'var(--sub)'},done5?'':(3-after)+'개의 제비가 남아 있습니다') ]):null,
+        React.createElement('button',{key:'cta',onClick:()=>this.wGo(done5?{wv:'complete'}:{wv:'gate',wEntry:null}),style:{marginTop:14,width:'100%',height:54,borderRadius:16,background:G,color:'#141312',fontSize:15,fontWeight:700,border:'none',cursor:'pointer',fontFamily:'inherit'}},done5?'완독 보기':'다음 제비 뽑으러 가기'),
+        this.wh('div',{key:'note',marginTop:10,textAlign:'center',fontSize:12,color:'var(--sub)',opacity:.7},done5?'오늘은 여기까지 — 내일 다시':'오늘은 여기까지 읽어도 좋습니다') ]);
+    const foot=this.wh('div',{key:'foot',margin:'22px 22px 40px',fontSize:10.5,color:'var(--sub)',opacity:.6,lineHeight:1.6},'성경 본문: 개역개정 ⓒ 대한성서공회');
+    return this.wh('div',{key:'reader',className:'wkeep',position:'absolute',top:0,left:0,right:0,bottom:0,overflowY:'auto',WebkitOverflowScrolling:'touch',background:'var(--bg)'},
+      [ cover, lens, verse, lit, ...flow, finish, foot ]);
+  }
+
+  wScreenComplete(){
+    const d=this.wDaily(); const G=this.wGold();
+    const words=d.picks.map(id=>{ const e=this.wFind(id); return e?e.word_orig:''; });
+    const streak=this.wStreak();
+    return this.wh('div',{key:'complete',className:'wkeep',position:'absolute',inset:0,background:'radial-gradient(120% 80% at 50% 22%,#221e15 0%,#0e0e10 72%)',display:'flex',flexDirection:'column',alignItems:'center',padding:'0 26px',textAlign:'center',animation:'riseIn .5s ease'},
+      [ this.wh('div',{key:'st',marginTop:70,width:108,height:108,borderRadius:'50%',border:'2px solid '+G,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',boxShadow:'0 0 50px rgba(230,183,86,.25)',transform:'rotate(-7deg)'},
+          [ this.wh('div',{key:'a',fontSize:11,letterSpacing:'.2em',color:G,fontWeight:700},'오늘의 말씀'),
+            this.wh('div',{key:'b',fontSize:22,color:G,fontWeight:700,marginTop:3},'완독') ]),
+        this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:19,lineHeight:1.6,color:'#f0ede8',marginTop:28},'세 단어를 모두 읽었습니다'),
+        this.wh('div',{key:'w',display:'flex',gap:10,justifyContent:'center',marginTop:20,flexWrap:'wrap'},
+          words.map((w,i)=>React.createElement('span',{key:i,className:'heb',style:{fontSize:19,color:'rgba(230,183,86,.75)'}},w))),
+        streak>0?this.wh('div',{key:'strk',marginTop:26,padding:'13px 20px',borderRadius:14,background:'rgba(255,255,255,.04)',border:'1px solid rgba(255,255,255,.1)',fontSize:13.5,color:'rgba(240,237,232,.75)'},
+          [ this.wh('span',{key:'a'},'연속 완독 '), this.wh('span',{key:'b',color:G,fontWeight:700},streak+'일째') ]):null,
+        this.wh('div',{key:'tm',marginTop:24,fontSize:12.5,color:'rgba(240,237,232,.42)',lineHeight:1.8,whiteSpace:'pre-line'},'내일 자정, 새로운 세 제비가 놓입니다\n오늘 읽은 단어는 제비를 다시 눌러 언제든'),
+        React.createElement('button',{key:'g',onClick:()=>this.wGo({wv:'gate',wEntry:null}),style:{marginTop:22,height:48,alignSelf:'stretch',borderRadius:14,border:'1px solid rgba(230,183,86,.5)',color:G,background:'none',fontSize:14,fontWeight:600,cursor:'pointer',fontFamily:'inherit'}},'오늘의 제비판') ]);
+  }
+
+  wordsBody() {
+    const v = this.state.wv;
+    let inner;
+    try {
+      inner = v==='reveal'?this.wScreenReveal() : v==='reader'?this.wScreenReader() : v==='complete'?this.wScreenComplete() : this.wScreenGate();
+    } catch(err){ inner = this.wh('div',{padding:24,color:'var(--sub)'},String(err)); }
+    return this.wh('div',{key:v,style:undefined,position:'absolute',inset:0},inner);
+  }
+
+  ridge(pct) {
+    const p = Math.max(0, Math.min(100, pct || 0));
+    // 실제 SVG 경로: M2 26 C 110 24 190 17 260 6 L 310 2  (viewBox 0 0 312 30, 세로 1:1 px)
+    // 근사식이 아니라 경로 위의 정확한 점을 샘플링한다 → 어느 위치에서도 십자가가 능선에 정확히 앉음.
+    const xT = 2 + (310 - 2) * p / 100;
+    let y;
+    if (xT <= 260) {
+      // 큐빅 베지어 (2,26)->(110,24)->(190,17)->(260,6), x는 단조 증가하므로 t를 이분 탐색
+      const bx = t => { const u = 1 - t; return u*u*u*2 + 3*u*u*t*110 + 3*u*t*t*190 + t*t*t*260; };
+      const by = t => { const u = 1 - t; return u*u*u*26 + 3*u*u*t*24 + 3*u*t*t*17 + t*t*t*6; };
+      let lo = 0, hi = 1;
+      for (let i = 0; i < 24; i++) { const m = (lo + hi) / 2; if (bx(m) < xT) lo = m; else hi = m; }
+      y = by((lo + hi) / 2);
+    } else {
+      // 직선 (260,6)->(310,2)
+      y = 6 + (2 - 6) * ((xT - 260) / (310 - 260));
+    }
+    return {
+      dash: (100 - p).toFixed(1),
+      crossLeft: (xT / 312 * 100).toFixed(2) + '%',
+      crossTop: (y - 3).toFixed(1) + 'px'   // 능선 위 작은 간격 (한 값으로 전 구간 일관)
+    };
+  }
+  // 진행바 십자가 드래그 → 위치 이동 (역발상)
+  ridgePct(container, clientX) {
+    const r = container.getBoundingClientRect();
+    if (r.width <= 0) return 0;
+    return Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+  }
+  flowDrag(e) {
+    if (!this._flowRidgeEl || !this.flowEl) return;
+    const f = this.ridgePct(this._flowRidgeEl, e.clientX);
+    const m = this.flowEl.scrollHeight - this.flowEl.clientHeight;
+    if (m > 0) this.flowEl.scrollTop = m * f;
+  }
+  openDrag(e) {
+    if (!this._openRidgeEl || !this.state.openKey) return;
+    const total = this._openPageCount || 1;
+    const f = this.ridgePct(this._openRidgeEl, e.clientX);
+    const page = Math.max(0, Math.min(total - 1, Math.round(f * (total - 1))));
+    if (page !== this.state.openPage) {
+      localStorage.setItem('sp_pos_' + this.state.openKey, String(page));
+      this.setState({ openPage: page });
+      if (this.scroller) this.scroller.scrollTop = 0;
+    }
+  }
+  chooseRead(key) { this.setState({ chooseKey: key }); }
+  favKeys() { try { const a = JSON.parse(localStorage.getItem('sp_favs') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  toggleFav(key) {
+    const a = this.favKeys(); const i = a.indexOf(key);
+    if (i >= 0) a.splice(i, 1); else a.push(key);
+    localStorage.setItem('sp_favs', JSON.stringify(a)); this.forceUpdate();
+  }
+
+  heroChoice() {
+    // 격일 전환, 매일 07:00 기준. 오늘(2026-09-04) = Joshua Generation
+    const dayNum = Math.floor((Date.now() - 7 * 3600e3) / 86400e3);
+    const anchor = Math.floor((new Date(2026, 8, 4, 12, 0, 0).getTime() - 7 * 3600e3) / 86400e3);
+    const joshua = (((dayNum - anchor) % 2) + 2) % 2 === 0;
+    if (joshua) return {
+      joshua: true,
+      img: 'assets/joshua-hero.jpg',
+      grad: 'linear-gradient(180deg,rgba(70,2,6,.34) 0%,rgba(70,2,6,0) 18%,rgba(70,2,6,0) 55%,rgba(174,5,10,.55) 78%,#ae050a 99%)',
+      fade: '#ae050a',
+      ctaBg: '#e40f22',
+      ctaShadow: '0 10px 26px rgba(0,0,0,.4)'
+    };
+    return {
+      joshua: false,
+      img: 'assets/oita-hero.jpg',
+      grad: 'linear-gradient(180deg,rgba(8,7,6,.42) 0%,rgba(8,7,6,0) 20%,rgba(8,7,6,0) 60%,rgba(8,7,6,.55) 80%,#090908 99%)',
+      fade: '#090908',
+      ctaBg: '#d90f34',
+      ctaShadow: '0 10px 26px rgba(217,15,52,.45)'
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const hero = this.heroChoice();
+    const accent = this.props.accentColor ?? null;
+    if (accent) document.documentElement.style.setProperty('--accent', accent);
+    const list = this.prayers();
+    const week = window.ECCLESIA_WEEK || [];
+    const w2l = window.WORSHIP_TO_LIFE || [];
+    const wd = this.weekData;
+    const dow = new Date().getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    const todayIdx = isWeekend ? 0 : dow - 1;
+    // 실제 본문 컨테이너를 측정해 스크롤 없이 한 화면에 들어가도록 페이지 분할
+    const boxH = s.boxH || Math.max(240, (window.innerHeight || 800) - 100);
+    const boxW = s.boxW || Math.min(window.innerWidth || 400, 480) - 40;
+    // 캔버스로 실제 글자 폭을 재서 픽셀 단위로 페이지를 채운다 (글자수 추정 금지)
+    if (!this._ctx) this._ctx = document.createElement('canvas').getContext('2d');
+    const ctx = this._ctx;
+    ctx.font = "400 " + s.fs + "px 'Noto Serif KR', serif";
+    const LINE_H = s.fs * 1.85, PARA_GAP = 13;
+    const budget = Math.max(LINE_H * 2, boxH - 8);
+    const HEAD_U = Math.round(s.fs * 0.87 * 1.4) + 10;   // 섹션 제목 높이
+    const GAP_U = 18;                                     // 블록 사이 간격
+    // 첫 장 머리(제목 + 설명) 높이를 실제 줄바꿈으로 계산한다
+    const titleU = note => {
+      if (!this._nctx) this._nctx = document.createElement('canvas').getContext('2d');
+      const n = this._nctx;
+      n.font = "400 13px 'Noto Sans KR', sans-serif";
+      const noteLines = note ? Math.max(1, Math.ceil(n.measureText(note).width / boxW)) : 0;
+      return Math.round(23 * 1.4) + 10 + (noteLines ? noteLines * Math.round(13 * 1.65) + 18 : 0);
+    };
+    const lineU = line => Math.max(1, Math.ceil(ctx.measureText(line).width / boxW)) * LINE_H + PARA_GAP;
+    // 균등 배분: 그리디로 필요한 최소 장수를 구한 뒤, 그 장수에 맞춰 목표치를 낮춰 재배치
+    const pack = (secs, cap0, capN) => {
+      const pages = [];
+      let cur = null, used = 0;
+      const newPage = () => { cur = { blocks: [] }; pages.push(cur); used = pages.length === 1 ? cap0 : 0; };
+      newPage();
+      const limit = () => capN;
+      secs.forEach((sec, si) => {
+        let part = 0, blk = null;
+        const pushBlock = () => { blk = { h: sec.h ? sec.h + (part ? ' (계속)' : '') : '', lines: [] }; cur.blocks.push(blk); used += (cur.blocks.length > 1 ? GAP_U : 0) + (sec.h ? HEAD_U : 0); part++; };
+        pushBlock();
+        sec.lines.forEach(line => {
+          const u = lineU(line);
+          if (used + u > limit() && (blk.lines.length || cur.blocks.length > 1)) {
+            if (!blk.lines.length) cur.blocks.pop();
+            newPage(); pushBlock();
+          }
+          blk.lines.push(line); used += u;
+        });
+        if (!blk.lines.length) { cur.blocks.pop(); }
+      });
+      return pages.filter(p => p.blocks.length);
+    };
+    const paginate = (secs, note) => {
+      const T = titleU(note);
+      const first = pack(secs, T, budget);
+      if (first.length < 2) return first;
+      let total = T;
+      secs.forEach((sec, i) => { if (sec.h) total += HEAD_U; if (i) total += GAP_U; sec.lines.forEach(l => { total += lineU(l); }); });
+      const target = Math.min(budget, Math.max(budget * 0.72, total / first.length + LINE_H * 0.5));
+      const balanced = pack(secs, T, target);
+      return balanced.length <= first.length ? balanced : first;
+    };
+    const notes = (window.DAY_NOTES) || {};
+    const weekReading = di => { const d = wd.DAYS[di]; return { title: '보혈 선포 기도문 · ' + d.day, ref: '', note: notes[d.day] || '', pages: paginate([...wd.INTRO, ...d.sections, ...wd.CONCLUSION], notes[d.day] || '') }; };
+    const q = (s.query || '').trim().toLowerCase();
+    const collapsed = s.collapsed || {};
+    const bodyOf = secs => secs.map(x => (x.h || '') + ' ' + x.lines.join(' ')).join(' ').toLowerCase();
+    const favSet = new Set(this.favKeys());
+    this._sigs = this._sigs || {};
+    const mk = (key, title, ref, body) => {
+      const sig = String(body.length);
+      this._sigs[key] = sig;
+      return {
+      title, ref, resume: this.resumeLabel(key, sig), body, key,
+      isFav: favSet.has(key), notFav: !favSet.has(key), toggleFav: () => this.toggleFav(key),
+      open: () => this.openPrayer(key), flow: () => this.openFlow(key), choose: () => this.chooseRead(key)
+    };
+    };
+    const raw = [];
+    const pushOrMerge = (label, items) => { const ex = raw.find(g => g.label === label); if (ex) ex.items = ex.items.concat(items); else raw.push({ label, items }); };
+    if (list.length) {
+      const ungrouped = list.filter(p => !p.group).slice().reverse();
+      if (ungrouped.length) raw.push({ label: '선포 기도문', items: ungrouped.map((p) => mk(this.keyFor('s', p.title), p.title, p.note || p.ref, bodyOf(p.sections))) });
+      const seen = [];
+      list.forEach(p => { if (p.group && seen.indexOf(p.group) < 0) seen.push(p.group); });
+      seen.forEach(gn => pushOrMerge(gn, list.filter(p => p.group === gn).map((p) => mk(this.keyFor('s', p.title), p.title, p.note || p.ref, bodyOf(p.sections)))));
+    }
+    if (w2l.length) pushOrMerge('예배에서 삶으로', w2l.map((p) => mk(this.keyFor('l', p.title), p.title, p.note || p.ref, bodyOf(p.sections))));
+    if (week.length) pushOrMerge('에클레시아 · 승부5 선포', week.map((p) => mk(this.keyFor('e', p.title), p.title, p.note || p.ref, bodyOf(p.sections))));
+    if (wd) pushOrMerge('보혈 선포 기도문 · 요일별', wd.DAYS.map((d) => mk(this.keyFor('w', d.day + ' 보혈 선포'), d.day + ' 보혈 선포', notes[d.day] || '', bodyOf([...wd.INTRO, ...d.sections, ...wd.CONCLUSION]))));
+    const favItems = [];
+    raw.forEach(g => g.items.forEach(it => { if (it.isFav) favItems.push(it); }));
+    let hits = 0;
+    const groups = raw.map(g => {
+      const items = q ? g.items.filter(it => (it.title + ' ' + it.ref + ' ' + it.body).toLowerCase().includes(q)) : g.items;
+      hits += items.length;
+      const isOpen = q ? true : !!collapsed[g.label];
+      return {
+        label: g.label, items, count: items.length, open: isOpen, rotate: isOpen ? 90 : 0,
+        toggle: () => this.setState({ collapsed: { ...collapsed, [g.label]: !isOpen } })
+      };
+    }).filter(g => g.items.length || !q);
+    let open = null;
+    // 키 → 원본 매핑 (키는 제목 해시 기반이므로 위치로 역산하지 않는다)
+    const keyMap = {};
+    list.forEach(p => { keyMap[this.keyFor('s', p.title)] = { title: p.title, ref: p.ref, note: p.note, secs: p.sections }; });
+    week.forEach(p => { keyMap[this.keyFor('e', p.title)] = { title: p.title, ref: p.ref, note: p.note, secs: p.sections }; });
+    w2l.forEach(p => { keyMap[this.keyFor('l', p.title)] = { title: p.title, ref: p.ref, note: p.note, secs: p.sections }; });
+    if (wd) wd.DAYS.forEach(d => { keyMap[this.keyFor('w', d.day + ' 보혈 선포')] = { title: '보혈 선포 기도문 · ' + d.day, ref: '', note: notes[d.day] || '', secs: [...wd.INTRO, ...d.sections, ...wd.CONCLUSION], week: true }; });
+    if (s.openKey && keyMap[s.openKey]) {
+      const m = keyMap[s.openKey];
+      open = { title: m.title, ref: m.ref, note: m.note, pages: paginate(m.secs, (m.ref || '') + ' ' + (m.note || '')) };
+    }
+    // 흐름 읽기용: 키로 섹션 원본을 찾는다
+    const sectionsFor = k => {
+      const m = k ? keyMap[k] : null;
+      return m ? { title: m.title, note: m.note || m.ref || '', secs: m.secs } : null;
+    };
+    const flow = sectionsFor(s.flowKey);
+    if (flow) this._flowChars = flow.secs.reduce((n, sec) => n + (sec.h ? sec.h.length : 0) + sec.lines.reduce((m, l) => m + l.length, 0), 0);
+    // ── 공유 카드 문구 ──
+    const kinds = [
+      { id: 'today', label: '오늘의 선포', q: wd && !isWeekend ? wd.DAYS[todayIdx].sections[0].lines[0] : (list[0] ? list[0].sections[0].lines[0] : '') },
+      { id: 'armor', label: '전신갑주', q: (week[0] || list[0]) ? (week[0] || list[0]).sections[0].lines[0] : '' },
+      { id: 'column', label: '묵상 칼럼', q: (window.COLUMN_POSTS && window.COLUMN_POSTS[0]) ? window.COLUMN_POSTS[0].title : '' }
+    ];
+    const kind = kinds.find(k => k.id === s.shareKind) || kinds[0];
+    const shareQuote = kind.q || '';
+    const shareTabs = kinds.map(k => ({
+      label: k.label,
+      pick: () => this.setState({ shareKind: k.id }),
+      border: k.id === s.shareKind ? 'var(--accent)' : 'var(--line)',
+      color: k.id === s.shareKind ? 'var(--accent)' : 'var(--sub)',
+      weight: k.id === s.shareKind ? 600 : 400
+    }));
+
+    // ── 묵상 칼럼 ──
+    const cposts = (window.COLUMN_POSTS || []);
+    const post = s.postNo ? cposts.find(p => p.no === s.postNo) : null;
+    const hours = this.hourData();
+    const max = Math.max(...hours, 1);
+    const nowH = new Date().getHours();
+    const hourBars = hours.map((c, h) => ({
+      count: c > 0 ? c : '', pct: Math.round(c / max * 100),
+      color: h === nowH ? 'var(--accent)' : (c > 0 ? 'color-mix(in oklch, var(--accent) 45%, var(--line))' : 'var(--line)')
+    }));
+    const peak = hours.indexOf(Math.max(...hours));
+    // 세계지도 도트맵 (32열): 접속자가 늘수록 열방 곳곳에 십자가(교회)가 세워진다
+    const W = 32;
+    const rows = [
+      '..XXXXX.......XX..XXXXXXXXX.....',
+      '.XXXXXXXX....XXX.XXXXXXXXXXXX...',
+      '.XXXXXXXX.....XXXXXXXXXXXXXXXX..',
+      '..XXXXXX......XXXXXXXXXXXXXXXX..',
+      '...XXXX.......XXXXXXXXXXXXXXX...',
+      '....XXX......XXXXXXXX.XXXXXX....',
+      '.....XX......XXXXXXXX...XXX.....',
+      '......XXX....XXXXXXX.....XX.....',
+      '......XXXX....XXXXX......X......',
+      '.......XXX....XXXX..............',
+      '.......XXX.....XX.........XXX...',
+      '........XX................XXXX..',
+      '........X.................XXX...'
+    ];
+    const spots = [];
+    rows.forEach((r, y) => { for (let x = 0; x < W; x++) if (r[x] === 'X') spots.push(y * W + x); });
+    // 채움 순서: 열방에 흩어지듯 의사난수 순서로 점등
+    const fillOrder = spots.slice().sort((a, b) => (Math.abs(Math.sin(a * 12.9898)) % 1) - (Math.abs(Math.sin(b * 12.9898)) % 1));
+    const litN = Math.max(1, Math.min(spots.length, Math.round(Math.log2(s.live + 1) / Math.log2(201) * spots.length)));
+    const litSet = new Set(fillOrder.slice(0, litN));
+    // 요일 진행(월→주일)에 따라 켜진 십자가 일부가 보혈의 레드로 물든다
+    const dayIdx = (new Date().getDay() + 6) % 7; // 월=0 … 주일=6
+    const redProg = dayIdx / 6;
+    const litArr = fillOrder.slice(0, litN);
+    const redOrder = litArr.slice().sort((a, b) => (Math.abs(Math.sin(a * 78.233)) % 1) - (Math.abs(Math.sin(b * 78.233)) % 1));
+    const redSet = new Set(redOrder.slice(0, Math.round(redProg * litN)));
+    const spotSet = new Set(spots);
+    const candles = Array.from({ length: W * rows.length }, (_, i) => {
+      if (!spotSet.has(i)) return { bg: 'transparent', glow: 'none', anim: 'none', heroBg: 'transparent', heroGlow: 'none' };
+      if (litSet.has(i)) {
+        const red = redSet.has(i);
+        return {
+          bg: 'var(--flame)', glow: '0 0 6px var(--flame)',
+          heroBg: red ? '#9d2933' : '#e6b756',
+          heroGlow: red ? '0 0 7px rgba(157,41,51,.9)' : '0 0 6px rgba(230,183,86,.85)',
+          anim: 'flicker ' + (1.4 + (i * 0.37) % 1.8).toFixed(2) + 's ease-in-out ' + ((i * 0.53) % 2).toFixed(2) + 's infinite'
+        };
+      }
+      return { bg: 'var(--line)', glow: 'none', anim: 'none', heroBg: 'rgba(255,255,255,.16)', heroGlow: 'none' };
+    });
+    const savePos = p => { if (s.openKey) localStorage.setItem('sp_pos_' + s.openKey, String(p)); };
+    const goNext = () => {
+      const n = op + 1;
+      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ tab: 'home', openKey: null, openPage: 0, doneMsg: this.doneAllowed() }); return; }
+      savePos(n); this.setState({ openPage: n }); if (this.scroller) this.scroller.scrollTop = 0;
+    };
+    const goPrev = () => { if (op > 0) { savePos(op - 1); this.setState({ openPage: op - 1 }); if (this.scroller) this.scroller.scrollTop = 0; } };
+    const homeR = wd ? weekReading(todayIdx) : { title: '보혈 선포 기도문', ref: '불러오는 중', pages: [{ h: '', lines: ['기도문을 불러오는 중입니다.'] }] };
+    const homePages = homeR.pages;
+    const hp = Math.min(s.homePage || 0, homePages.length - 1);
+    const openPages = open ? open.pages : [{ h: '', lines: [] }];
+    const op = Math.min(s.openPage || 0, openPages.length - 1);
+    const handed = s.handed;
+    const setHand = h => () => { localStorage.setItem('sp_hand', h); this.setState({ handed: h }); };
+    const dark = s.theme === 'dark';
+    const onHome = s.tab === 'home' && !s.openKey && !s.flowKey && !s.postNo;
+    const navDark = s.tab === 'home' || s.tab === 'words';
+    const navActive = navDark ? '#e6b756' : 'var(--accent)';
+    // 주말 고정 배정: 토·일 모두 60분 통독 선포
+    const findP = t => list.findIndex(p => p.title === t);
+    let weekendIdx = -1;
+    if (isWeekend) {
+      weekendIdx = findP('창세에서 재림까지 — 60분 통독 선포');
+    }
+    const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
+    const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false, postNo: null, collapsed: {}, query: '' }); };
+    const tabs = [
+      { key: 'home', label: '홈', icon: '✦' }, { key: 'prayers', label: '기도문', icon: '𝄞' },
+      { key: 'column', label: '묵상', icon: '❖' }, { key: 'settings', label: '설정', icon: '⚙' }
+    ].map(t => ({ ...t, go: setTab(t.key), color: s.tab === t.key ? 'var(--accent)' : 'var(--sub)', weight: s.tab === t.key ? 700 : 400 }));
+    return {
+      isHome: s.tab === 'home', isPrayers: s.tab === 'prayers', isColumn: s.tab === 'column' && !post, isSettings: s.tab === 'settings',
+      isWords: s.tab === 'words',
+      statsMode: !!s.statsMode,
+      statsBody: s.statsMode ? this.statsBody() : null,
+      wordsBody: this.wordsBody(),
+      isDavid: s.tab === 'david',
+      davidBody: s.tab === 'david' ? this.davidBody() : null,
+      goDavid: () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: 'david', openKey: null, flowKey: null, flowPlay: false, postNo: null, dv: 'map', dvSong: null }); },
+      tabDavidColor: s.tab === 'david' ? navActive : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabDavidWeight: s.tab === 'david' ? 600 : 400,
+      goWords: () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: 'words', openKey: null, flowKey: null, flowPlay: false, postNo: null, wv: 'gate', wEntry: null }); },
+      tabWordsColor: s.tab === 'words' ? navActive : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabWordsWeight: s.tab === 'words' ? 600 : 400,
+      homeBgRef: (el) => {
+        if (!el) return;
+        const IDS = ['GEN-001','GEN-002','GEN-003','GEN-004','GEN-005','GEN-006','GEN-007','GEN-008','GEN-009','GEN-010','GEN-011','GEN-013','GEN-014','GEN-015','GEN-016','GEN-017','GEN-018','GEN-019','GEN-020','GEN-021','GEN-022','GEN-023','GEN-024','GEN-025','GEN-027','GEN-028','GEN-029','GEN-030','GEN-031','GEN-032','GEN-033','GEN-034','GEN-035','GEN-036','GEN-073'];
+        const id = IDS[Math.floor(Date.now() / 86400000) % IDS.length];
+        const src = 'assets/words/' + id + '-2x.jpg';
+        if (el.getAttribute('src') !== src) { el.src = src; el.removeAttribute('srcset'); el.sizes = '100vw'; }
+        el.style.objectPosition = '50% 50%';
+        el.style.filter = 'contrast(1.05) brightness(.6) saturate(1.02)';
+      },
+      themeIcon: dark ? '☀︎' : '☾',
+      toggleTheme: () => { const t = dark ? 'light' : 'dark'; localStorage.setItem('sp_theme', t); document.body.dataset.theme = t; this.setState({ theme: t }); },
+      liveCount: s.live, todayTotal: hours.reduce((a, b) => a + b, 0),
+      liveDotColor: s.online === false ? '#c9c7c3' : '#d90f34',
+      ...this.armorVals(),
+      liveLine: s.online === null ? '집계를 불러오는 중입니다' : (s.online === false ? '집계 서버에 연결할 수 없습니다' : null),
+      liveOk: s.online === true,
+      candles,
+      prayerFs: s.fs,
+      fontUp: () => { const f = Math.min(30, s.fs + 2); localStorage.setItem('sp_fs', f); this.setState({ fs: f }); },
+      fontDown: () => { const f = Math.max(15, s.fs - 2); localStorage.setItem('sp_fs', f); this.setState({ fs: f }); },
+      prayerGroups: groups, noPrayerOpen: !open, prayerOpen: !!open,
+      query: s.query || '', hasQuery: !!q, noResult: !!q && hits === 0,
+      searchInfo: q ? (hits ? hits + '편을 찾았습니다' : '') : '',
+      setQuery: e => this.setState({ query: e.target.value }),
+      clearQuery: () => this.setState({ query: '' }),
+      openTitle: open ? open.title : '', openRef: open ? open.ref : '',
+      openNote: open && op === 0 ? (open.note || '') : '',
+      isFirstPage: op === 0, chromeOn: s.tab === 'home' ? true : (!open && !flow && !(s.tab === 'words' && (s.wv === 'reader' || s.wv === 'reveal' || s.wv === 'complete')) && !(s.tab === 'david' && (s.dv === 'reader' || s.dv === 'done'))), headerOn: !open && !flow && !post && s.tab !== 'home' && s.tab !== 'words',
+      navBg: s.tab === 'home' ? hero.fade : (s.tab === 'words' ? 'rgba(24,19,17,.94)' : 'var(--navbg)'),
+      navBorder: s.tab === 'home' ? 'transparent' : (s.tab === 'words' ? 'rgba(255,255,255,.1)' : 'var(--line)'),
+      isDark: dark, isLight: !dark, doneMsg: !!s.doneMsg,
+      muteWeek: !!s.muteWeek,
+      muteBorder: s.muteWeek ? 'var(--accent)' : 'var(--line)',
+      muteBg: s.muteWeek ? 'var(--accent)' : 'transparent',
+      toggleMute: () => {
+        const on = !this.state.muteWeek;
+        if (on) localStorage.setItem('sp_done_mute', String(Date.now() + 7 * 24 * 60 * 60 * 1000));
+        else localStorage.removeItem('sp_done_mute');
+        this.setState({ muteWeek: on });
+      },
+      doneLine: '오늘 이 자리에서 ' + hours.reduce((a, b) => a + b, 0) + '명이 함께했습니다. 혼자 하는 기도가 아닙니다.',
+      closeDone: () => this.setState({ doneMsg: false }),
+      canInstall: !this.isStandalone(),
+      openInstall: () => this.setState({ doneMsg: false, installOpen: true }),
+      closeInstall: () => this.setState({ installOpen: false }),
+      installSteps: this.isIOS()
+        ? [{ n: '1', text: '화면 아래 공유 버튼을 누릅니다' }, { n: '2', text: '목록에서 "홈 화면에 추가"를 찾습니다' }, { n: '3', text: '오른쪽 위 "추가"를 누르면 끝입니다' }]
+        : [{ n: '1', text: '오른쪽 위 메뉴(⋮)를 누릅니다' }, { n: '2', text: '"홈 화면에 추가"를 선택합니다' }, { n: '3', text: '"설치"를 누르면 끝입니다' }],
+      openShare: () => this.setState({ doneMsg: false, shareOpen: true }),
+      closeShare: () => this.setState({ shareOpen: false }),
+      shareOpen: !!s.shareOpen, installOpen: !!s.installOpen,
+      cardRef: el => { if (el) this.cardEl = el; },
+      shareDate: new Date().getFullYear() + '. ' + (new Date().getMonth() + 1) + '. ' + new Date().getDate() + '.',
+      shareLive: '지금 ' + s.live + '명이 함께 깨어 있습니다',
+      shareQuote: shareQuote,
+      shareTabs: shareTabs,
+      doShare: () => this.shareCard(false),
+      saveCard: () => this.shareCard(true),
+      shareBtnLabel: s.shareBtnBusy || '카카오톡 · 문자로 보내기',
+      saveBtnLabel: s.savedMsg || '이미지로 저장',
+      stopProp: e => e.stopPropagation(),
+      bgmList: this.tracks().map(t => ({
+        title: t.title, artist: t.artist || '', selected: s.bgm === t.id,
+        weight: s.bgm === t.id ? 600 : 400,
+        border: s.bgm === t.id ? 'var(--accent)' : 'var(--line)',
+        bg: s.bgm === t.id ? 'color-mix(in oklch, var(--accent) 7%, transparent)' : 'none',
+        iconColor: s.bgm === t.id ? 'var(--accent)' : 'var(--sub)',
+        pick: () => this.bgmPick(t.id)
+      })),
+      bgmOn: s.bgm !== 'none', bgmPlaying: s.bgmPlay, bgmPaused: !s.bgmPlay,
+      bgmColor: s.bgmPlay ? 'var(--accent)' : 'var(--sub)',
+      bgmStatus: s.bgmPlay ? '재생 중입니다' : '멈춰 있습니다',
+      bgmBtnLabel: s.bgmPlay ? '일시정지' : '재생',
+      heroBgmColor: s.bgmPlay ? '#e6b756' : 'rgba(255,255,255,.5)',
+      bgmSheet: s.bgmSheet, stopProp: e => e.stopPropagation(),
+      openBgmSheet: () => {
+        if (s.bgm === 'none') { const t = this.tracks().find(x => x.file); if (t) this.bgmPick(t.id); }
+        else if (!this.audio) this.bgmSync();
+        this.setState({ bgmSheet: true });
+      },
+      closeBgmSheet: () => this.setState({ bgmSheet: false }),
+      bgmTrackTitle: (() => { const t = this.tracks().find(x => x.id === s.bgm); return t && t.file ? t.title + (t.artist ? ' · ' + t.artist : '') : '음악을 고르지 않았습니다'; })(),
+      bgmPos: s.bgmPos, bgmDur: s.bgmDur || 1,
+      bgmPosLabel: this.fmt(s.bgmPos), bgmDurLabel: this.fmt(s.bgmDur),
+      seekBgm: e => {
+        const v = Number(e.target.value);
+        this._seeking = true;
+        if (this.audio) this.audio.currentTime = v;
+        this.setState({ bgmPos: v });
+        clearTimeout(this._skT); this._skT = setTimeout(() => { this._seeking = false; }, 400);
+      },
+      barBgmColor: s.bgmPlay ? 'var(--accent)' : 'var(--sub)',
+      toggleBgm: () => {
+        if (s.bgm === 'none') { const t = this.tracks().find(x => x.file); if (t) { this.bgmPick(t.id); return; } }
+        this.setState({ bgmPlay: !s.bgmPlay }, () => this.bgmSync());
+      },
+      goHome: setTab('home'), goPrayers: setTab('prayers'), goSettings: setTab('settings'),
+      heroIsJoshua: hero.joshua, heroIsOita: !hero.joshua,
+      heroImg: hero.img, heroGrad: hero.grad, heroCtaBg: hero.ctaBg, heroCtaShadow: hero.ctaShadow,
+      reloadHome: () => location.reload(),
+      goColumn: () => { this.setState({ tab: 'column', openKey: null, flowKey: null, flowPlay: false, postNo: null }); },
+      tabHomeColor: s.tab === 'home' ? '#e6b756' : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabHomeWeight: s.tab === 'home' ? 600 : 400,
+      tabPrayColor: s.tab === 'prayers' ? navActive : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabPrayWeight: s.tab === 'prayers' ? 600 : 400,
+      tabColColor: s.tab === 'column' ? 'var(--accent)' : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabColColWeight: s.tab === 'column' ? 600 : 400,
+      tabSetColor: s.tab === 'settings' ? (navDark ? '#e6b756' : 'var(--accent)') : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabSetWeight: s.tab === 'settings' ? 600 : 400,
+      streakLabel: this.streak() > 1 ? this.streak() + '일 연속 선포 중입니다' : '',
+      fontDownColor: s.fs <= 15 ? 'var(--line)' : 'var(--sub)',
+      fontUpColor: s.fs >= 30 ? 'var(--line)' : 'var(--sub)',
+      scrollerRef: el => { if (el) { this.scroller = el; } },
+      posts: cposts.map(p => ({
+        no: p.no, title: p.title, meta: p.meta,
+        bg: "url('" + p.photo + "-2x.jpg')",
+        open: () => { this.setState({ postNo: p.no, tab: 'column' }); }
+      })),
+      postOpen: !!post,
+      postNo: post ? post.no : '', postTitle: post ? post.title : '', postMeta: post ? post.meta : '',
+      postDate: post ? (post.date || '') : '',
+      postBg: post ? ("url('" + post.photo + "-2x.jpg')") : 'none',
+      postBlocks: post ? post.blocks.map(b => ({ lines: b.lines, isText: b.t === 'p', isQuote: b.t === 'q', isBreak: b.t === 'b' })) : [],
+      postFs: Math.max(15, Math.min(22, s.fs - 1)),
+      postQuoteFs: Math.max(18, Math.min(26, s.fs + 3)),
+      postBgmColor: s.bgmPlay ? '#e6b756' : 'rgba(255,255,255,.7)',
+      postScrollRef: el => { if (el) this.postEl = el; },
+      closePost: () => { this.setState({ postNo: null }); },
+      flowOpen: !!flow, flowTitle: flow ? flow.title : '', flowNote: flow ? flow.note : '',
+      flowSecs: (flow ? flow.secs : []).map(sec => ({ h: sec.h, qlines: this.quoteLines(sec.lines) })),
+      flowPlaying: !!s.flowPlay, flowPaused: !s.flowPlay,
+      flowSpeed: s.flowSpeed, flowSpeedLabel: '분당 ' + s.flowSpeed + '자',
+      flowSpeedOpen: !!s.flowSpeedOpen,
+      toggleSpeedMenu: () => this.setState({ flowSpeedOpen: !this.state.flowSpeedOpen }),
+      flowSpeedCur: ({ 240: '느리게', 340: '조금 느리게', 440: '보통', 540: '빠르게', 640: '매우 빠르게' })[s.flowSpeed] || '보통',
+      flowFinishDisabled: !s.flowAtEnd,
+      flowFinishBg: s.flowAtEnd ? 'var(--accent)' : 'color-mix(in oklch, var(--accent) 16%, transparent)',
+      flowFinishFg: s.flowAtEnd ? '#fff' : 'var(--sub)',
+      flowFinishCursor: s.flowAtEnd ? 'pointer' : 'default',
+      flowSpeedOpts: [
+        { label: '느리게', v: 240 },
+        { label: '조금 느리게', v: 340 },
+        { label: '보통', v: 440 },
+        { label: '빠르게', v: 540 },
+        { label: '매우 빠르게', v: 640 }
+      ].map(o => {
+        const on = s.flowSpeed === o.v;
+        return {
+          label: o.label,
+          border: on ? 'var(--accent)' : 'var(--line)',
+          bg: on ? 'var(--accent)' : 'transparent',
+          fg: on ? '#fff' : 'var(--sub)',
+          pick: () => { localStorage.setItem('sp_flow_speed', String(o.v)); this.setState({ flowSpeed: o.v, flowSpeedOpen: false }); }
+        };
+      }),
+      flowRef: el => {
+        if (el && this.flowEl !== el) {
+          this.flowEl = el;
+          const r = parseFloat(localStorage.getItem('sp_flow_' + s.flowKey) || '0');
+          if (r > 0.01 && r < 0.99) setTimeout(() => { const m = el.scrollHeight - el.clientHeight; if (m > 0) el.scrollTop = m * r; }, 60);
+          el.addEventListener('scroll', () => {
+            if (this._flowRaf) return;
+            this._flowRaf = requestAnimationFrame(() => {
+              this._flowRaf = null;
+              const m = el.scrollHeight - el.clientHeight;
+              const pct = m > 0 ? Math.round(el.scrollTop / m * 100) : 0;
+              const atEnd = m <= 0 || el.scrollTop >= m - 6;
+              if (pct !== this.state.flowPct || atEnd !== this.state.flowAtEnd) this.setState({ flowPct: pct, flowAtEnd: atEnd });
+            });
+          }, { passive: true });
+        }
+      },
+      toggleFlow: () => {
+        const on = !s.flowPlay;
+        this.setState({ flowPlay: on });
+        this.requestWake(on);
+        if (on) setTimeout(() => this.startFlowLoop(), 0); else { this.stopFlowLoop(); this.saveFlowPos(); }
+      },
+      setFlowSpeed: e => { const v = Number(e.target.value); localStorage.setItem('sp_flow_speed', String(v)); this.setState({ flowSpeed: v }); },
+      flowToTop: () => { if (this.flowEl) this.flowEl.scrollTo({ top: 0, behavior: 'smooth' }); },
+      closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
+      flowFinish: () => { if (!this.state.flowAtEnd) return; this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
+      shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
+      openBlocks: (openPages[op].blocks || []).map(b => ({ h: b.h, qlines: this.quoteLines(b.lines) })),
+      openPageLabel: (op + 1) + ' / ' + openPages.length,
+      barTitle: op === 0 ? '' : open.title,
+      openNext: goNext, openPrevBtn: goPrev,
+      openRidge: this.ridge(Math.round(op / Math.max(1, openPages.length - 1) * 100)),
+      flowRidge: this.ridge(s.flowPct),
+      patchOpen: s.tab === 'home' && !s.patchClosed && localStorage.getItem('sp_patch_seen') !== this.PATCH_VER,
+      patchItems: this.PATCH_NOTES,
+      closePatch: () => { localStorage.setItem('sp_patch_seen', this.PATCH_VER); this.setState({ patchClosed: true }); },
+      openRidgeRef: el => { if (el) this._openRidgeEl = el; },
+      flowRidgeRef: el => { if (el) this._flowRidgeEl = el; },
+      openDragStart: e => {
+        this._openPageCount = openPages.length;
+        e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+        const mv = ev => this.openDrag(ev);
+        const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+        this.openDrag(e);
+      },
+      flowDragStart: e => {
+        this.stopFlowLoop && this.stopFlowLoop();
+        if (this.state.flowPlay) this.setState({ flowPlay: false });
+        e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+        const mv = ev => this.flowDrag(ev);
+        const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+        this.flowDrag(e);
+      },
+      openToTop: () => { if (op !== 0) { savePos(0); this.setState({ openPage: 0 }); } if (this.scroller) this.scroller.scrollTop = 0; },
+      zoneTap: e => { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX - r.left < r.width * 0.3) goPrev(); else goNext(); },
+      touchStart: e => { const t = e.touches[0]; this._tx = t.clientX; this._ty = t.clientY; },
+      touchEnd: e => {
+        const t = e.changedTouches[0], dx = t.clientX - (this._tx || 0), dy = t.clientY - (this._ty || 0);
+        if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.6) { e.preventDefault(); if (dx < 0) goNext(); else goPrev(); }
+      },
+      openNextLabel: op === openPages.length - 1 ? '선포 마쳤습니다' : '다음 장',
+      openPct: Math.round((op + 1) / openPages.length * 100),
+      openPrevOpacity: op === 0 ? 0.35 : 1,
+      todayDayLabel: wd ? wd.DAYS[todayIdx].day : '오늘의',
+      todayCtaLabel: (wd ? wd.DAYS[todayIdx].day : '오늘의') + ' 보혈 선포 시작하기',
+      weekendCtaLabel: (weekendPrayer ? weekendPrayer.title : '오늘의 선포') + ' 시작하기',
+      isWeekend, isWeekday: !isWeekend,
+      weekendTitle: weekendPrayer ? weekendPrayer.title : '',
+      goWeekend: () => { if (weekendPrayer) this.chooseRead(this.keyFor('s', weekendPrayer.title)); },
+      goToday: () => this.chooseRead(this.keyFor('w', wd ? wd.DAYS[todayIdx].day + ' 보혈 선포' : '')),
+      chooseOpen: !!s.chooseKey,
+      chooseChapter: () => { if (s.chooseKey) this.openPrayer(s.chooseKey); },
+      chooseFlow: () => { if (s.chooseKey) this.openFlow(s.chooseKey); },
+      closeChoose: () => this.setState({ chooseKey: null }),
+      favSheet: !!s.favSheet, favItems, hasFavs: favItems.length > 0, noFavs: favItems.length === 0,
+      openFavSheet: () => this.setState({ favSheet: true }),
+      closeFavSheet: () => this.setState({ favSheet: false }),
+      goPrayersFromFav: () => this.setState({ tab: 'prayers', favSheet: false }),
+      homeParas: homePages[hp].lines, homeHead: homePages[hp].h, homeTitle: homeR.title, homeRef: homeR.ref, homePageLabel: (hp + 1) + ' / ' + homePages.length,
+      homeNext: () => this.setState({ homePage: (hp + 1) % homePages.length }),
+      homePrev: () => this.setState({ homePage: Math.max(0, hp - 1) }),
+      homeNextLabel: hp === homePages.length - 1 ? '처음으로' : '다음 장',
+      navRowDir: handed === 'left' ? 'row-reverse' : 'row',
+      flowRowDir: handed === 'left' ? 'row-reverse' : 'row',
+      setLeftHand: setHand('left'), setRightHand: setHand('right'),
+      leftHandBg: handed === 'left' ? 'var(--accent)' : 'none', leftHandFg: handed === 'left' ? '#fff' : 'var(--sub)', leftHandBorder: handed === 'left' ? 'var(--accent)' : 'var(--line)',
+      rightHandBg: handed === 'right' ? 'var(--accent)' : 'none', rightHandFg: handed === 'right' ? '#fff' : 'var(--sub)', rightHandBorder: handed === 'right' ? 'var(--accent)' : 'var(--line)',
+      closePrayer: () => this.setState({ openKey: null, openPage: 0, collapsed: {}, query: '' }),
+      hourBars, peakHourLabel: peak + '시',
+      darkToggleBg: dark ? 'var(--accent)' : '#c9c7c3', darkKnobLeft: dark ? 28 : 4,
+      copyAccount: () => { navigator.clipboard && navigator.clipboard.writeText('국민 92311516646'); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1600); },
+      copyLabel: s.copied ? '복사됨 ✓' : '복사',
+      heroY: s.heroY,
+      setHeroY: e => { const v = Math.max(0, Math.min(100, Number(e.target.value))); localStorage.setItem('sp_hero_y', String(v)); this.setState({ heroY: v }); },
+      resetHeroY: () => { localStorage.setItem('sp_hero_y', '72'); this.setState({ heroY: 72 }); },
+      copyLink: () => {
+        const url = location.href.split('#')[0];
+        if (navigator.clipboard) navigator.clipboard.writeText(url).catch(() => {});
+        this.setState({ linkCopied: true }); setTimeout(() => this.setState({ linkCopied: false }), 1600);
+      },
+      copyLinkLabel: s.linkCopied ? '링크가 복사되었습니다 ✓' : '공유 링크 복사',
+      tabs
+    };
+  }
+}
+</script>
+</body>
+</html>
