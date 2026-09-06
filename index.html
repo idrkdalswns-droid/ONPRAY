@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#f7f6f4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20260904a"></script>
+<script src="prayers-data.js?v=20260906a"></script>
 <script src="column-data.js?v=20260903a"></script>
 <script src="words-data.js?v=20260903a"></script>
 <script src="david-data.js?v=20260903a"></script>
@@ -340,7 +340,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
           <button onClick="{{ openFavSheet }}" aria-label="나의 기도문" style="flex:none;width:54px;min-height:54px;border:1px solid rgba(255,255,255,.28);border-radius:15px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6b756" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
           </button>
-          <button onClick="{{ goToday }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:{{ heroCtaBg }};color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:{{ heroCtaShadow }};">{{ todayCtaLabel }}</button>
+          <button onClick="{{ goToday }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:{{ heroCtaBg }};color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:{{ heroCtaShadow }};word-break:keep-all;padding:8px 12px;">{{ todayCtaLabel }}</button>
         </div>
       </sc-if>
       <sc-if value="{{ isWeekend }}" hint-placeholder-val="{{ false }}">
@@ -348,7 +348,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
           <button onClick="{{ openFavSheet }}" aria-label="나의 기도문" style="flex:none;width:54px;min-height:54px;border:1px solid rgba(255,255,255,.28);border-radius:15px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6b756" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
           </button>
-          <button onClick="{{ goWeekend }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:{{ heroCtaBg }};color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:{{ heroCtaShadow }};">{{ weekendCtaLabel }}</button>
+          <button onClick="{{ goWeekend }}" style="flex:1;min-height:54px;border:none;border-radius:15px;background:{{ heroCtaBg }};color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:{{ heroCtaShadow }};white-space:pre-line;line-height:1.3;padding:8px 12px;word-break:keep-all;">{{ weekendCtaLabel }}</button>
         </div>
       </sc-if>
       <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);">오늘 <strong style="color:rgba(255,255,255,.82);font-weight:600;">{{ todayTotal }}명</strong>이 이 자리에서 선포했습니다</div>
@@ -1168,7 +1168,8 @@ class Component extends DCLogic {
       { id: 'none', title: '사용하지 않음' },
       { id: 'bless-the-lord', title: 'Bless The Lord O My Soul', artist: 'CalledOut Music', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fbless-the-lord.mp3?alt=media&token=0c69c8a2-1918-4035-95cb-1a45bb1a1e87' },
       { id: 'give-thanks', title: 'Give Thanks', artist: 'UPPERROOM', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fgive-thanks.mp3?alt=media&token=1daa4b99-150c-4727-98da-395a3919cc29' },
-      { id: 'd-major-pad', title: 'D Major Pad', artist: '연주 · 기도 배경', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fd-major-pad.mp3?alt=media&token=d3c2f44f-0d90-4853-a2b0-960eaffb9232' }
+      { id: 'd-major-pad', title: 'D Major Pad', artist: '연주 · 기도 배경', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2Fd-major-pad.mp3?alt=media&token=d3c2f44f-0d90-4853-a2b0-960eaffb9232' },
+      { id: 'promise-presence', title: 'Promise Presence', artist: '연주 · 기도 배경', file: 'https://firebasestorage.googleapis.com/v0/b/onpray.firebasestorage.app/o/bgm%2FPromise-Presence-Instrumental.mp3?alt=media&token=5d18a6d3-3d0c-4658-ac61-8f7ff17cda56' }
     ];
   }
   bgmPick(id) {
@@ -1289,10 +1290,10 @@ class Component extends DCLogic {
     for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
     return prefix + h.toString(36);
   }
-  PATCH_VER = '20260904a';
+  PATCH_VER = '20260906a';
   PATCH_NOTES = [
-    "홈 배너 — 격일로 이미지가 바뀝니다 (매일 오전 7시 전환)",
-    "새 기도문 — 기도의 자리에서 경영하는 자"
+    "새 기도문 — 마음의 동기_완벽 추구 목적형",
+    "배경음악 — Promise Presence 추가"
   ];
   // ── 말씀 렌즈(원어) 탭 ──
   WA = { width:['뜻의 폭','◐'], sound:['소리','♪'], form:['형태','⌗'], journey:['여정','→'], canon:['정경','⋯'], split:['번역의 갈림','⑂'], contrast:['대조','⇄'], background:['배경','▦'], name:['이름','✦'] };
@@ -1750,14 +1751,18 @@ class Component extends DCLogic {
     const e=this.wFind(this.state.wEntry);
     if(!e) return this.wScreenGate();
     const d=this.wDaily(); const readN=d.read.length; const isPick=d.picks.indexOf(e.id)>=0;
-    const photo='assets/words/'+(e.photo? e.photo.split('/').pop() : e.id)+'-2x.jpg';
+    const HAS=['001','002','003','004','005','006','007','008','009','010','011','013','014','015','016','017','018','019','020','021','022','023','024','025','027','028','029','030','031','032','033','034','035','036','073'];
+    const num=(e.id||'').split('-')[1];
+    let pid=e.id;
+    if(HAS.indexOf(num)<0){ const h=this.wSeedStr(e.id); pid='GEN-'+HAS[h%HAS.length]; }
+    const photo='assets/words/'+pid+'-2x.jpg';
     const G=this.wGold();
     // 커버
-    const cover=this.wh('div',{key:'cover',position:'relative',height:430},
-      [ React.createElement('img',{key:'img',src:photo,alt:'',style:{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}),
+    const cover=this.wh('div',{key:'cover',position:'relative',height:430,background:'radial-gradient(120% 90% at 50% 30%,#2a231a 0%,#141210 70%)'},
+      [ React.createElement('img',{key:'img',src:photo,alt:'',onError:ev=>{ev.currentTarget.style.display='none';},style:{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}),
         this.wh('div',{key:'g',position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(14,14,16,.5) 0%,rgba(14,14,16,.08) 32%,rgba(14,14,16,.6) 72%,var(--bg) 100%)'}),
         React.createElement('button',{key:'back',onClick:()=>this.wGo({wv:'gate',wEntry:null}),style:{position:'absolute',top:44,left:16,width:38,height:38,borderRadius:'50%',border:'none',background:'rgba(0,0,0,.4)',color:'#fff',cursor:'pointer',fontSize:18,fontFamily:'inherit'}},'‹'),
-        this.wh('div',{key:'no',position:'absolute',top:52,left:20,fontSize:10.5,letterSpacing:'.22em',color:'rgba(255,255,255,.75)'},(e.anchor||'').toUpperCase()),
+        this.wh('div',{key:'no',position:'absolute',top:54,left:62,fontSize:10.5,letterSpacing:'.22em',color:'rgba(255,255,255,.75)'},(e.anchor||'').toUpperCase()),
         this.wh('div',{key:'ctl',position:'absolute',top:44,right:14,display:'flex',gap:6},
           [ React.createElement('button',{key:'fd',onClick:()=>this.fsDown(),'aria-label':'글자 작게',style:{width:36,height:32,borderRadius:9,border:'1px solid rgba(255,255,255,.28)',background:'rgba(0,0,0,.28)',color:'#fff',fontSize:12,cursor:'pointer',fontFamily:'inherit'}},'가−'),
             React.createElement('button',{key:'fu',onClick:()=>this.fsUp(),'aria-label':'글자 크게',style:{width:36,height:32,borderRadius:9,border:'1px solid rgba(255,255,255,.28)',background:'rgba(0,0,0,.28)',color:'#fff',fontSize:15,cursor:'pointer',fontFamily:'inherit'}},'가+'),
@@ -2119,11 +2124,11 @@ class Component extends DCLogic {
     const onHome = s.tab === 'home' && !s.openKey && !s.flowKey && !s.postNo;
     const navDark = s.tab === 'home' || s.tab === 'words';
     const navActive = navDark ? '#e6b756' : 'var(--accent)';
-    // 주말 고정 배정: 토·일 모두 60분 통독 선포
+    // 주말 고정 배정: 토·일 모두 '기도의 자리에서 경영하는 자'
     const findP = t => list.findIndex(p => p.title === t);
     let weekendIdx = -1;
     if (isWeekend) {
-      weekendIdx = findP('창세에서 재림까지 — 60분 통독 선포');
+      weekendIdx = findP('기도의 자리에서 경영하는 자');
     }
     const weekendPrayer = weekendIdx >= 0 ? list[weekendIdx] : null;
     const setTab = t => () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: t, openKey: null, flowKey: null, flowPlay: false, postNo: null, collapsed: {}, query: '' }); };
@@ -2361,8 +2366,8 @@ class Component extends DCLogic {
       openPct: Math.round((op + 1) / openPages.length * 100),
       openPrevOpacity: op === 0 ? 0.35 : 1,
       todayDayLabel: wd ? wd.DAYS[todayIdx].day : '오늘의',
-      todayCtaLabel: (wd ? wd.DAYS[todayIdx].day : '오늘의') + ' 보혈 선포 시작하기',
-      weekendCtaLabel: (weekendPrayer ? weekendPrayer.title : '오늘의 선포') + ' 시작하기',
+      todayCtaLabel: (wd ? wd.DAYS[todayIdx].day : '오늘의') + ' 보혈 선포하기',
+      weekendCtaLabel: (weekendPrayer ? weekendPrayer.title : '오늘의 선포') + '\n선포하기',
       isWeekend, isWeekday: !isWeekend,
       weekendTitle: weekendPrayer ? weekendPrayer.title : '',
       goWeekend: () => { if (weekendPrayer) this.chooseRead(this.keyFor('s', weekendPrayer.title)); },
