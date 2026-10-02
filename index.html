@@ -189,10 +189,15 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
         <sc-if value="{{ hasFavs }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;flex-direction:column;gap:8px;">
             <sc-for list="{{ favItems }}" as="p" hint-placeholder-count="2">
-              <button onClick="{{ p.choose }}" style="display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:13px;background:none;color:var(--text);cursor:pointer;font-family:inherit;padding:13px 15px;text-align:left;">
-                <span style="flex:1;min-width:0;font-family:'Noto Serif KR',serif;font-size:15px;">{{ p.title }}</span>
-                <span style="flex:none;color:var(--accent);font-size:12px;font-weight:600;">선포 →</span>
-              </button>
+              <div style="display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:13px;padding:0 6px 0 0;">
+                <button onClick="{{ p.choose }}" style="flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:none;background:none;color:var(--text);cursor:pointer;font-family:inherit;padding:13px 4px 13px 15px;text-align:left;">
+                  <span style="flex:1;min-width:0;font-family:'Noto Serif KR',serif;font-size:15px;">{{ p.title }}</span>
+                  <span style="flex:none;color:var(--accent);font-size:12px;font-weight:600;">선포 →</span>
+                </button>
+                <button onClick="{{ p.toggleFav }}" aria-label="즐겨찾기 해제" style="flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;padding:0;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                </button>
+              </div>
             </sc-for>
           </div>
         </sc-if>
@@ -437,7 +442,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
     </sc-if>
     <sc-if value="{{ flowOpen }}" hint-placeholder-val="{{ false }}">
       <div style="position:fixed;inset:0;background:var(--bg);z-index:20;">
-        <div ref="{{ flowRef }}" onClick="{{ toggleFlow }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;">
+        <div id="flowScroller" ref="{{ flowRef }}" onClick="{{ toggleFlow }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;">
           <div style="max-width:480px;margin:0 auto;padding:0 22px;box-sizing:border-box;">
             <div style="height:150px;"></div>
             <sc-if value="{{ plOn }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 10px;">{{ plLabel }}</div></sc-if>
@@ -520,7 +525,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l12 7.5-12 7.5z"></path></svg>
               </sc-if>
             </button>
-            <button onClick="{{ flowFinish }}" disabled="{{ flowFinishDisabled }}" style="flex:1;min-width:0;height:48px;border:none;border-radius:13px;background:{{ flowFinishBg }};color:{{ flowFinishFg }};font-size:14.5px;font-weight:700;font-family:inherit;cursor:{{ flowFinishCursor }};white-space:nowrap;padding:0 8px;">선포 마쳤습니다</button>
+            <button onClick="{{ flowFinish }}" disabled="{{ flowFinishDisabled }}" style="flex:1;min-width:0;height:48px;border:none;border-radius:13px;background:{{ flowFinishBg }};color:{{ flowFinishFg }};font-size:14.5px;font-weight:700;font-family:inherit;cursor:{{ flowFinishCursor }};white-space:nowrap;padding:0 8px;">{{ flowFinishLabel }}</button>
             <button onClick="{{ toggleSpeedMenu }}" aria-label="흐르는 속도" style="flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent);border-radius:50%;background:none;color:var(--accent);font-family:inherit;cursor:pointer;padding:0;position:relative;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5 4.5l9 5.5-9 5.5z" opacity="0.45"></path><path d="M11 4.5l9 5.5-9 5.5z"></path></svg>
             </button>
@@ -852,7 +857,7 @@ class Component extends DCLogic {
   componentDidMount() {
     document.body.dataset.theme = this.state.theme;
     if (/[?&]stats=1/.test(location.search)) { this.setState({ statsMode: true }); this.statsLoad(); }
-    const grab = () => { if (window.PRAYER_DATA && window.COLUMN_POSTS) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
+    const grab = () => { if (window.PRAYER_DATA) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
     if (!grab()) { let n = 0; const t = setInterval(() => { if (grab() || ++n > 50) clearInterval(t); }, 100); }
     this.cid = localStorage.getItem('sp_cid') || (Math.random().toString(36).slice(2) + Date.now().toString(36));
     localStorage.setItem('sp_cid', this.cid);
@@ -1245,7 +1250,7 @@ class Component extends DCLogic {
     if (this._raf) return;
     let last = performance.now(), acc = 0;
     const step = now => {
-      const el = this.flowEl;
+      const el = document.getElementById('flowScroller') || this.flowEl;
       if (!el || !this.state.flowPlay) { this._raf = null; return; }
       const dt = Math.min(120, now - last); last = now;
       const max = el.scrollHeight - el.clientHeight;
@@ -1256,6 +1261,7 @@ class Component extends DCLogic {
       if (acc >= 1) { el.scrollTop += Math.floor(acc); acc -= Math.floor(acc); }
       if (el.scrollTop >= max - 1) {
         this.markDone(); this.stopFlowLoop();
+        if (this.state.pl && this.plNext()) return;
         this.setState({ flowPlay: false, flowAtEnd: true, doneMsg: this.doneAllowed() });
         return;
       }
@@ -1933,7 +1939,7 @@ class Component extends DCLogic {
   // ═══ 프레이리스트 ═══
   plLoad(){ try{ const a=JSON.parse(localStorage.getItem('sp_playlists')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
   plSave(a){ localStorage.setItem('sp_playlists',JSON.stringify(a)); this.forceUpdate(); }
-  plToday(){ const wd=window.PRAYER_DATA; if(!wd) return null; const dow=new Date().getDay(); const i=(dow===0||dow===6)?0:dow-1; return this.keyFor('w', wd.DAYS[i].day+' 보혈 선포'); }
+  plToday(){ const wd=this.weekData||window.PRAYER_DATA; if(!wd) return null; const dow=new Date().getDay(); const i=(dow===0||dow===6)?0:dow-1; return this.keyFor('w', wd.DAYS[i].day+' 보혈 선포'); }
   plResolve(k){ return k==='TODAY' ? this.plToday() : k; }
   plInfo(k){
     const km=this._keyMap||{}; const r=this.plResolve(k); const m=r?km[r]:null;
@@ -1956,8 +1962,25 @@ class Component extends DCLogic {
     const k=this.plResolve(keys[idx]);
     localStorage.removeItem('sp_flow_'+k);
     this.openFlow(k);
-    this.setState({ pl:{ id, idx, keys, name:p.name } });
+    this.setState({ pl:{ id, idx, keys, name:p.name }, flowPlay:true, flowPct:0, flowAtEnd:false });
+    this.plTop();
+    this.requestWake(true);
+    if(this._flowStartTimer) clearTimeout(this._flowStartTimer);
+    this._flowStartTimer=setTimeout(()=>{ this._flowStartTimer=null; if(this.state.flowPlay) this.startFlowLoop(); },10000);
   }
+  plNext(){
+    const pl=this.state.pl; if(!pl || pl.idx>=pl.keys.length-1) return false;
+    this.stopFlowLoop();
+    const ni=pl.idx+1, nk=this.plResolve(pl.keys[ni]);
+    localStorage.removeItem('sp_flow_'+nk);
+    this.openFlow(nk);
+    this.setState({ pl:Object.assign({},pl,{idx:ni}), flowPlay:true, flowPct:0, flowAtEnd:false });
+    this.plTop();
+    this.requestWake(true);
+    this._flowStartTimer=setTimeout(()=>{ this._flowStartTimer=null; if(this.state.flowPlay) this.startFlowLoop(); },4000);
+    return true;
+  }
+  plTop(){ const go=()=>{ const el=document.getElementById('flowScroller'); if(el){ el.scrollTop=0; this.flowEl=el; } }; go(); requestAnimationFrame(go); setTimeout(go,80); setTimeout(go,300); }
   plCover(name,size){
     const tones=['#4a2a26','#5a2a2a','#2e2b27','#463424','#3a2f3a'];
     const t=String(name||'?'); let h=0; for(let i=0;i<t.length;i++) h=(h*31+t.charCodeAt(i))>>>0;
@@ -2184,8 +2207,7 @@ class Component extends DCLogic {
     // ── 공유 카드 문구 ──
     const kinds = [
       { id: 'today', label: '오늘의 선포', q: wd && !isWeekend ? wd.DAYS[todayIdx].sections[0].lines[0] : (list[0] ? list[0].sections[0].lines[0] : '') },
-      { id: 'armor', label: '전신갑주', q: (week[0] || list[0]) ? (week[0] || list[0]).sections[0].lines[0] : '' },
-      { id: 'column', label: '묵상 칼럼', q: (window.COLUMN_POSTS && window.COLUMN_POSTS[0]) ? window.COLUMN_POSTS[0].title : '' }
+      { id: 'armor', label: '전신갑주', q: (week[0] || list[0]) ? (week[0] || list[0]).sections[0].lines[0] : '' }
     ];
     const kind = kinds.find(k => k.id === s.shareKind) || kinds[0];
     const shareQuote = kind.q || '';
@@ -2431,6 +2453,7 @@ class Component extends DCLogic {
       toggleSpeedMenu: () => this.setState({ flowSpeedOpen: !this.state.flowSpeedOpen }),
       flowSpeedCur: ({ 240: '느리게', 340: '조금 느리게', 440: '보통', 540: '빠르게', 640: '매우 빠르게' })[s.flowSpeed] || '보통',
       flowFinishDisabled: !s.flowAtEnd,
+      flowFinishLabel: (s.pl && s.pl.idx < s.pl.keys.length - 1) ? '다음 기도문' : '선포 마쳤습니다',
       flowFinishBg: s.flowAtEnd ? 'var(--accent)' : 'color-mix(in oklch, var(--accent) 16%, transparent)',
       flowFinishFg: s.flowAtEnd ? '#fff' : 'var(--sub)',
       flowFinishCursor: s.flowAtEnd ? 'pointer' : 'default',
@@ -2484,15 +2507,7 @@ class Component extends DCLogic {
       closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
       flowFinish: () => { if (!this.state.flowAtEnd) return;
         const pl = this.state.pl;
-        if (pl && pl.idx < pl.keys.length - 1) {
-          this.markDone(); this.stopFlowLoop(); this.saveFlowPos();
-          const ni = pl.idx + 1; const nk = this.plResolve(pl.keys[ni]);
-          localStorage.removeItem('sp_flow_' + nk);
-          this.flowEl = null; this.openFlow(nk);
-          this.setState({ pl: Object.assign({}, pl, { idx: ni }), flowPlay: true });
-          this._flowStartTimer = setTimeout(() => { this._flowStartTimer = null; if (this.state.flowPlay) this.startFlowLoop(); }, 10000);
-          return;
-        }
+        if (pl && pl.idx < pl.keys.length - 1) { this.markDone(); this.plNext(); return; }
         this.setState({ pl: null });
         this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
       shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
