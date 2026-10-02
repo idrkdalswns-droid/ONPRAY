@@ -17,8 +17,6 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <script src="prayers-data.js?v=20260922a"></script>
-<script src="column-data.js?v=20260903a"></script>
-<script src="words-data.js?v=20260903a"></script>
 <script src="david-data.js?v=20260903a"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -307,6 +305,12 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
     <sc-if value="{{ heroIsOita }}" hint-placeholder-val="{{ false }}">
     <img src="assets/oita-hero.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 0%;">
     </sc-if>
+    <sc-if value="{{ heroIsStamp }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;background:#600001;"></div>
+    <div style="position:absolute;left:0;top:0px;width:100%;display:flex;flex-direction:column;">
+      <img src="assets/stamp-hero.jpg" alt="" style="display:block;width:100%;height:auto;">
+      <img src="assets/stamp-hero.jpg" alt="" aria-hidden="true" style="display:block;width:100%;height:auto;transform:scaleY(-1);filter:grayscale(1) contrast(1.15) brightness(.55);opacity:.35;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,0) 60%);mask-image:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,0) 60%);"></div>
+    </sc-if>
     <div style="position:absolute;inset:0;background:{{ heroGrad }};"></div>
 
     <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top),10px) 14px 0 22px;">
@@ -399,6 +403,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
                         </sc-if>
                         <span style="font-size:13px;color:var(--sub);line-height:1.6;">{{ p.ref }}</span>
                       </div>
+                      <button onClick="{{ p.plAdd }}" aria-label="프레이리스트에 담기" style="flex:none;width:40px;height:40px;margin:-6px 0 0 0;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;padding:0;color:var(--sub);"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h12M3 12h12M3 18h7"></path><path d="M18 14v6M15 17h6"></path></svg></button>
                       <button onClick="{{ p.toggleFav }}" aria-label="즐겨찾기" style="flex:none;width:40px;height:40px;margin:-6px -6px 0 0;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;padding:0;">
                         <sc-if value="{{ p.isFav }}" hint-placeholder-val="{{ false }}">
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
@@ -435,6 +440,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
         <div ref="{{ flowRef }}" onClick="{{ toggleFlow }}" style="position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;cursor:pointer;">
           <div style="max-width:480px;margin:0 auto;padding:0 22px;box-sizing:border-box;">
             <div style="height:150px;"></div>
+            <sc-if value="{{ plOn }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 10px;">{{ plLabel }}</div></sc-if>
             <h1 style="font-family:'Noto Serif KR',serif;font-size:24px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em;">{{ flowTitle }}</h1>
             <p style="font-size:12.5px;color:var(--sub);margin:0 0 34px;line-height:1.65;">{{ flowNote }}</p>
             <div style="display:flex;flex-direction:column;gap:26px;">
@@ -784,15 +790,16 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
   </main>
   </sc-if>
 
-  <!-- ─── 원어 (말씀 렸즈) ─── -->
+  <sc-if value="{{ isPl }}" hint-placeholder-val="{{ false }}">
+  <main style="position:relative;min-height:100dvh;">{{ plBody }}</main>
+  </sc-if>
+  {{ plOverlay }}
+
   <!-- ─── 다윗의 노래 ─── -->
   <sc-if value="{{ isDavid }}" hint-placeholder-val="{{ false }}">
   <main style="position:relative;min-height:100dvh;">{{ davidBody }}</main>
   </sc-if>
 
-  <sc-if value="{{ isWords }}" hint-placeholder-val="{{ false }}">
-  <main style="position:relative;min-height:100dvh;">{{ wordsBody }}</main>
-  </sc-if>
 
   <!-- ─── 하단 탭 ─── -->
   <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}">
@@ -809,9 +816,9 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
       <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabDavidWeight }};">다윗의 노래</span>
     </button>
-    <button onClick="{{ goWords }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabWordsColor }};font-family:inherit;">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.8L18.7 9.7 14 11.6 12 16.4 10 11.6 5.3 9.7 10.1 7.8z"></path><path d="M18 15l.9 2.2L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.8z"></path></svg>
-      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabWordsWeight }};">원어</span>
+    <button onClick="{{ goPl }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabPlColor }};font-family:inherit;">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h13M3 12h13M3 18h8"></path><path d="M16 15.5v-5l5 2.5z"></path></svg>
+      <span style="font-size:10px;white-space:nowrap;font-weight:{{ tabPlWeight }};">프레이리스트</span>
     </button>
     <button onClick="{{ goSettings }}" style="min-height:56px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{ tabSetColor }};font-family:inherit;">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -1224,7 +1231,7 @@ class Component extends DCLogic {
   closeFlow() {
     this.saveFlowPos();
     this.stopFlowLoop();
-    this.setState({ flowKey: null, flowPlay: false, collapsed: {}, query: '' });
+    this.setState({ flowKey: null, flowPlay: false, collapsed: {}, query: '', pl: null, tab: this.state.pl ? 'pl' : this.state.tab });
   }
   saveFlowPos() {
     const el = this.flowEl;
@@ -1290,10 +1297,11 @@ class Component extends DCLogic {
     for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
     return prefix + h.toString(36);
   }
-  PATCH_VER = '20260922a';
+  PATCH_VER = '20261002b';
   PATCH_NOTES = [
-    "새 기도문 — 예언의 영으로 낳는 자들 (2026 Team Joyful)",
-    "흐름으로 읽기 — 처음 재생 시 5초 뒤 자동 스크롤 시작"
+    "프레이리스트 — 매일 드리는 기도문을 묶어 한 번에 이어서 선포하세요",
+    "기도문 목록의 담기 버튼으로 바로 추가할 수 있습니다",
+    "홈 배경이 매일 세 장으로 순환합니다"
   ];
   // ── 말씀 렌즈(원어) 탭 ──
   WA = { width:['뜻의 폭','◐'], sound:['소리','♪'], form:['형태','⌗'], journey:['여정','→'], canon:['정경','⋯'], split:['번역의 갈림','⑂'], contrast:['대조','⇄'], background:['배경','▦'], name:['이름','✦'] };
@@ -1891,11 +1899,19 @@ class Component extends DCLogic {
   }
 
   heroChoice() {
-    // 격일 전환, 매일 07:00 기준. 오늘(2026-09-04) = Joshua Generation
+    // 매일 07:00 기준 3장 순환: Joshua → Oita → Stamp
     const dayNum = Math.floor((Date.now() - 7 * 3600e3) / 86400e3);
     const anchor = Math.floor((new Date(2026, 8, 4, 12, 0, 0).getTime() - 7 * 3600e3) / 86400e3);
-    const joshua = (((dayNum - anchor) % 2) + 2) % 2 === 0;
-    if (joshua) return {
+    const slot = (((dayNum - anchor + 1) % 3) + 3) % 3; // 2026-10-02 = Stamp
+    if (slot === 2) return {
+      joshua: false, stamp: true,
+      img: 'assets/stamp-hero.jpg',
+      grad: 'linear-gradient(180deg,rgba(60,0,2,.36) 0%,rgba(60,0,2,0) 18%,rgba(60,0,2,0) 58%,rgba(96,0,1,.6) 80%,#600001 99%)',
+      fade: '#600001',
+      ctaBg: '#d8232a',
+      ctaShadow: '0 10px 26px rgba(0,0,0,.4)'
+    };
+    if (slot === 0) return {
       joshua: true,
       img: 'assets/joshua-hero.jpg',
       grad: 'linear-gradient(180deg,rgba(70,2,6,.34) 0%,rgba(70,2,6,0) 18%,rgba(70,2,6,0) 55%,rgba(174,5,10,.55) 78%,#ae050a 99%)',
@@ -1911,6 +1927,132 @@ class Component extends DCLogic {
       ctaBg: '#d90f34',
       ctaShadow: '0 10px 26px rgba(217,15,52,.45)'
     };
+  }
+
+
+  // ═══ 프레이리스트 ═══
+  plLoad(){ try{ const a=JSON.parse(localStorage.getItem('sp_playlists')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  plSave(a){ localStorage.setItem('sp_playlists',JSON.stringify(a)); this.forceUpdate(); }
+  plToday(){ const wd=window.PRAYER_DATA; if(!wd) return null; const dow=new Date().getDay(); const i=(dow===0||dow===6)?0:dow-1; return this.keyFor('w', wd.DAYS[i].day+' 보혈 선포'); }
+  plResolve(k){ return k==='TODAY' ? this.plToday() : k; }
+  plInfo(k){
+    const km=this._keyMap||{}; const r=this.plResolve(k); const m=r?km[r]:null;
+    if(!m) return null;
+    const chars=(m.secs||[]).reduce((n,sec)=>n+(sec.lines||[]).reduce((a,l)=>a+l.length,0),0);
+    const min=Math.max(1,Math.round(chars/440));
+    return { title: k==='TODAY' ? '오늘의 보혈 선포' : m.title, sub: k==='TODAY' ? '요일마다 자동으로 바뀝니다' : min+'분', min };
+  }
+  plTotal(p){ return (p.keys||[]).reduce((n,k)=>{ const i=this.plInfo(k); return n+(i?i.min:0); },0); }
+  plGet(id){ return this.plLoad().find(p=>p.id===id); }
+  plUpdate(id,fn){ const a=this.plLoad(); const p=a.find(x=>x.id===id); if(!p) return; fn(p); this.plSave(a); }
+  plToggleKey(id,k){ this.plUpdate(id,p=>{ const i=p.keys.indexOf(k); if(i>=0) p.keys.splice(i,1); else p.keys.push(k); }); }
+  plCreate(name){ const a=this.plLoad(); const id='p'+Date.now().toString(36); a.push({id,name:name||'새 프레이리스트',keys:[]}); this.plSave(a); return id; }
+  plGo(patch){ this.setState(Object.assign({plMenu:null},patch)); if(this.plScroller) this.plScroller.scrollTop=0; }
+  plPlay(id,start){
+    const p=this.plGet(id); if(!p) return;
+    const keys=p.keys.filter(k=>this.plInfo(k));
+    if(!keys.length) return;
+    const idx=Math.min(start||0,keys.length-1);
+    const k=this.plResolve(keys[idx]);
+    localStorage.removeItem('sp_flow_'+k);
+    this.openFlow(k);
+    this.setState({ pl:{ id, idx, keys, name:p.name } });
+  }
+  plCover(name,size){
+    const tones=['#4a2a26','#5a2a2a','#2e2b27','#463424','#3a2f3a'];
+    const t=String(name||'?'); let h=0; for(let i=0;i<t.length;i++) h=(h*31+t.charCodeAt(i))>>>0;
+    return this.wh('div',{flex:'none',width:size,height:size,borderRadius:size>80?16:9,background:tones[h%tones.length],display:'flex',alignItems:'center',justifyContent:'center',color:'rgba(255,255,255,.9)',fontFamily:"'Noto Serif KR',serif",fontSize:size>80?42:18},t.slice(0,1));
+  }
+  plRow(key,left,title,sub,right,onClick){
+    return React.createElement('div',{key,onClick,style:{minHeight:64,display:'flex',alignItems:'center',gap:14,padding:'8px 24px',cursor:onClick?'pointer':'default',boxSizing:'border-box'}},
+      [ left, this.wh('div',{key:'m',flex:1,minWidth:0},[
+          this.wh('div',{key:'a',fontSize:15,color:'var(--text)',fontWeight:500,lineHeight:1.4,wordBreak:'keep-all'},title),
+          sub?this.wh('div',{key:'b',fontSize:12,color:'var(--sub)',marginTop:3},sub):null ]), right||null ]);
+  }
+  plAddBtn(on,onClick){
+    return React.createElement('button',{key:'add',onClick:e=>{e.stopPropagation();onClick();},'aria-label':on?'빼기':'담기',style:{flex:'none',width:32,height:32,borderRadius:'50%',border:on?'none':'1.5px solid var(--line)',background:on?'var(--accent)':'transparent',color:on?'#fff':'var(--sub)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:on?13:18,fontWeight:on?700:300,cursor:'pointer',padding:0,fontFamily:'inherit'}},on?'✓':'+');
+  }
+  plTitleBar(t,right){ return this.wh('div',{key:'tb',padding:'20px 24px 14px',display:'flex',alignItems:'center',justifyContent:'space-between',maxWidth:480,margin:'0 auto',boxSizing:'border-box'},[
+    this.wh('span',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:24,color:'var(--text)',fontWeight:600},t), right||null ]); }
+  plWrap(kids){ return this.wh('div',{position:'absolute',inset:0,overflowY:'auto',WebkitOverflowScrolling:'touch',background:'var(--bg)',paddingTop:56,paddingBottom:90},
+    [ React.createElement('div',{key:'in',ref:el=>{ if(el) this.plScroller=el.parentNode; },style:{maxWidth:480,margin:'0 auto'}},kids) ]); }
+  plList(){
+    const a=this.plLoad();
+    const plus=React.createElement('button',{key:'p',onClick:()=>this.setState({plNaming:true,plNameVal:''}),'aria-label':'새 프레이리스트',style:{width:38,height:38,borderRadius:'50%',border:'none',background:'var(--text)',color:'var(--bg)',fontSize:22,fontWeight:300,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',padding:0,fontFamily:'inherit'}},'+');
+    const rows = a.length ? a.map(p=>this.plRow(p.id,this.plCover(p.name,50),p.name,'기도문 '+p.keys.length+'개'+(p.keys.length?' · '+this.plTotal(p)+'분':''),this.wh('span',{key:'c',color:'var(--sub)',fontSize:18},'›'),()=>this.plGo({plv:'detail',plId:p.id})))
+      : [ this.wh('div',{key:'e',padding:'40px 32px',textAlign:'center'},[
+            this.wh('div',{key:'a',fontFamily:"'Noto Serif KR',serif",fontSize:19,color:'var(--text)',lineHeight:1.6,whiteSpace:'pre-line'},'매일 드리는 기도를\n하나로 묶어 두세요'),
+            this.wh('div',{key:'b',fontSize:13,color:'var(--sub)',marginTop:10,lineHeight:1.7},'한 번 누르면 순서대로 이어서 선포합니다.'),
+            React.createElement('button',{key:'c',onClick:()=>this.setState({plNaming:true,plNameVal:''}),style:{marginTop:26,height:50,padding:'0 30px',borderRadius:25,border:'none',background:'var(--accent)',color:'#fff',fontSize:15,fontWeight:600,cursor:'pointer',fontFamily:'inherit'}},'새 프레이리스트 만들기') ]) ];
+    return this.plWrap([ this.plTitleBar('프레이리스트', a.length?plus:null), ...rows ]);
+  }
+  plDetail(){
+    const p=this.plGet(this.state.plId); if(!p) return this.plList();
+    const n=p.keys.length; const menu=this.state.plMenu;
+    const mv=(i,d)=>this.plUpdate(p.id,q=>{ const j=i+d; if(j<0||j>=q.keys.length) return; const t=q.keys[i]; q.keys[i]=q.keys[j]; q.keys[j]=t; });
+    const sb=(k,t,fn,dis,danger)=>React.createElement('button',{key:k,disabled:dis,onClick:e=>{e.stopPropagation();fn();},style:{flex:1,height:38,borderRadius:10,border:'1px solid var(--line)',background:'var(--card)',color:danger?'var(--accent)':'var(--text)',opacity:dis?.35:1,fontSize:13,cursor:dis?'default':'pointer',fontFamily:'inherit'}},t);
+    const rows=[];
+    p.keys.forEach((k,i)=>{
+      const inf=this.plInfo(k)||{title:'(삭제된 기도문)',sub:''};
+      rows.push(this.plRow('r'+i,this.wh('span',{key:'n',flex:'none',width:20,textAlign:'center',fontSize:14,color:'var(--sub)'},i+1),inf.title,inf.sub,
+        React.createElement('button',{key:'d',onClick:e=>{e.stopPropagation();this.setState({plMenu:menu===i?null:i});},'aria-label':'더보기',style:{flex:'none',width:36,height:36,border:'none',background:'none',color:'var(--sub)',fontSize:17,cursor:'pointer',letterSpacing:'1px',padding:0}},'···')));
+      if(menu===i) rows.push(this.wh('div',{key:'m'+i,display:'flex',gap:8,padding:'0 24px 12px'},[ sb('u','위로',()=>{mv(i,-1);this.setState({plMenu:i-1});},i===0), sb('d','아래로',()=>{mv(i,1);this.setState({plMenu:i+1});},i===n-1), sb('x','빼기',()=>{this.plToggleKey(p.id,k);this.setState({plMenu:null});},false,true) ]));
+    });
+    const back=React.createElement('button',{key:'bk',onClick:()=>this.plGo({plv:'list'}),style:{border:'none',background:'none',color:'var(--sub)',fontSize:14,cursor:'pointer',padding:'18px 24px 0',fontFamily:'inherit'}},'‹ 프레이리스트');
+    const head=this.wh('div',{key:'hd',padding:'22px 24px 18px',display:'flex',flexDirection:'column',alignItems:'center'},[
+      this.plCover(p.name,140),
+      this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:24,color:'var(--text)',fontWeight:600,marginTop:20,textAlign:'center',wordBreak:'keep-all'},p.name),
+      this.wh('div',{key:'m',fontSize:13,color:'var(--sub)',marginTop:6},'기도문 '+n+'개'+(n?' · '+this.plTotal(p)+'분':'')) ]);
+    const act=this.wh('div',{key:'ac',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 24px 12px'},[
+      React.createElement('button',{key:'del',onClick:()=>{ if(confirm('이 프레이리스트를 삭제할까요?')){ this.plSave(this.plLoad().filter(x=>x.id!==p.id)); this.plGo({plv:'list'}); } },style:{border:'none',background:'none',color:'var(--sub)',fontSize:13,cursor:'pointer',padding:0,fontFamily:'inherit'}},'삭제'),
+      React.createElement('button',{key:'pl',disabled:!n,onClick:()=>this.plPlay(p.id,0),'aria-label':'선포 시작',style:{width:62,height:62,borderRadius:'50%',border:'none',background:'var(--accent)',color:'#fff',fontSize:20,paddingLeft:4,cursor:n?'pointer':'default',opacity:n?1:.35,boxShadow:'0 8px 22px color-mix(in oklch, var(--accent) 35%, transparent)'}},'▶') ]);
+    const add=React.createElement('button',{key:'ad',onClick:()=>this.plGo({plv:'add'}),style:{display:'block',margin:'10px 24px 24px',width:'calc(100% - 48px)',height:48,borderRadius:24,border:'1px solid var(--line)',background:'var(--card)',color:'var(--text)',fontSize:14,cursor:'pointer',fontFamily:'inherit'}},'+ 기도문 담기');
+    return this.plWrap([ back, head, act, ...rows, add ]);
+  }
+  plAdd(){
+    const p=this.plGet(this.state.plId); if(!p) return this.plList();
+    const q=(this.state.plQ||'').trim();
+    const cat=[{key:'TODAY'}].concat((this._plCatalog||[]).map(k=>({key:k})));
+    const items=cat.map(c=>({key:c.key,info:this.plInfo(c.key)})).filter(x=>x.info && (!q || x.info.title.indexOf(q)>=0));
+    const top=this.wh('div',{key:'top',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px 4px'},[
+      this.wh('span',{key:'a',fontFamily:"'Noto Serif KR',serif",fontSize:20,color:'var(--text)',fontWeight:600,wordBreak:'keep-all'},p.name+'에 담기'),
+      React.createElement('button',{key:'b',onClick:()=>this.plGo({plv:'detail',plQ:''}),style:{border:'none',background:'none',color:'var(--accent)',fontSize:15,fontWeight:600,cursor:'pointer',padding:0,fontFamily:'inherit'}},'완료') ]);
+    const search=React.createElement('input',{key:'sr',value:this.state.plQ||'',onChange:e=>this.setState({plQ:e.target.value}),placeholder:'기도문 검색',style:{display:'block',margin:'14px 24px 10px',width:'calc(100% - 48px)',height:44,borderRadius:22,border:'none',background:'color-mix(in oklch, var(--text) 6%, transparent)',padding:'0 18px',fontSize:15,color:'var(--text)',boxSizing:'border-box',fontFamily:'inherit',outline:'none'}});
+    return this.plWrap([ top, search, ...items.map(x=>this.plRow(x.key,null,x.info.title,x.info.sub,this.plAddBtn(p.keys.indexOf(x.key)>=0,()=>this.plToggleKey(p.id,x.key)),()=>this.plToggleKey(p.id,x.key))) ]);
+  }
+  plNameSheet(){
+    const make=()=>{ const id=this.plCreate((this.state.plNameVal||'').trim()); this.setState({plNaming:false,tab:'pl',plv:'add',plId:id,plQ:'', plSheetKey:null}); };
+    const fromKey=this.state.plSheetKey;
+    const makeWith=()=>{ const id=this.plCreate((this.state.plNameVal||'').trim()); this.plUpdate(id,p=>p.keys.push(fromKey)); this.setState({plNaming:false,plSheetKey:null,toast:'담았습니다'}); };
+    return [ React.createElement('div',{key:'dim',onClick:()=>this.setState({plNaming:false}),style:{position:'fixed',inset:0,background:'rgba(20,18,16,.38)',zIndex:90}}),
+      this.wh('div',{key:'sh',position:'fixed',left:0,right:0,bottom:0,zIndex:91,background:'var(--card)',borderRadius:'24px 24px 0 0',padding:'14px 24px calc(30px + env(safe-area-inset-bottom))',maxWidth:480,margin:'0 auto',boxSizing:'border-box'},[
+        this.wh('div',{key:'g',width:36,height:4,borderRadius:2,background:'var(--line)',margin:'0 auto 24px'}),
+        this.wh('div',{key:'t',fontFamily:"'Noto Serif KR',serif",fontSize:20,color:'var(--text)',fontWeight:600,textAlign:'center'},'프레이리스트 이름'),
+        React.createElement('input',{key:'i',autoFocus:true,value:this.state.plNameVal||'',onChange:e=>this.setState({plNameVal:e.target.value}),placeholder:'예: 아침의 자리',style:{display:'block',width:'100%',margin:'24px 0 8px',padding:'0 0 12px',border:'none',borderBottom:'2px solid var(--text)',background:'transparent',fontSize:20,color:'var(--text)',textAlign:'center',outline:'none',fontFamily:'inherit',boxSizing:'border-box'}}),
+        this.wh('div',{key:'s',fontSize:12,color:'var(--sub)',textAlign:'center',marginBottom:26},'언제 드리는 기도인지로 이름 지으면 찾기 쉽습니다'),
+        React.createElement('button',{key:'c',onClick:fromKey?makeWith:make,style:{display:'block',width:'100%',height:52,borderRadius:26,border:'none',background:'var(--accent)',color:'#fff',fontSize:15,fontWeight:600,cursor:'pointer',fontFamily:'inherit'}},'만들기') ]) ];
+  }
+  plPickSheet(){
+    const k=this.state.plSheetKey; const a=this.plLoad(); const inf=this.plInfo(k);
+    return [ React.createElement('div',{key:'dim',onClick:()=>this.setState({plSheetKey:null}),style:{position:'fixed',inset:0,background:'rgba(20,18,16,.38)',zIndex:90}}),
+      this.wh('div',{key:'sh',position:'fixed',left:0,right:0,bottom:0,zIndex:91,background:'var(--card)',borderRadius:'24px 24px 0 0',padding:'14px 0 calc(24px + env(safe-area-inset-bottom))',maxWidth:480,margin:'0 auto',maxHeight:'75vh',overflowY:'auto'},[
+        this.wh('div',{key:'g',width:36,height:4,borderRadius:2,background:'var(--line)',margin:'0 auto 18px'}),
+        this.wh('div',{key:'k',padding:'0 24px',fontSize:12.5,color:'var(--sub)'},inf?inf.title:''),
+        this.wh('div',{key:'t',padding:'4px 24px 10px',fontFamily:"'Noto Serif KR',serif",fontSize:19,color:'var(--text)',fontWeight:600},'프레이리스트에 담기'),
+        ...a.map(p=>this.plRow(p.id,this.plCover(p.name,44),p.name,'기도문 '+p.keys.length+'개',this.plAddBtn(p.keys.indexOf(k)>=0,()=>this.plToggleKey(p.id,k)),()=>this.plToggleKey(p.id,k))),
+        this.plRow('new',this.wh('span',{key:'i',flex:'none',width:44,height:44,borderRadius:9,border:'1.5px dashed var(--line)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,color:'var(--sub)'},'+'),'새 프레이리스트','',null,()=>this.setState({plNaming:true,plNameVal:''})),
+        React.createElement('button',{key:'d',onClick:()=>this.setState({plSheetKey:null}),style:{display:'block',margin:'12px 24px 0',width:'calc(100% - 48px)',height:50,borderRadius:25,border:'none',background:'var(--accent)',color:'#fff',fontSize:15,fontWeight:600,cursor:'pointer',fontFamily:'inherit'}},'완료') ]) ];
+  }
+  plBody(){
+    const v=this.state.plv||'list'; let inner;
+    try{ inner = v==='detail'?this.plDetail() : v==='add'?this.plAdd() : this.plList(); }
+    catch(err){ inner=this.wh('div',{padding:'80px 24px',color:'var(--sub)'},String(err)); }
+    return this.wh('div',{key:'pl-'+v,position:'absolute',inset:0},inner);
+  }
+  plOverlay(){
+    if(this.state.plNaming) return this.wh('div',{key:'ov'},this.plNameSheet());
+    if(this.state.plSheetKey) return this.wh('div',{key:'ov'},this.plPickSheet());
+    return null;
   }
 
   renderVals() {
@@ -1991,7 +2133,8 @@ class Component extends DCLogic {
       return {
       title, ref, resume: this.resumeLabel(key, sig), body, key,
       isFav: favSet.has(key), notFav: !favSet.has(key), toggleFav: () => this.toggleFav(key),
-      open: () => this.openPrayer(key), flow: () => this.openFlow(key), choose: () => this.chooseRead(key)
+      open: () => this.openPrayer(key), flow: () => this.openFlow(key), choose: () => this.chooseRead(key),
+      plAdd: (e) => { if (e) e.stopPropagation(); this.setState({ plSheetKey: key }); }
     };
     };
     const raw = [];
@@ -2025,6 +2168,8 @@ class Component extends DCLogic {
     week.forEach(p => { keyMap[this.keyFor('e', p.title)] = { title: p.title, ref: p.ref, note: p.note, secs: p.sections }; });
     w2l.forEach(p => { keyMap[this.keyFor('l', p.title)] = { title: p.title, ref: p.ref, note: p.note, secs: p.sections }; });
     if (wd) wd.DAYS.forEach(d => { keyMap[this.keyFor('w', d.day + ' 보혈 선포')] = { title: '보혈 선포 기도문 · ' + d.day, ref: '', note: notes[d.day] || '', secs: [...wd.INTRO, ...d.sections, ...wd.CONCLUSION], week: true }; });
+    this._keyMap = keyMap;
+    this._plCatalog = list.slice().reverse().map(p => this.keyFor('s', p.title)).concat(w2l.map(p => this.keyFor('l', p.title)), week.map(p => this.keyFor('e', p.title)));
     if (s.openKey && keyMap[s.openKey]) {
       const m = keyMap[s.openKey];
       open = { title: m.title, ref: m.ref, note: m.note, pages: paginate(m.secs, (m.ref || '') + ' ' + (m.note || '')) };
@@ -2143,6 +2288,12 @@ class Component extends DCLogic {
       statsBody: s.statsMode ? this.statsBody() : null,
       wordsBody: this.wordsBody(),
       isDavid: s.tab === 'david',
+      isPl: s.tab === 'pl',
+      plBody: s.tab === 'pl' ? this.plBody() : null,
+      plOverlay: this.plOverlay(),
+      goPl: () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: 'pl', openKey: null, flowKey: null, flowPlay: false, postNo: null, plv: 'list', plMenu: null, pl: null }); },
+      tabPlColor: s.tab === 'pl' ? navActive : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabPlWeight: s.tab === 'pl' ? 600 : 400,
+      plOn: !!(s.pl && s.flowKey), plLabel: s.pl ? (s.pl.name + ' · ' + (s.pl.idx + 1) + ' / ' + s.pl.keys.length) : '',
       davidBody: s.tab === 'david' ? this.davidBody() : null,
       goDavid: () => { this.stopFlowLoop(); this.requestWake(false); this.setState({ tab: 'david', openKey: null, flowKey: null, flowPlay: false, postNo: null, dv: 'map', dvSong: null }); },
       tabDavidColor: s.tab === 'david' ? navActive : (navDark ? 'rgba(255,255,255,.78)' : 'var(--sub)'), tabDavidWeight: s.tab === 'david' ? 600 : 400,
@@ -2245,7 +2396,7 @@ class Component extends DCLogic {
         this.setState({ bgmPlay: !s.bgmPlay }, () => this.bgmSync());
       },
       goHome: setTab('home'), goPrayers: setTab('prayers'), goSettings: setTab('settings'),
-      heroIsJoshua: hero.joshua, heroIsOita: !hero.joshua,
+      heroIsJoshua: hero.joshua, heroIsOita: !hero.joshua && !hero.stamp, heroIsStamp: !!hero.stamp,
       heroImg: hero.img, heroGrad: hero.grad, heroCtaBg: hero.ctaBg, heroCtaShadow: hero.ctaShadow,
       reloadHome: () => location.reload(),
       goColumn: () => { this.setState({ tab: 'column', openKey: null, flowKey: null, flowPlay: false, postNo: null }); },
@@ -2324,14 +2475,26 @@ class Component extends DCLogic {
         if (on) {
           const el = this.flowEl;
           const atTop = !el || el.scrollTop <= 8;
-          if (atTop) { this._flowStartTimer = setTimeout(() => { this._flowStartTimer = null; if (this.state.flowPlay) this.startFlowLoop(); }, 5000); }
+          if (atTop) { this._flowStartTimer = setTimeout(() => { this._flowStartTimer = null; if (this.state.flowPlay) this.startFlowLoop(); }, 10000); }
           else setTimeout(() => this.startFlowLoop(), 0);
         } else { this.stopFlowLoop(); this.saveFlowPos(); }
       },
       setFlowSpeed: e => { const v = Number(e.target.value); localStorage.setItem('sp_flow_speed', String(v)); this.setState({ flowSpeed: v }); },
       flowToTop: () => { if (this.flowEl) this.flowEl.scrollTo({ top: 0, behavior: 'smooth' }); },
       closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
-      flowFinish: () => { if (!this.state.flowAtEnd) return; this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
+      flowFinish: () => { if (!this.state.flowAtEnd) return;
+        const pl = this.state.pl;
+        if (pl && pl.idx < pl.keys.length - 1) {
+          this.markDone(); this.stopFlowLoop(); this.saveFlowPos();
+          const ni = pl.idx + 1; const nk = this.plResolve(pl.keys[ni]);
+          localStorage.removeItem('sp_flow_' + nk);
+          this.flowEl = null; this.openFlow(nk);
+          this.setState({ pl: Object.assign({}, pl, { idx: ni }), flowPlay: true });
+          this._flowStartTimer = setTimeout(() => { this._flowStartTimer = null; if (this.state.flowPlay) this.startFlowLoop(); }, 10000);
+          return;
+        }
+        this.setState({ pl: null });
+        this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
       shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
       openBlocks: (openPages[op].blocks || []).map(b => ({ h: b.h, qlines: this.quoteLines(b.lines) })),
       openPageLabel: (op + 1) + ' / ' + openPages.length,
