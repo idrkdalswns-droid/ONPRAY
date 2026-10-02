@@ -1234,6 +1234,7 @@ class Component extends DCLogic {
     this.setState({ flowKey: key, flowPlay: false, flowAtEnd: false, flowSpeedOpen: false, openKey: null, favSheet: false, chooseKey: null, tab: 'prayers' });
   }
   closeFlow() {
+    if (this._plNextTimer) { clearTimeout(this._plNextTimer); this._plNextTimer = null; }
     this.saveFlowPos();
     this.stopFlowLoop();
     this.setState({ flowKey: null, flowPlay: false, collapsed: {}, query: '', pl: null, tab: this.state.pl ? 'pl' : this.state.tab });
@@ -1261,7 +1262,13 @@ class Component extends DCLogic {
       if (acc >= 1) { el.scrollTop += Math.floor(acc); acc -= Math.floor(acc); }
       if (el.scrollTop >= max - 1) {
         this.markDone(); this.stopFlowLoop();
-        if (this.state.pl && this.plNext()) return;
+        const pl = this.state.pl;
+        if (pl && pl.idx < pl.keys.length - 1) {
+          this.setState({ flowPlay: false, flowAtEnd: true });
+          if (this._plNextTimer) clearTimeout(this._plNextTimer);
+          this._plNextTimer = setTimeout(() => { this._plNextTimer = null; if (this.state.pl && this.state.flowAtEnd) this.plNext(); }, 2000);
+          return;
+        }
         this.setState({ flowPlay: false, flowAtEnd: true, doneMsg: this.doneAllowed() });
         return;
       }
@@ -2507,7 +2514,7 @@ class Component extends DCLogic {
       closeFlowView: () => { this.requestWake(false); this.closeFlow(); },
       flowFinish: () => { if (!this.state.flowAtEnd) return;
         const pl = this.state.pl;
-        if (pl && pl.idx < pl.keys.length - 1) { this.markDone(); this.plNext(); return; }
+        if (pl && pl.idx < pl.keys.length - 1) { if (this._plNextTimer) { clearTimeout(this._plNextTimer); this._plNextTimer = null; } this.markDone(); this.plNext(); return; }
         this.setState({ pl: null });
         this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
       shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
