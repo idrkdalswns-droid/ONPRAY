@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20261004a"></script>
+<script src="prayers-data.js?v=20261017b"></script>
 <script src="david-data.js?v=20261004a"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1213,7 +1213,7 @@ class Component extends DCLogic {
         if (pl && pl.idx < pl.keys.length - 1) {
           this.setState({ flowPlay: false, flowAtEnd: true });
           if (this._plNextTimer) clearTimeout(this._plNextTimer);
-          this._plNextTimer = setTimeout(() => { this._plNextTimer = null; if (this.state.pl && this.state.flowAtEnd) this.plNext(); }, 2000);
+          this._plNextTimer = setTimeout(() => { this._plNextTimer = null; if (this.state.pl && this.state.flowAtEnd) this.plNext(); }, 4000);
           return;
         }
         this.setState({ flowPlay: false, flowAtEnd: true, doneMsg: this.doneAllowed() });
@@ -1257,12 +1257,11 @@ class Component extends DCLogic {
     for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
     return prefix + h.toString(36);
   }
-  PATCH_VER = '20261004a';
+  PATCH_VER = '20261017b';
   PATCH_NOTES = [
-    "다윗의 노래 — 열 줄 비파로 새로워졌습니다",
-    "흐름으로 읽기 — 자동 스크롤이 더 부드러워졌습니다",
-    "설정 — 내 기록 백업으로 휴대폰을 바꿔도 기록이 이어집니다",
-    "설정 — 비파 줄 소리를 끌 수 있습니다"
+    "새 기도문 — 정체가 아니라 안식, 새로운 문이 열리다",
+    "아침 기도문 다섯 편을 다듬었습니다",
+    "프레이리스트 — 다음 기도문으로 넘어가기 전 4초간 머뭅니다"
   ];
   // ── 말씀 렌즈(원어) 탭 ──
   WA = { width:['뜻의 폭','◐'], sound:['소리','♪'], form:['형태','⌗'], journey:['여정','→'], canon:['정경','⋯'], split:['번역의 갈림','⑂'], contrast:['대조','⇄'], background:['배경','▦'], name:['이름','✦'] };
