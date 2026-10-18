@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script src="prayers-data.js?v=20261017b"></script>
+<script src="prayers-data.js?v=20261018a"></script>
 <script src="david-data.js?v=20261004a"></script>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#8e2b2b"></rect><rect x="46" y="30" width="8" height="40" rx="2" fill="#f7f6f4"></rect><rect x="34" y="42" width="32" height="8" rx="2" fill="#f7f6f4"></rect></svg></template>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -266,7 +266,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent);opacity
             </div>
             <p style="font-family:'Noto Serif KR',serif;font-size:19px;font-weight:600;line-height:1.62;color:#fff;margin:0 0 12px;text-shadow:0 2px 20px rgba(0,0,0,.5);">{{ shareQuote }}</p>
             <div style="width:22px;height:1px;background:rgba(255,255,255,.4);margin-bottom:10px;"></div>
-            <span style="font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;">onpray.pages.dev</span>
+            <span style="font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;">{{ shareHost }}</span>
           </div>
         </div>
         <div style="display:flex;gap:7px;margin-top:14px;">
@@ -804,7 +804,7 @@ class Component extends DCLogic {
   componentDidMount() {
     document.body.dataset.theme = this.state.theme;
     if (/[?&]stats=1/.test(location.search)) { this.setState({ statsMode: true }); this.statsLoad(); }
-    const grab = () => { if (window.PRAYER_DATA) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); return true; } return false; };
+    const grab = () => { if (window.PRAYER_DATA) { this.weekData = window.PRAYER_DATA; this.forceUpdate(); setTimeout(() => this.openFromLink(), 0); return true; } return false; };
     if (!grab()) { let n = 0; const t = setInterval(() => { if (grab() || ++n > 50) clearInterval(t); }, 100); }
     this.cid = localStorage.getItem('sp_cid') || (Math.random().toString(36).slice(2) + Date.now().toString(36));
     localStorage.setItem('sp_cid', this.cid);
@@ -1054,7 +1054,9 @@ class Component extends DCLogic {
 
   async shareCard(save) {
     const el = this.cardEl;
-    const text = 'ONPRAY — 깨어 기도하는 자리\nhttps://onpray.pages.dev';
+    const pk = this.state.shareKind === 'prayer' && this._doneKey;
+    const link = pk ? this.prayerLink(pk) : this.siteUrl();
+    const text = pk ? '「' + (this.statsMap()[pk] || '') + '」\n함께 선포해요\n' + link : 'ONPRAY — 깨어 기도하는 자리\n' + link;
     let file = null;
     if (el && window.htmlToImage) {
       try {
@@ -1075,7 +1077,7 @@ class Component extends DCLogic {
       if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], text: text });
       } else if (navigator.share) {
-        await navigator.share({ title: 'ONPRAY', text: text, url: 'https://onpray.pages.dev' });
+        await navigator.share({ title: 'ONPRAY', text: text, url: link });
       } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
         this.flash('shareBtnBusy', '링크를 복사했습니다');
@@ -1257,12 +1259,24 @@ class Component extends DCLogic {
     for (let i = 0; i < t.length; i++) h = ((h * 33) ^ t.charCodeAt(i)) >>> 0;
     return prefix + h.toString(36);
   }
-  PATCH_VER = '20261017b';
+  PATCH_VER = '20261018a';
   PATCH_NOTES = [
-    "새 기도문 — 정체가 아니라 안식, 새로운 문이 열리다",
-    "아침 기도문 다섯 편을 다듬었습니다",
-    "프레이리스트 — 다음 기도문으로 넘어가기 전 4초간 머뭅니다"
+    "새 기도문 — 더 깊은 차원의 기도로 들어가는 여정에",
+    "기도문을 마치고 동역자에게 전하면, 받는 분에게 그 기도문이 바로 열립니다",
+    "새 기도문 — 정체가 아니라 안식, 새로운 문이 열리다"
   ];
+  // ── 공유 주소: 지금 접속한 주소 그대로 (어느 주소로 들어와도 링크가 살아 있게) ──
+  siteUrl() { return location.origin + location.pathname.replace(/index\.html$/, ''); }
+  prayerLink(key) { return this.siteUrl() + '?p=' + encodeURIComponent(key); }
+  // ── 공유 링크(?p=키)로 들어오면 그 기도문을 바로 연다 ──
+  openFromLink() {
+    if (this._linkDone) return;
+    this._linkDone = true;
+    const key = new URLSearchParams(location.search).get('p');
+    if (!key) return;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+    if (/^[selw]/.test(key) && this.statsMap()[key]) this.openPrayer(key);
+  }
   // ── 말씀 렌즈(원어) 탭 ──
   WA = { width:['뜻의 폭','◐'], sound:['소리','♪'], form:['형태','⌗'], journey:['여정','→'], canon:['정경','⋯'], split:['번역의 갈림','⑂'], contrast:['대조','⇄'], background:['배경','▦'], name:['이름','✦'] };
   wh(tag, style, kids) { return React.createElement(tag, { style }, kids); }
@@ -1854,7 +1868,9 @@ class Component extends DCLogic {
     const flow = sectionsFor(s.flowKey);
     if (flow) this._flowChars = flow.secs.reduce((n, sec) => n + (sec.h ? sec.h.length : 0) + sec.lines.reduce((m, l) => m + l.length, 0), 0);
     // ── 공유 카드 문구 ──
+    const doneP = this._doneKey && keyMap[this._doneKey];
     const kinds = [
+      ...(doneP ? [{ id: 'prayer', label: '이 기도문', q: '「' + doneP.title + '」' }] : []),
       { id: 'today', label: '오늘의 선포', q: wd && !isWeekend ? wd.DAYS[todayIdx].sections[0].lines[0] : (list[0] ? list[0].sections[0].lines[0] : '') },
       { id: 'armor', label: '전신갑주', q: (week[0] || list[0]) ? (week[0] || list[0]).sections[0].lines[0] : '' }
     ];
@@ -1922,7 +1938,7 @@ class Component extends DCLogic {
     const savePos = p => { if (s.openKey) localStorage.setItem('sp_pos_' + s.openKey, String(p)); };
     const goNext = () => {
       const n = op + 1;
-      if (n >= openPages.length) { localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ tab: 'home', openKey: null, openPage: 0, doneMsg: this.doneAllowed() }); return; }
+      if (n >= openPages.length) { this._doneKey = s.openKey; localStorage.removeItem('sp_pos_' + s.openKey); this.markDone(); this.setState({ tab: 'home', openKey: null, openPage: 0, doneMsg: this.doneAllowed() }); return; }
       savePos(n); this.setState({ openPage: n }); if (this.scroller) this.scroller.scrollTop = 0;
     };
     const goPrev = () => { if (op > 0) { savePos(op - 1); this.setState({ openPage: op - 1 }); if (this.scroller) this.scroller.scrollTop = 0; } };
@@ -2007,12 +2023,13 @@ class Component extends DCLogic {
       installSteps: this.isIOS()
         ? [{ n: '1', text: '화면 아래 공유 버튼을 누릅니다' }, { n: '2', text: '목록에서 "홈 화면에 추가"를 찾습니다' }, { n: '3', text: '오른쪽 위 "추가"를 누르면 끝입니다' }]
         : [{ n: '1', text: '오른쪽 위 메뉴(⋮)를 누릅니다' }, { n: '2', text: '"홈 화면에 추가"를 선택합니다' }, { n: '3', text: '"설치"를 누르면 끝입니다' }],
-      openShare: () => this.setState({ doneMsg: false, shareOpen: true }),
+      openShare: () => this.setState({ doneMsg: false, shareOpen: true, shareKind: this._doneKey ? 'prayer' : 'today' }),
       closeShare: () => this.setState({ shareOpen: false }),
       shareOpen: !!s.shareOpen, installOpen: !!s.installOpen,
       cardRef: el => { if (el) this.cardEl = el; },
       shareDate: new Date().getFullYear() + '. ' + (new Date().getMonth() + 1) + '. ' + new Date().getDate() + '.',
       shareLive: '지금 ' + s.live + '명이 함께 깨어 있습니다',
+      shareHost: this.siteUrl().replace(/^https?:\/\//, '').replace(/\/$/, ''),
       shareQuote: shareQuote,
       shareTabs: shareTabs,
       doShare: () => this.shareCard(false),
@@ -2130,6 +2147,7 @@ class Component extends DCLogic {
         const pl = this.state.pl;
         if (pl && pl.idx < pl.keys.length - 1) { if (this._plNextTimer) { clearTimeout(this._plNextTimer); this._plNextTimer = null; } this.markDone(); this.plNext(); return; }
         this.setState({ pl: null });
+        this._doneKey = this.state.flowKey;
         this.markDone(); this.stopFlowLoop(); this.requestWake(false); this.saveFlowPos(); this.setState({ tab: 'home', flowKey: null, flowPlay: false, flowSpeedOpen: false, flowAtEnd: false, collapsed: {}, query: '', doneMsg: this.doneAllowed() }); },
       shellPadBottom: open || flow || onHome ? '0px' : '84px', /* 칼럼 읽기는 fixed 오버레이 */
       openBlocks: (openPages[op].blocks || []).map(b => ({ h: b.h, qlines: this.quoteLines(b.lines) })),
